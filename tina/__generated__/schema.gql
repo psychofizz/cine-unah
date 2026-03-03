@@ -170,7 +170,7 @@ type PeliculaConnection implements Connection {
 type Evento implements Node & Document {
   title: String!
   poster: String!
-  description: String!
+  description: String
   date: String!
   eventTime: String
   featured: Boolean

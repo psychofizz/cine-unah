@@ -267,7 +267,7 @@ export type Evento = Node & Document & {
   __typename?: 'Evento';
   title: Scalars['String']['output'];
   poster: Scalars['String']['output'];
-  description: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
   date: Scalars['String']['output'];
   eventTime?: Maybe<Scalars['String']['output']>;
   featured?: Maybe<Scalars['Boolean']['output']>;
@@ -406,7 +406,7 @@ export type EventoMutation = {
 
 export type PeliculaPartsFragment = { __typename: 'Pelicula', title: string, poster: string, synopsis?: string | null, credits?: string | null, showDate: string, showTime?: string | null, status: string, featured?: boolean | null, duration?: number | null, country?: string | null };
 
-export type EventoPartsFragment = { __typename: 'Evento', title: string, poster: string, description: string, date: string, eventTime?: string | null, featured?: boolean | null, location?: string | null };
+export type EventoPartsFragment = { __typename: 'Evento', title: string, poster: string, description?: string | null, date: string, eventTime?: string | null, featured?: boolean | null, location?: string | null };
 
 export type PeliculaQueryVariables = Exact<{
   relativePath: Scalars['String']['input'];
@@ -432,7 +432,7 @@ export type EventoQueryVariables = Exact<{
 }>;
 
 
-export type EventoQuery = { __typename?: 'Query', evento: { __typename: 'Evento', id: string, title: string, poster: string, description: string, date: string, eventTime?: string | null, featured?: boolean | null, location?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } };
+export type EventoQuery = { __typename?: 'Query', evento: { __typename: 'Evento', id: string, title: string, poster: string, description?: string | null, date: string, eventTime?: string | null, featured?: boolean | null, location?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } };
 
 export type EventoConnectionQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
@@ -444,7 +444,7 @@ export type EventoConnectionQueryVariables = Exact<{
 }>;
 
 
-export type EventoConnectionQuery = { __typename?: 'Query', eventoConnection: { __typename?: 'EventoConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'EventoConnectionEdges', cursor: string, node?: { __typename: 'Evento', id: string, title: string, poster: string, description: string, date: string, eventTime?: string | null, featured?: boolean | null, location?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
+export type EventoConnectionQuery = { __typename?: 'Query', eventoConnection: { __typename?: 'EventoConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'EventoConnectionEdges', cursor: string, node?: { __typename: 'Evento', id: string, title: string, poster: string, description?: string | null, date: string, eventTime?: string | null, featured?: boolean | null, location?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
 
 export const PeliculaPartsFragmentDoc = gql`
     fragment PeliculaParts on Pelicula {

@@ -21,6 +21,7 @@ var TimePickerField = ({ input }) => {
   });
 };
 var config_default = defineConfig({
+  branch: process.env.TINA_BRANCH || process.env.VERCEL_GIT_COMMIT_REF || process.env.HEAD || "main",
   clientId: process.env.TINA_CLIENT_ID ?? "",
   token: process.env.TINA_TOKEN ?? "",
   build: {
