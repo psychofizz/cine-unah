@@ -1,54 +1,66 @@
 ---
-// MovieCard.astro
-// Reusable card for movie display (cartelera + archivo)
-
 interface Props {
     slug: string;
     title: string;
     poster?: string;
     showDate: string;
+    showTime?: string;
     status: "current" | "next" | "past";
     country?: string;
     duration?: number;
 }
 
-const { slug, title, poster, showDate, status, country, duration } =
+const { slug, title, poster, showDate, showTime, status, country, duration } =
     Astro.props;
 
-const statusLabel = {
+const statusLabel: Record<string, string> = {
     current: "En cartelera",
     next: "Próxima",
     past: "Pasada",
-}[status];
+};
 
 const formattedDate = new Date(showDate).toLocaleDateString("es-MX", {
     weekday: "short",
     day: "numeric",
-    month: "long",
-    year: "numeric",
+    month: "short",
 });
 ---
 
 <a
     href={`/peliculas/${slug}`}
     class="card"
-    aria-label={`Ver detalle: ${title}`}
+    aria-label={`${title} — ${formattedDate}${showTime ? " " + showTime : ""}`}
 >
     <div class="card-poster">
         {
             poster ? (
-                <img src={poster} alt={`Poster de ${title}`} loading="lazy" />
+                <img src={poster} alt={`Poster: ${title}`} loading="lazy" />
             ) : (
                 <div class="card-poster-placeholder" aria-hidden="true">
                     🎬
                 </div>
             )
         }
-        {status !== "past" && <span class="card-badge">{statusLabel}</span>}
+        {
+            status !== "past" && (
+                <span class="card-badge">{statusLabel[status]}</span>
+            )
+        }
     </div>
     <div class="card-body">
         <h3 class="card-title">{title}</h3>
+
+        {
+            showTime && (
+                <div class="card-time-row">
+                    <span class="card-time">{showTime}</span>
+                    <span class="card-time-label">hrs</span>
+                </div>
+            )
+        }
+
         <p class="card-date">{formattedDate}</p>
+
         {
             (country || duration) && (
                 <p class="card-meta">

@@ -24,6 +24,9 @@ const formattedDate = new Date(movie.showDate).toLocaleDateString("es-MX", {
     month: "long",
     year: "numeric",
 });
+const weekday = new Date(movie.showDate).toLocaleDateString("es-MX", {
+    weekday: "long",
+});
 
 const statusLabel: Record<string, string> = {
     current: "En cartelera",
@@ -34,20 +37,20 @@ const statusLabel: Record<string, string> = {
 
 <BaseLayout
     title={movie.title}
-    description={movie.synopsis?.slice(0, 155) ?? `${movie.title} — Taquilla`}
+    description={movie.synopsis?.slice(0, 155) ?? `${movie.title} — Cine UNAH`}
     image={movie.poster}
     pathname={`/peliculas/${Astro.params.slug}`}
 >
     <div class="container">
         <div class="detail-page">
-            <a href="/" class="back-link" aria-label="Regresar a cartelera">
+            <a href="/" class="back-link">
                 <svg
-                    width="16"
-                    height="16"
+                    width="14"
+                    height="14"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
+                    stroke-width="2.5"
                     aria-hidden="true"
                 >
                     <path d="M19 12H5M12 5l-7 7 7 7"></path>
@@ -62,16 +65,10 @@ const statusLabel: Record<string, string> = {
                         movie.poster ? (
                             <img
                                 src={movie.poster}
-                                alt={`Poster de ${movie.title}`}
+                                alt={`Poster: ${movie.title}`}
                             />
                         ) : (
-                            <div
-                                class="card-poster-placeholder"
-                                style="aspect-ratio:2/3; display:flex; align-items:center; justify-content:center; font-size:4rem;"
-                                aria-hidden="true"
-                            >
-                                🎬
-                            </div>
+                            <div style="aspect-ratio:2/3;background:#111;" />
                         )
                     }
                 </div>
@@ -82,7 +79,29 @@ const statusLabel: Record<string, string> = {
                         >{statusLabel[movie.status] ?? movie.status}</span
                     >
                     <h1 class="detail-title">{movie.title}</h1>
-                    <p class="detail-date">{formattedDate}</p>
+
+                    <!-- BIG TIME BLOCK -->
+                    <div
+                        class="detail-time-hero"
+                        aria-label={`Proyección: ${weekday} ${formattedDate}${movie.showTime ? " a las " + movie.showTime : ""}`}
+                    >
+                        {
+                            movie.showTime && (
+                                <span class="detail-time-number">
+                                    {movie.showTime}
+                                </span>
+                            )
+                        }
+                        <div class="detail-time-info">
+                            <span class="detail-time-label">Proyección</span>
+                            <span class="detail-date-str"
+                                >{weekday}
+                                {
+                                    formattedDate.replace(weekday + ", ", "")
+                                }</span
+                            >
+                        </div>
+                    </div>
 
                     {
                         (movie.country || movie.duration) && (
@@ -116,10 +135,9 @@ const statusLabel: Record<string, string> = {
                         )
                     }
 
-                    <!-- Share -->
                     <ShareButtons
                         title={movie.title}
-                        text={`${movie.title} — ${formattedDate}`}
+                        text={`${movie.title} — ${weekday} ${movie.showTime ?? ""}`}
                     />
                 </div>
             </div>

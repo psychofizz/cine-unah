@@ -96,7 +96,9 @@ type Pelicula implements Node & Document {
   synopsis: String!
   credits: String
   showDate: String!
+  showTime: String!
   status: String!
+  featured: Boolean
   duration: Float
   country: String
   id: ID!
@@ -126,6 +128,11 @@ input DatetimeFilter {
   in: [String]
 }
 
+input BooleanFilter {
+  eq: Boolean
+  exists: Boolean
+}
+
 input NumberFilter {
   lt: Float
   lte: Float
@@ -142,7 +149,9 @@ input PeliculaFilter {
   synopsis: StringFilter
   credits: StringFilter
   showDate: DatetimeFilter
+  showTime: StringFilter
   status: StringFilter
+  featured: BooleanFilter
   duration: NumberFilter
   country: StringFilter
 }
@@ -163,6 +172,8 @@ type Evento implements Node & Document {
   poster: String!
   description: String!
   date: String!
+  eventTime: String!
+  featured: Boolean
   location: String
   id: ID!
   _sys: SystemInfo!
@@ -174,6 +185,8 @@ input EventoFilter {
   poster: ImageFilter
   description: StringFilter
   date: DatetimeFilter
+  eventTime: StringFilter
+  featured: BooleanFilter
   location: StringFilter
 }
 
@@ -217,7 +230,9 @@ input PeliculaMutation {
   synopsis: String
   credits: String
   showDate: String
+  showTime: String
   status: String
+  featured: Boolean
   duration: Float
   country: String
 }
@@ -227,6 +242,8 @@ input EventoMutation {
   poster: String
   description: String
   date: String
+  eventTime: String
+  featured: Boolean
   location: String
 }
 

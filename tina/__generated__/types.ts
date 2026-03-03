@@ -190,7 +190,9 @@ export type Pelicula = Node & Document & {
   synopsis: Scalars['String']['output'];
   credits?: Maybe<Scalars['String']['output']>;
   showDate: Scalars['String']['output'];
+  showTime: Scalars['String']['output'];
   status: Scalars['String']['output'];
+  featured?: Maybe<Scalars['Boolean']['output']>;
   duration?: Maybe<Scalars['Float']['output']>;
   country?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
@@ -220,6 +222,11 @@ export type DatetimeFilter = {
   in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
+export type BooleanFilter = {
+  eq?: InputMaybe<Scalars['Boolean']['input']>;
+  exists?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type NumberFilter = {
   lt?: InputMaybe<Scalars['Float']['input']>;
   lte?: InputMaybe<Scalars['Float']['input']>;
@@ -236,7 +243,9 @@ export type PeliculaFilter = {
   synopsis?: InputMaybe<StringFilter>;
   credits?: InputMaybe<StringFilter>;
   showDate?: InputMaybe<DatetimeFilter>;
+  showTime?: InputMaybe<StringFilter>;
   status?: InputMaybe<StringFilter>;
+  featured?: InputMaybe<BooleanFilter>;
   duration?: InputMaybe<NumberFilter>;
   country?: InputMaybe<StringFilter>;
 };
@@ -260,6 +269,8 @@ export type Evento = Node & Document & {
   poster: Scalars['String']['output'];
   description: Scalars['String']['output'];
   date: Scalars['String']['output'];
+  eventTime: Scalars['String']['output'];
+  featured?: Maybe<Scalars['Boolean']['output']>;
   location?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   _sys: SystemInfo;
@@ -271,6 +282,8 @@ export type EventoFilter = {
   poster?: InputMaybe<ImageFilter>;
   description?: InputMaybe<StringFilter>;
   date?: InputMaybe<DatetimeFilter>;
+  eventTime?: InputMaybe<StringFilter>;
+  featured?: InputMaybe<BooleanFilter>;
   location?: InputMaybe<StringFilter>;
 };
 
@@ -374,7 +387,9 @@ export type PeliculaMutation = {
   synopsis?: InputMaybe<Scalars['String']['input']>;
   credits?: InputMaybe<Scalars['String']['input']>;
   showDate?: InputMaybe<Scalars['String']['input']>;
+  showTime?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<Scalars['String']['input']>;
+  featured?: InputMaybe<Scalars['Boolean']['input']>;
   duration?: InputMaybe<Scalars['Float']['input']>;
   country?: InputMaybe<Scalars['String']['input']>;
 };
@@ -384,19 +399,21 @@ export type EventoMutation = {
   poster?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   date?: InputMaybe<Scalars['String']['input']>;
+  eventTime?: InputMaybe<Scalars['String']['input']>;
+  featured?: InputMaybe<Scalars['Boolean']['input']>;
   location?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type PeliculaPartsFragment = { __typename: 'Pelicula', title: string, poster: string, synopsis: string, credits?: string | null, showDate: string, status: string, duration?: number | null, country?: string | null };
+export type PeliculaPartsFragment = { __typename: 'Pelicula', title: string, poster: string, synopsis: string, credits?: string | null, showDate: string, showTime: string, status: string, featured?: boolean | null, duration?: number | null, country?: string | null };
 
-export type EventoPartsFragment = { __typename: 'Evento', title: string, poster: string, description: string, date: string, location?: string | null };
+export type EventoPartsFragment = { __typename: 'Evento', title: string, poster: string, description: string, date: string, eventTime: string, featured?: boolean | null, location?: string | null };
 
 export type PeliculaQueryVariables = Exact<{
   relativePath: Scalars['String']['input'];
 }>;
 
 
-export type PeliculaQuery = { __typename?: 'Query', pelicula: { __typename: 'Pelicula', id: string, title: string, poster: string, synopsis: string, credits?: string | null, showDate: string, status: string, duration?: number | null, country?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } };
+export type PeliculaQuery = { __typename?: 'Query', pelicula: { __typename: 'Pelicula', id: string, title: string, poster: string, synopsis: string, credits?: string | null, showDate: string, showTime: string, status: string, featured?: boolean | null, duration?: number | null, country?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } };
 
 export type PeliculaConnectionQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
@@ -408,14 +425,14 @@ export type PeliculaConnectionQueryVariables = Exact<{
 }>;
 
 
-export type PeliculaConnectionQuery = { __typename?: 'Query', peliculaConnection: { __typename?: 'PeliculaConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'PeliculaConnectionEdges', cursor: string, node?: { __typename: 'Pelicula', id: string, title: string, poster: string, synopsis: string, credits?: string | null, showDate: string, status: string, duration?: number | null, country?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
+export type PeliculaConnectionQuery = { __typename?: 'Query', peliculaConnection: { __typename?: 'PeliculaConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'PeliculaConnectionEdges', cursor: string, node?: { __typename: 'Pelicula', id: string, title: string, poster: string, synopsis: string, credits?: string | null, showDate: string, showTime: string, status: string, featured?: boolean | null, duration?: number | null, country?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
 
 export type EventoQueryVariables = Exact<{
   relativePath: Scalars['String']['input'];
 }>;
 
 
-export type EventoQuery = { __typename?: 'Query', evento: { __typename: 'Evento', id: string, title: string, poster: string, description: string, date: string, location?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } };
+export type EventoQuery = { __typename?: 'Query', evento: { __typename: 'Evento', id: string, title: string, poster: string, description: string, date: string, eventTime: string, featured?: boolean | null, location?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } };
 
 export type EventoConnectionQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
@@ -427,7 +444,7 @@ export type EventoConnectionQueryVariables = Exact<{
 }>;
 
 
-export type EventoConnectionQuery = { __typename?: 'Query', eventoConnection: { __typename?: 'EventoConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'EventoConnectionEdges', cursor: string, node?: { __typename: 'Evento', id: string, title: string, poster: string, description: string, date: string, location?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
+export type EventoConnectionQuery = { __typename?: 'Query', eventoConnection: { __typename?: 'EventoConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'EventoConnectionEdges', cursor: string, node?: { __typename: 'Evento', id: string, title: string, poster: string, description: string, date: string, eventTime: string, featured?: boolean | null, location?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
 
 export const PeliculaPartsFragmentDoc = gql`
     fragment PeliculaParts on Pelicula {
@@ -437,7 +454,9 @@ export const PeliculaPartsFragmentDoc = gql`
   synopsis
   credits
   showDate
+  showTime
   status
+  featured
   duration
   country
 }
@@ -449,6 +468,8 @@ export const EventoPartsFragmentDoc = gql`
   poster
   description
   date
+  eventTime
+  featured
   location
 }
     `;

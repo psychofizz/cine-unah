@@ -1,8 +1,6 @@
 // tina/config.ts
 import { defineConfig } from "tinacms";
 var config_default = defineConfig({
-  // For TinaCMS Cloud, set these via environment variables:
-  // TINA_CLIENT_ID and TINA_TOKEN
   clientId: process.env.TINA_CLIENT_ID ?? "",
   token: process.env.TINA_TOKEN ?? "",
   build: {
@@ -17,7 +15,7 @@ var config_default = defineConfig({
   },
   schema: {
     collections: [
-      // ─── PELÍCULAS (Movies) ───────────────────────────────────────────────
+      // ─── PELÍCULAS ────────────────────────────────────────────────────────
       {
         name: "pelicula",
         label: "Pel\xEDculas",
@@ -41,9 +39,7 @@ var config_default = defineConfig({
             type: "string",
             name: "synopsis",
             label: "Sinopsis",
-            ui: {
-              component: "textarea"
-            },
+            ui: { component: "textarea" },
             required: true
           },
           {
@@ -51,14 +47,19 @@ var config_default = defineConfig({
             name: "credits",
             label: "Cr\xE9ditos",
             description: "Ej: Dir. Stanley Kubrick | Elenco: Jack Nicholson...",
-            ui: {
-              component: "textarea"
-            }
+            ui: { component: "textarea" }
           },
           {
             type: "datetime",
             name: "showDate",
             label: "Fecha de proyecci\xF3n",
+            required: true
+          },
+          {
+            type: "string",
+            name: "showTime",
+            label: "Hora de proyecci\xF3n",
+            description: "Ej: 19:00 o 7:00 PM",
             required: true
           },
           {
@@ -71,6 +72,12 @@ var config_default = defineConfig({
               { value: "past", label: "Pasada (archivo)" }
             ],
             required: true
+          },
+          {
+            type: "boolean",
+            name: "featured",
+            label: "\u2B50 Destacada (Hero Principal)",
+            description: "Si est\xE1 activo, esta pel\xEDcula ocupa el hero principal hasta que la fecha pase. Solo una debe estar activa a la vez."
           },
           {
             type: "number",
@@ -109,9 +116,7 @@ var config_default = defineConfig({
             type: "string",
             name: "description",
             label: "Descripci\xF3n",
-            ui: {
-              component: "textarea"
-            },
+            ui: { component: "textarea" },
             required: true
           },
           {
@@ -119,6 +124,19 @@ var config_default = defineConfig({
             name: "date",
             label: "Fecha del evento",
             required: true
+          },
+          {
+            type: "string",
+            name: "eventTime",
+            label: "Hora del evento",
+            description: "Ej: 20:00 o 8:00 PM",
+            required: true
+          },
+          {
+            type: "boolean",
+            name: "featured",
+            label: "\u2B50 Destacado (Hero Principal)",
+            description: "Si est\xE1 activo, este evento ocupa el hero principal hasta que la fecha pase."
           },
           {
             type: "string",

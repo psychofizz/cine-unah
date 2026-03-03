@@ -1,34 +1,31 @@
 ---
-// EventCard.astro
-// Reusable card for upcoming events
-
 interface Props {
     slug: string;
     title: string;
     poster?: string;
     date: string;
+    eventTime?: string;
     location?: string;
 }
 
-const { slug, title, poster, date, location } = Astro.props;
+const { slug, title, poster, date, eventTime, location } = Astro.props;
 
 const formattedDate = new Date(date).toLocaleDateString("es-MX", {
-    weekday: "long",
+    weekday: "short",
     day: "numeric",
-    month: "long",
-    year: "numeric",
+    month: "short",
 });
 ---
 
-<a href={`/eventos/${slug}`} class="card" aria-label={`Ver evento: ${title}`}>
+<a
+    href={`/eventos/${slug}`}
+    class="card"
+    aria-label={`${title} — ${formattedDate}${eventTime ? " " + eventTime : ""}`}
+>
     <div class="card-poster">
         {
             poster ? (
-                <img
-                    src={poster}
-                    alt={`Poster del evento: ${title}`}
-                    loading="lazy"
-                />
+                <img src={poster} alt={`Poster: ${title}`} loading="lazy" />
             ) : (
                 <div class="card-poster-placeholder" aria-hidden="true">
                     🎭
@@ -39,6 +36,16 @@ const formattedDate = new Date(date).toLocaleDateString("es-MX", {
     </div>
     <div class="card-body">
         <h3 class="card-title">{title}</h3>
+
+        {
+            eventTime && (
+                <div class="card-time-row">
+                    <span class="card-time">{eventTime}</span>
+                    <span class="card-time-label">hrs</span>
+                </div>
+            )
+        }
+
         <p class="card-date">{formattedDate}</p>
         {location && <p class="card-meta">{location}</p>}
     </div>

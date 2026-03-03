@@ -5,7 +5,9 @@ fragment PeliculaParts on Pelicula {
   synopsis
   credits
   showDate
+  showTime
   status
+  featured
   duration
   country
 }
@@ -16,5 +18,7 @@ fragment EventoParts on Evento {
   poster
   description
   date
+  eventTime
+  featured
   location
 }

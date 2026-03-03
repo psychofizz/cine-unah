@@ -24,25 +24,28 @@ const formattedDate = new Date(event.date).toLocaleDateString("es-MX", {
     month: "long",
     year: "numeric",
 });
+const weekday = new Date(event.date).toLocaleDateString("es-MX", {
+    weekday: "long",
+});
 ---
 
 <BaseLayout
     title={event.title}
     description={event.description?.slice(0, 155) ??
-        `${event.title} — Taquilla`}
+        `${event.title} — Cine UNAH`}
     image={event.poster}
     pathname={`/eventos/${Astro.params.slug}`}
 >
     <div class="container">
         <div class="detail-page">
-            <a href="/" class="back-link" aria-label="Regresar a inicio">
+            <a href="/" class="back-link">
                 <svg
-                    width="16"
-                    height="16"
+                    width="14"
+                    height="14"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
+                    stroke-width="2.5"
                     aria-hidden="true"
                 >
                     <path d="M19 12H5M12 5l-7 7 7 7"></path>
@@ -60,13 +63,7 @@ const formattedDate = new Date(event.date).toLocaleDateString("es-MX", {
                                 alt={`Poster: ${event.title}`}
                             />
                         ) : (
-                            <div
-                                class="card-poster-placeholder"
-                                style="aspect-ratio:2/3; display:flex; align-items:center; justify-content:center; font-size:4rem;"
-                                aria-hidden="true"
-                            >
-                                🎭
-                            </div>
+                            <div style="aspect-ratio:2/3;background:#111;" />
                         )
                     }
                 </div>
@@ -75,7 +72,29 @@ const formattedDate = new Date(event.date).toLocaleDateString("es-MX", {
                 <div class="detail-info">
                     <span class="detail-tag">Evento</span>
                     <h1 class="detail-title">{event.title}</h1>
-                    <p class="detail-date">{formattedDate}</p>
+
+                    <!-- BIG TIME BLOCK -->
+                    <div
+                        class="detail-time-hero"
+                        aria-label={`Evento: ${weekday} ${formattedDate}${event.eventTime ? " a las " + event.eventTime : ""}`}
+                    >
+                        {
+                            event.eventTime && (
+                                <span class="detail-time-number">
+                                    {event.eventTime}
+                                </span>
+                            )
+                        }
+                        <div class="detail-time-info">
+                            <span class="detail-time-label">Evento</span>
+                            <span class="detail-date-str"
+                                >{weekday}
+                                {
+                                    formattedDate.replace(weekday + ", ", "")
+                                }</span
+                            >
+                        </div>
+                    </div>
 
                     {
                         event.location && (
@@ -93,10 +112,9 @@ const formattedDate = new Date(event.date).toLocaleDateString("es-MX", {
                         )
                     }
 
-                    <!-- Share -->
                     <ShareButtons
                         title={event.title}
-                        text={`${event.title} — ${formattedDate}`}
+                        text={`${event.title} — ${weekday} ${event.eventTime ?? ""}`}
                     />
                 </div>
             </div>
