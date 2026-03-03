@@ -1,0 +1,45 @@
+---
+// EventCard.astro
+// Reusable card for upcoming events
+
+interface Props {
+    slug: string;
+    title: string;
+    poster?: string;
+    date: string;
+    location?: string;
+}
+
+const { slug, title, poster, date, location } = Astro.props;
+
+const formattedDate = new Date(date).toLocaleDateString("es-MX", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+});
+---
+
+<a href={`/eventos/${slug}`} class="card" aria-label={`Ver evento: ${title}`}>
+    <div class="card-poster">
+        {
+            poster ? (
+                <img
+                    src={poster}
+                    alt={`Poster del evento: ${title}`}
+                    loading="lazy"
+                />
+            ) : (
+                <div class="card-poster-placeholder" aria-hidden="true">
+                    🎭
+                </div>
+            )
+        }
+        <span class="card-badge">Evento</span>
+    </div>
+    <div class="card-body">
+        <h3 class="card-title">{title}</h3>
+        <p class="card-date">{formattedDate}</p>
+        {location && <p class="card-meta">{location}</p>}
+    </div>
+</a>

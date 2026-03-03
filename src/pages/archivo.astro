@@ -1,0 +1,98 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { client } from "../../tina/__generated__/client";
+
+let pastMovies: any[] = [];
+
+try {
+    const result = await client.queries.peliculaConnection();
+    const edges = result.data.peliculaConnection.edges ?? [];
+    pastMovies = edges
+        .filter((e: any) => e?.node?.status === "past")
+        .map((e: any) => e.node)
+        .sort(
+            (a: any, b: any) =>
+                new Date(b.showDate).getTime() - new Date(a.showDate).getTime(),
+        );
+} catch (err) {
+    console.warn("TinaCMS data not available.", err);
+}
+
+function slugFromFilename(filename: string) {
+    return filename.replace(/\.md$/, "");
+}
+
+function formatDate(dateStr: string) {
+    return new Date(dateStr).toLocaleDateString("es-MX", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+    });
+}
+---
+
+<BaseLayout
+    title="Archivo de proyecciones"
+    description="Historial de todas las películas que hemos proyectado en Taquilla."
+    pathname="/archivo"
+>
+    <div class="container">
+        <section class="section" aria-labelledby="archivo-title">
+            <div class="section-header">
+                <span class="section-tag">Archivo</span>
+                <h1 class="section-title" id="archivo-title">
+                    Proyecciones Pasadas
+                </h1>
+                <div class="section-line" aria-hidden="true"></div>
+            </div>
+
+            {
+                pastMovies.length > 0 ? (
+                    <div class="archive-grid">
+                        {pastMovies.map((movie: any) => (
+                            <a
+                                href={`/peliculas/${slugFromFilename(movie._sys.filename)}`}
+                                class="archive-card"
+                                aria-label={`${movie.title} — ${formatDate(movie.showDate)}`}
+                            >
+                                <div class="archive-poster">
+                                    {movie.poster ? (
+                                        <img
+                                            src={movie.poster}
+                                            alt={`Poster de ${movie.title}`}
+                                            loading="lazy"
+                                        />
+                                    ) : (
+                                        <div
+                                            class="card-poster-placeholder"
+                                            style="height:100%; display:flex; align-items:center; justify-content:center; font-size:2.5rem;"
+                                            aria-hidden="true"
+                                        >
+                                            🎬
+                                        </div>
+                                    )}
+                                </div>
+                                <div class="archive-body">
+                                    <p class="archive-title">{movie.title}</p>
+                                    <p class="archive-date">
+                                        {formatDate(movie.showDate)}
+                                    </p>
+                                </div>
+                            </a>
+                        ))}
+                    </div>
+                ) : (
+                    <div class="empty-state">
+                        <div class="empty-state-icon" aria-hidden="true">
+                            📽️
+                        </div>
+                        <p class="empty-state-text">
+                            El archivo irá creciendo con cada proyección.
+                            ¡Vuelve pronto!
+                        </p>
+                    </div>
+                )
+            }
+        </section>
+    </div>
+</BaseLayout>

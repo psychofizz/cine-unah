@@ -1,0 +1,105 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ShareButtons from "../../components/ShareButtons.astro";
+import { client } from "../../../tina/__generated__/client";
+
+export async function getStaticPaths() {
+    try {
+        const result = await client.queries.eventoConnection();
+        const edges = result.data.eventoConnection.edges ?? [];
+        return edges.map((edge: any) => ({
+            params: { slug: edge.node._sys.filename },
+            props: { event: edge.node },
+        }));
+    } catch {
+        return [];
+    }
+}
+
+const { event } = Astro.props;
+
+const formattedDate = new Date(event.date).toLocaleDateString("es-MX", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+});
+---
+
+<BaseLayout
+    title={event.title}
+    description={event.description?.slice(0, 155) ??
+        `${event.title} — Taquilla`}
+    image={event.poster}
+    pathname={`/eventos/${Astro.params.slug}`}
+>
+    <div class="container">
+        <div class="detail-page">
+            <a href="/" class="back-link" aria-label="Regresar a inicio">
+                <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                >
+                    <path d="M19 12H5M12 5l-7 7 7 7"></path>
+                </svg>
+                Regresar
+            </a>
+
+            <div class="detail-layout">
+                <!-- Poster -->
+                <div class="detail-poster">
+                    {
+                        event.poster ? (
+                            <img
+                                src={event.poster}
+                                alt={`Poster: ${event.title}`}
+                            />
+                        ) : (
+                            <div
+                                class="card-poster-placeholder"
+                                style="aspect-ratio:2/3; display:flex; align-items:center; justify-content:center; font-size:4rem;"
+                                aria-hidden="true"
+                            >
+                                🎭
+                            </div>
+                        )
+                    }
+                </div>
+
+                <!-- Info -->
+                <div class="detail-info">
+                    <span class="detail-tag">Evento</span>
+                    <h1 class="detail-title">{event.title}</h1>
+                    <p class="detail-date">{formattedDate}</p>
+
+                    {
+                        event.location && (
+                            <div class="detail-meta-row">
+                                <span class="detail-meta-chip">
+                                    📍 {event.location}
+                                </span>
+                            </div>
+                        )
+                    }
+
+                    {
+                        event.description && (
+                            <p class="detail-synopsis">{event.description}</p>
+                        )
+                    }
+
+                    <!-- Share -->
+                    <ShareButtons
+                        title={event.title}
+                        text={`${event.title} — ${formattedDate}`}
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+</BaseLayout>

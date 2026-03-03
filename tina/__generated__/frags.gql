@@ -1,0 +1,20 @@
+fragment PeliculaParts on Pelicula {
+  __typename
+  title
+  poster
+  synopsis
+  credits
+  showDate
+  status
+  duration
+  country
+}
+
+fragment EventoParts on Evento {
+  __typename
+  title
+  poster
+  description
+  date
+  location
+}

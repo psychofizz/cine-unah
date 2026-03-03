@@ -1,0 +1,62 @@
+---
+// MovieCard.astro
+// Reusable card for movie display (cartelera + archivo)
+
+interface Props {
+    slug: string;
+    title: string;
+    poster?: string;
+    showDate: string;
+    status: "current" | "next" | "past";
+    country?: string;
+    duration?: number;
+}
+
+const { slug, title, poster, showDate, status, country, duration } =
+    Astro.props;
+
+const statusLabel = {
+    current: "En cartelera",
+    next: "Próxima",
+    past: "Pasada",
+}[status];
+
+const formattedDate = new Date(showDate).toLocaleDateString("es-MX", {
+    weekday: "short",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+});
+---
+
+<a
+    href={`/peliculas/${slug}`}
+    class="card"
+    aria-label={`Ver detalle: ${title}`}
+>
+    <div class="card-poster">
+        {
+            poster ? (
+                <img src={poster} alt={`Poster de ${title}`} loading="lazy" />
+            ) : (
+                <div class="card-poster-placeholder" aria-hidden="true">
+                    🎬
+                </div>
+            )
+        }
+        {status !== "past" && <span class="card-badge">{statusLabel}</span>}
+    </div>
+    <div class="card-body">
+        <h3 class="card-title">{title}</h3>
+        <p class="card-date">{formattedDate}</p>
+        {
+            (country || duration) && (
+                <p class="card-meta">
+                    {[country, duration ? `${duration} min` : null]
+                        .filter(Boolean)
+                        .join(" · ")}
+                </p>
+            )
+        }
+    </div>
+</a>

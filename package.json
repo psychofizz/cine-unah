@@ -1,0 +1,17 @@
+{
+  "name": "taquilla",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "tinacms dev -c \"astro dev\"",
+    "build": "tinacms build && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "tina": "tinacms dev -c \"astro dev\""
+  },
+  "dependencies": {
+    "@tinacms/cli": "^2.1.8",
+    "astro": "^5.17.1",
+    "tinacms": "^3.6.0"
+  }
+}

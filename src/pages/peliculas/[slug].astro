@@ -1,0 +1,128 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ShareButtons from "../../components/ShareButtons.astro";
+import { client } from "../../../tina/__generated__/client";
+
+export async function getStaticPaths() {
+    try {
+        const result = await client.queries.peliculaConnection();
+        const edges = result.data.peliculaConnection.edges ?? [];
+        return edges.map((edge: any) => ({
+            params: { slug: edge.node._sys.filename },
+            props: { movie: edge.node },
+        }));
+    } catch {
+        return [];
+    }
+}
+
+const { movie } = Astro.props;
+
+const formattedDate = new Date(movie.showDate).toLocaleDateString("es-MX", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+});
+
+const statusLabel: Record<string, string> = {
+    current: "En cartelera",
+    next: "Próxima proyección",
+    past: "Archivo",
+};
+---
+
+<BaseLayout
+    title={movie.title}
+    description={movie.synopsis?.slice(0, 155) ?? `${movie.title} — Taquilla`}
+    image={movie.poster}
+    pathname={`/peliculas/${Astro.params.slug}`}
+>
+    <div class="container">
+        <div class="detail-page">
+            <a href="/" class="back-link" aria-label="Regresar a cartelera">
+                <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                >
+                    <path d="M19 12H5M12 5l-7 7 7 7"></path>
+                </svg>
+                Regresar
+            </a>
+
+            <div class="detail-layout">
+                <!-- Poster -->
+                <div class="detail-poster">
+                    {
+                        movie.poster ? (
+                            <img
+                                src={movie.poster}
+                                alt={`Poster de ${movie.title}`}
+                            />
+                        ) : (
+                            <div
+                                class="card-poster-placeholder"
+                                style="aspect-ratio:2/3; display:flex; align-items:center; justify-content:center; font-size:4rem;"
+                                aria-hidden="true"
+                            >
+                                🎬
+                            </div>
+                        )
+                    }
+                </div>
+
+                <!-- Info -->
+                <div class="detail-info">
+                    <span class="detail-tag"
+                        >{statusLabel[movie.status] ?? movie.status}</span
+                    >
+                    <h1 class="detail-title">{movie.title}</h1>
+                    <p class="detail-date">{formattedDate}</p>
+
+                    {
+                        (movie.country || movie.duration) && (
+                            <div class="detail-meta-row">
+                                {movie.country && (
+                                    <span class="detail-meta-chip">
+                                        {movie.country}
+                                    </span>
+                                )}
+                                {movie.duration && (
+                                    <span class="detail-meta-chip">
+                                        {movie.duration} min
+                                    </span>
+                                )}
+                            </div>
+                        )
+                    }
+
+                    {
+                        movie.synopsis && (
+                            <p class="detail-synopsis">{movie.synopsis}</p>
+                        )
+                    }
+
+                    {
+                        movie.credits && (
+                            <div>
+                                <p class="detail-credits-heading">Créditos</p>
+                                <p class="detail-credits">{movie.credits}</p>
+                            </div>
+                        )
+                    }
+
+                    <!-- Share -->
+                    <ShareButtons
+                        title={movie.title}
+                        text={`${movie.title} — ${formattedDate}`}
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+</BaseLayout>

@@ -1,0 +1,144 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import MovieCard from "../components/MovieCard.astro";
+import EventCard from "../components/EventCard.astro";
+import { client } from "../../tina/__generated__/client";
+
+// Fetch movies from TinaCMS
+let currentMovies: any[] = [];
+let nextMovies: any[] = [];
+let upcomingEvents: any[] = [];
+
+try {
+	const peliculasResult = await client.queries.peliculaConnection();
+	const allMovies = peliculasResult.data.peliculaConnection.edges ?? [];
+
+	currentMovies = allMovies
+		.filter((e: any) => e?.node?.status === "current")
+		.map((e: any) => e.node);
+
+	nextMovies = allMovies
+		.filter((e: any) => e?.node?.status === "next")
+		.map((e: any) => e.node);
+
+	const eventosResult = await client.queries.eventoConnection();
+	const allEvents = eventosResult.data.eventoConnection.edges ?? [];
+
+	const now = new Date();
+	upcomingEvents = allEvents
+		.filter((e: any) => e?.node?.date && new Date(e.node.date) >= now)
+		.sort(
+			(a: any, b: any) =>
+				new Date(a.node.date).getTime() -
+				new Date(b.node.date).getTime(),
+		)
+		.map((e: any) => e.node);
+} catch (err) {
+	console.warn(
+		"TinaCMS data not yet available (local mode). Using empty data.",
+		err,
+	);
+}
+
+function slugFromPath(path: string) {
+	return path.replace(/^.*\//, "").replace(/\.md$/, "");
+}
+---
+
+<BaseLayout
+	title="Taquilla"
+	description="Cine de barrio. Una pantalla. Mucha película."
+>
+	<div class="container">
+		<!-- ════════════════════════════════════════
+         SECTION A — EN CARTELERA
+    ════════════════════════════════════════ -->
+		<section class="section" aria-labelledby="cartelera-title">
+			<div class="section-header">
+				<span class="section-tag">Hoy</span>
+				<h2 class="section-title" id="cartelera-title">En Cartelera</h2>
+				<div class="section-line" aria-hidden="true"></div>
+			</div>
+
+			{
+				currentMovies.length > 0 || nextMovies.length > 0 ? (
+					<div class="grid-movies">
+						{currentMovies.map((movie: any) => (
+							<MovieCard
+								slug={slugFromPath(movie._sys.filename)}
+								title={movie.title}
+								poster={movie.poster}
+								showDate={movie.showDate}
+								status="current"
+								country={movie.country}
+								duration={movie.duration}
+							/>
+						))}
+						{nextMovies.map((movie: any) => (
+							<MovieCard
+								slug={slugFromPath(movie._sys.filename)}
+								title={movie.title}
+								poster={movie.poster}
+								showDate={movie.showDate}
+								status="next"
+								country={movie.country}
+								duration={movie.duration}
+							/>
+						))}
+					</div>
+				) : (
+					<div class="empty-state">
+						<div class="empty-state-icon" aria-hidden="true">
+							🎬
+						</div>
+						<p class="empty-state-text">
+							Próximamente — añade películas desde el panel de
+							administración.
+						</p>
+					</div>
+				)
+			}
+		</section>
+
+		<hr class="divider" aria-hidden="true" />
+
+		<!-- ════════════════════════════════════════
+         SECTION B — PRÓXIMOS EVENTOS
+    ════════════════════════════════════════ -->
+		<section class="section" aria-labelledby="eventos-title">
+			<div class="section-header">
+				<span class="section-tag">Eventos</span>
+				<h2 class="section-title" id="eventos-title">
+					Próximos Eventos
+				</h2>
+				<div class="section-line" aria-hidden="true"></div>
+			</div>
+
+			{
+				upcomingEvents.length > 0 ? (
+					<div class="grid-events">
+						{upcomingEvents.map((event: any) => (
+							<EventCard
+								slug={slugFromPath(event._sys.filename)}
+								title={event.title}
+								poster={event.poster}
+								date={event.date}
+								location={event.location}
+							/>
+						))}
+					</div>
+				) : (
+					<div class="empty-state">
+						<div class="empty-state-icon" aria-hidden="true">
+							🎭
+						</div>
+						<p class="empty-state-text">
+							Sin eventos próximos por ahora — añade uno desde el
+							panel de administración.
+						</p>
+					</div>
+				)
+			}
+		</section>
+	</div>
+</BaseLayout>
