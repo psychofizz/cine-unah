@@ -1,5 +1,25 @@
-// tina/config.ts
+// tina/config.tsx
+import React from "react";
 import { defineConfig } from "tinacms";
+var TimePickerField = ({ input }) => {
+  return React.createElement("input", {
+    type: "time",
+    id: input.name,
+    value: input.value || "",
+    onChange: (e) => input.onChange(e.currentTarget.value),
+    style: {
+      width: "100%",
+      padding: "8px 12px",
+      fontSize: "1rem",
+      border: "1px solid #e2e8f0",
+      borderRadius: "6px",
+      background: "white",
+      color: "#1a202c",
+      outline: "none",
+      cursor: "pointer"
+    }
+  });
+};
 var config_default = defineConfig({
   clientId: process.env.TINA_CLIENT_ID ?? "",
   token: process.env.TINA_TOKEN ?? "",
@@ -39,8 +59,7 @@ var config_default = defineConfig({
             type: "string",
             name: "synopsis",
             label: "Sinopsis",
-            ui: { component: "textarea" },
-            required: true
+            ui: { component: "textarea" }
           },
           {
             type: "string",
@@ -59,8 +78,7 @@ var config_default = defineConfig({
             type: "string",
             name: "showTime",
             label: "Hora de proyecci\xF3n",
-            description: "Ej: 19:00 o 7:00 PM",
-            required: true
+            ui: { component: TimePickerField }
           },
           {
             type: "string",
@@ -116,8 +134,7 @@ var config_default = defineConfig({
             type: "string",
             name: "description",
             label: "Descripci\xF3n",
-            ui: { component: "textarea" },
-            required: true
+            ui: { component: "textarea" }
           },
           {
             type: "datetime",
@@ -129,8 +146,7 @@ var config_default = defineConfig({
             type: "string",
             name: "eventTime",
             label: "Hora del evento",
-            description: "Ej: 20:00 o 8:00 PM",
-            required: true
+            ui: { component: TimePickerField }
           },
           {
             type: "boolean",

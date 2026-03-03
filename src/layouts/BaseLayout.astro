@@ -33,26 +33,56 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
   </head>
 
   <body>
+    <!-- ── HEADER ──────────────────────────────────────── -->
     <header class="site-header">
       <div class="container">
         <div class="site-header-inner">
-          <a href="/" class="site-logo">
+          <a href="/" class="site-logo" aria-label="Cine UNAH — inicio">
             Cine <span>UNAH</span>
           </a>
-          <nav aria-label="Navegación principal">
-            <ul class="site-nav">
+
+          <!-- Desktop nav -->
+          <nav class="site-nav-desktop" aria-label="Navegación principal">
+            <ul>
               <li><a href="/">Cartelera</a></li>
               <li><a href="/archivo">Archivo</a></li>
             </ul>
           </nav>
+
+          <!-- Mobile hamburger -->
+          <button
+            class="nav-toggle"
+            aria-label="Abrir menú"
+            aria-expanded="false"
+            aria-controls="mobile-nav"
+            id="nav-toggle"
+          >
+            <span class="nav-toggle-bar"></span>
+            <span class="nav-toggle-bar"></span>
+            <span class="nav-toggle-bar"></span>
+          </button>
         </div>
       </div>
     </header>
+
+    <!-- ── MOBILE NAV OVERLAY ──────────────────────────── -->
+    <nav
+      class="mobile-nav"
+      id="mobile-nav"
+      aria-label="Menú móvil"
+      aria-hidden="true"
+    >
+      <ul class="mobile-nav-list">
+        <li><a href="/" class="mobile-nav-link">Cartelera</a></li>
+        <li><a href="/archivo" class="mobile-nav-link">Archivo</a></li>
+      </ul>
+    </nav>
 
     <main>
       <slot />
     </main>
 
+    <!-- ── FOOTER ──────────────────────────────────────── -->
     <footer class="site-footer">
       <div class="container">
         <div class="footer-inner">
@@ -60,7 +90,7 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
 
           <div class="footer-social">
             <a
-              href="https://instagram.com/taquilla"
+              href="https://www.instagram.com/cine_unah/"
               target="_blank"
               rel="noopener noreferrer"
               class="footer-social-link"
@@ -74,7 +104,7 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
               Instagram
             </a>
             <a
-              href="https://facebook.com/taquilla"
+              href="https://www.facebook.com/profile.php?id=61553719695216"
               target="_blank"
               rel="noopener noreferrer"
               class="footer-social-link"
@@ -92,8 +122,41 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
           <p class="footer-copy">
             &copy; {new Date().getFullYear()} Comunidad del Cine Universitario
           </p>
+          <a
+            href="https://github.com/psychofizz"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="footer-dev"
+          >
+            dev ❤️ psychofizz
+          </a>
         </div>
       </div>
     </footer>
+
+    <script>
+      const toggle = document.getElementById("nav-toggle");
+      const nav = document.getElementById("mobile-nav");
+
+      toggle?.addEventListener("click", () => {
+        const open = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", String(!open));
+        nav?.setAttribute("aria-hidden", String(open));
+        toggle.classList.toggle("is-open", !open);
+        nav?.classList.toggle("is-open", !open);
+        document.body.classList.toggle("nav-open", !open);
+      });
+
+      // Close on nav link click
+      nav?.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          toggle?.setAttribute("aria-expanded", "false");
+          nav.setAttribute("aria-hidden", "true");
+          toggle?.classList.remove("is-open");
+          nav.classList.remove("is-open");
+          document.body.classList.remove("nav-open");
+        });
+      });
+    </script>
   </body>
 </html>

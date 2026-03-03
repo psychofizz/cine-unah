@@ -76,11 +76,8 @@ if (featuredMovie || featuredEvent) {
 	)[0];
 }
 
-// ── Remaining grid movies (exclude hero if it's a movie) ──
-const gridMovies = activeMovies.filter(
-	(m: any) =>
-		heroType !== "movie" || m._sys.filename !== heroItem?._sys?.filename,
-);
+// ── Grid movies — show ALL active movies (hero stays in grid too) ──
+const gridMovies = activeMovies;
 
 // ── Upcoming events (exclude hero if it's an event) ──────
 const upcomingEvents = futureEvents
@@ -235,17 +232,6 @@ function formatHeroDate(dateStr: string) {
 												<path d="M5 12h14M12 5l7 7-7 7" />
 											</svg>
 										</a>
-										{isMovie && heroItem.synopsis && (
-											<span
-												class="hero-chip"
-												style="align-self:center;"
-											>
-												{heroItem.synopsis.slice(0, 60)}
-												{heroItem.synopsis.length > 60
-													? "…"
-													: ""}
-											</span>
-										)}
 									</div>
 								</div>
 							</div>

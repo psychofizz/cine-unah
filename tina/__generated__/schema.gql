@@ -93,10 +93,10 @@ union DocumentNode = Pelicula | Evento | Folder
 type Pelicula implements Node & Document {
   title: String!
   poster: String!
-  synopsis: String!
+  synopsis: String
   credits: String
   showDate: String!
-  showTime: String!
+  showTime: String
   status: String!
   featured: Boolean
   duration: Float
@@ -172,7 +172,7 @@ type Evento implements Node & Document {
   poster: String!
   description: String!
   date: String!
-  eventTime: String!
+  eventTime: String
   featured: Boolean
   location: String
   id: ID!
