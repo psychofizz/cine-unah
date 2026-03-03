@@ -1,43 +1,65 @@
-# Astro Starter Kit: Minimal
+# 🎬 Cine UNAH
 
-```sh
-npm create astro@latest -- --template minimal
+Website creado para el manejo de cartelera y eventos del cine, creando asi una pagina consolidada para que la comunidad este informada de proyecciones futuras.
+
+Una pantalla. Mucha película.
+
+## qué hace esto?
+
+- 🎥 **Cartelera** — muestra las pelis que estan en proyección ahora y las que vienen. hora, fecha, poster, todo visible de un vistazo.
+- 🎪 **Eventos** — para las actividades especiales (noches de terror, ciclos, charlas, etc). con poster, descripción y fecha.
+- 📁 **Archivo** — registro histórico de todo lo que se ha proyectado. pa' que quede constancia.
+- 📱 **Mobile first** — diseñado primero para celular porque asi es como la gente lo va a ver.
+- 🔗 **Compartir** — cada peli y evento se puede compartir fácil por WhatsApp, Facebook o copiar el link.
+
+## tech stack
+
+- [Astro](https://astro.build) — framework web, rápido y estático
+- [TinaCMS](https://tina.io) — CMS para manejar el contenido sin tocar código
+- [Vercel](https://vercel.com) — hosting y deploy automático
+
+## setup local
+
+```bash
+# instalar dependencias
+npm install
+
+# correr en dev
+npm run dev
+
+# build para producción
+npm run build
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+el dev server corre en `localhost:4321`.
+el admin de TinaCMS está en `localhost:4321/admin`.
 
-## 🚀 Project Structure
+## variables de entorno
 
-Inside of your Astro project, you'll see the following folders and files:
+para el build de producción necesitas configurar las variables de TinaCMS:
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```
+TINA_CLIENT_ID=tu_client_id
+TINA_TOKEN=tu_token
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+en local no necesitas esto, TinaCMS corre en modo local automáticamente.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## estructura
 
-Any static assets, like images, can be placed in the `public/` directory.
+```
+src/
+├── components/      # MovieCard, EventCard
+├── content/         # markdown de pelis y eventos (manejado por TinaCMS)
+├── layouts/         # BaseLayout con header, footer, nav
+├── pages/           # index, archivo, detalle de peli/evento
+└── styles/          # global.css — todo el diseño
+tina/
+└── config.tsx       # esquema de TinaCMS + time picker custom
+```
 
-## 🧞 Commands
+## créditos
 
-All commands are run from the root of the project, from a terminal:
+hecho por la **Comunidad del Cine Universitario**.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+dev ❤️ [psychofizz](https://github.com/psychofizz)
