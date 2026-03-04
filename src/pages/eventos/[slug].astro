@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
 import { client } from "../../../tina/__generated__/client";
+import { Image } from "astro:assets";
 
 export async function getStaticPaths() {
     try {
@@ -58,9 +59,11 @@ const weekday = new Date(event.date).toLocaleDateString("es-MX", {
                 <div class="detail-poster">
                     {
                         event.poster ? (
-                            <img
+                            <Image
                                 src={event.poster}
                                 alt={`Poster: ${event.title}`}
+                                width={600}
+                                height={900}
                             />
                         ) : (
                             <div style="aspect-ratio:2/3;background:#111;" />
@@ -106,16 +109,16 @@ const weekday = new Date(event.date).toLocaleDateString("es-MX", {
                         )
                     }
 
+                    <ShareButtons
+                        title={event.title}
+                        text={`${event.title} — ${weekday} ${event.eventTime ?? ""}`}
+                    />
+
                     {
                         event.description && (
                             <p class="detail-synopsis">{event.description}</p>
                         )
                     }
-
-                    <ShareButtons
-                        title={event.title}
-                        text={`${event.title} — ${weekday} ${event.eventTime ?? ""}`}
-                    />
                 </div>
             </div>
         </div>

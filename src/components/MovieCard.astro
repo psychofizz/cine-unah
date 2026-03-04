@@ -24,6 +24,8 @@ const formattedDate = new Date(showDate).toLocaleDateString("es-MX", {
     day: "numeric",
     month: "short",
 });
+
+import { Image } from "astro:assets";
 ---
 
 <a
@@ -34,7 +36,13 @@ const formattedDate = new Date(showDate).toLocaleDateString("es-MX", {
     <div class="card-poster">
         {
             poster ? (
-                <img src={poster} alt={`Poster: ${title}`} loading="lazy" />
+                <Image
+                    src={poster}
+                    alt={`Poster: ${title}`}
+                    width={400}
+                    height={600}
+                    loading="lazy"
+                />
             ) : (
                 <div class="card-poster-placeholder" aria-hidden="true">
                     🎬

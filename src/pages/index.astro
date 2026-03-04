@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import MovieCard from "../components/MovieCard.astro";
 import EventCard from "../components/EventCard.astro";
 import { client } from "../../tina/__generated__/client";
+import { Image } from "astro:assets";
 
 // ── Fetch data ─────────────────────────────────────────
 let allMovies: any[] = [];
@@ -134,10 +135,12 @@ function formatHeroDate(dateStr: string) {
 							{/* Background poster */}
 							<div class="hero-poster-bg">
 								{heroItem.poster ? (
-									<img
+									<Image
 										src={heroItem.poster}
 										alt=""
 										aria-hidden="true"
+										width={1200}
+										height={800}
 									/>
 								) : (
 									<div class="hero-poster-bg-empty" />
@@ -149,9 +152,11 @@ function formatHeroDate(dateStr: string) {
 								{/* Thumbnail poster */}
 								<div class="hero-poster-thumb">
 									{heroItem.poster ? (
-										<img
+										<Image
 											src={heroItem.poster}
 											alt={`Poster: ${heroItem.title}`}
+											width={400}
+											height={600}
 										/>
 									) : (
 										<div style="aspect-ratio:2/3;background:#1a1a1a;" />

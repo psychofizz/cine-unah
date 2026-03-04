@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { client } from "../../tina/__generated__/client";
+import { Image } from "astro:assets";
 
 let pastMovies: any[] = [];
 
@@ -57,9 +58,11 @@ function formatDate(dateStr: string) {
                             >
                                 <div class="archive-poster">
                                     {movie.poster ? (
-                                        <img
+                                        <Image
                                             src={movie.poster}
                                             alt={`Poster de ${movie.title}`}
+                                            width={300}
+                                            height={450}
                                             loading="lazy"
                                         />
                                     ) : (

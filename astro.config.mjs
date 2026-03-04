@@ -1,9 +1,15 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
     site: 'https://taquilla.cine',
     output: 'static',
+    adapter: vercel({
+        imageService: true,
+    }),
+    image: {
+        domains: [],
+    },
 });
-

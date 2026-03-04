@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
 import { client } from "../../../tina/__generated__/client";
+import { Image } from "astro:assets";
 
 export async function getStaticPaths() {
     try {
@@ -63,9 +64,11 @@ const statusLabel: Record<string, string> = {
                 <div class="detail-poster">
                     {
                         movie.poster ? (
-                            <img
+                            <Image
                                 src={movie.poster}
                                 alt={`Poster: ${movie.title}`}
+                                width={600}
+                                height={900}
                             />
                         ) : (
                             <div style="aspect-ratio:2/3;background:#111;" />
@@ -120,6 +123,11 @@ const statusLabel: Record<string, string> = {
                         )
                     }
 
+                    <ShareButtons
+                        title={movie.title}
+                        text={`${movie.title} — ${weekday} ${movie.showTime ?? ""}`}
+                    />
+
                     {
                         movie.synopsis && (
                             <p class="detail-synopsis">{movie.synopsis}</p>
@@ -134,11 +142,6 @@ const statusLabel: Record<string, string> = {
                             </div>
                         )
                     }
-
-                    <ShareButtons
-                        title={movie.title}
-                        text={`${movie.title} — ${weekday} ${movie.showTime ?? ""}`}
-                    />
                 </div>
             </div>
         </div>

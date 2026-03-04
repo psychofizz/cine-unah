@@ -10,6 +10,7 @@
     "tina": "tinacms dev -c \"astro dev\""
   },
   "dependencies": {
+    "@astrojs/vercel": "^9.0.4",
     "@tinacms/cli": "^2.1.8",
     "astro": "^5.17.1",
     "tinacms": "^3.6.0"
