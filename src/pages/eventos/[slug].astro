@@ -79,12 +79,15 @@ const weekday = new Date(event.date).toLocaleDateString("es-MX", {
                     <!-- BIG TIME BLOCK -->
                     <div
                         class="detail-time-hero"
-                        aria-label={`Evento: ${weekday} ${formattedDate}${event.eventTime ? " a las " + event.eventTime : ""}`}
+                        aria-label={`Evento: ${weekday} ${formattedDate}${event.eventTime ? " a las " + event.eventTime : ""}${event.eventEndTime ? " hasta " + event.eventEndTime : ""}`}
                     >
                         {
                             event.eventTime && (
                                 <span class="detail-time-number">
                                     {event.eventTime}
+                                    {event.eventEndTime
+                                        ? ` - ${event.eventEndTime}`
+                                        : ""}
                                 </span>
                             )
                         }
@@ -111,7 +114,7 @@ const weekday = new Date(event.date).toLocaleDateString("es-MX", {
 
                     <ShareButtons
                         title={event.title}
-                        text={`${event.title} — ${weekday} ${event.eventTime ?? ""}`}
+                        text={`${event.title} — ${weekday} ${event.eventTime ?? ""}${event.eventEndTime ? " - " + event.eventEndTime : ""}`}
                     />
 
                     {

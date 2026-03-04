@@ -33,12 +33,21 @@ function slugFromFilename(f: string) {
 	return f.replace(/\.md$/, "");
 }
 
-const activeMovies = allMovies.filter(
-	(m: any) => m.status === "current" || m.status === "next",
-);
-const futureEvents = allEvents.filter(
-	(e: any) => e.date && new Date(e.date) >= now,
-);
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const activeMovies = allMovies.filter((m: any) => {
+	const showDate = new Date(m.showDate);
+	showDate.setHours(0, 0, 0, 0);
+	return showDate >= today;
+});
+
+const futureEvents = allEvents.filter((e: any) => {
+	if (!e.date) return false;
+	const eventDate = new Date(e.date);
+	eventDate.setHours(0, 0, 0, 0);
+	return eventDate >= today;
+});
 
 // Find a featured item
 const featuredMovie =
@@ -265,7 +274,7 @@ function formatHeroDate(dateStr: string) {
 								poster={movie.poster}
 								showDate={movie.showDate}
 								showTime={movie.showTime}
-								status={movie.status}
+								showEndTime={movie.showEndTime}
 								country={movie.country}
 								duration={movie.duration}
 							/>
@@ -319,6 +328,7 @@ function formatHeroDate(dateStr: string) {
 								poster={event.poster}
 								date={event.date}
 								eventTime={event.eventTime}
+								eventEndTime={event.eventEndTime}
 								location={event.location}
 							/>
 						))}

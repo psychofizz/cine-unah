@@ -5,13 +5,28 @@ interface Props {
     poster?: string;
     showDate: string;
     showTime?: string;
-    status: "current" | "next" | "past";
+    showEndTime?: string;
     country?: string;
     duration?: number;
 }
 
-const { slug, title, poster, showDate, showTime, status, country, duration } =
-    Astro.props;
+const {
+    slug,
+    title,
+    poster,
+    showDate,
+    showTime,
+    showEndTime,
+    country,
+    duration,
+} = Astro.props;
+
+const showDateParsed = new Date(showDate);
+showDateParsed.setHours(0, 0, 0, 0);
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const status = showDateParsed < today ? "past" : "current";
 
 const statusLabel: Record<string, string> = {
     current: "En cartelera",
@@ -61,8 +76,10 @@ import { Image } from "astro:assets";
         {
             showTime && (
                 <div class="card-time-row">
-                    <span class="card-time">{showTime}</span>
-                    <span class="card-time-label">hrs</span>
+                    <span class="card-time">
+                        {showTime} {showEndTime ? ` - ${showEndTime}` : ""}
+                    </span>
+                    {!showEndTime && <span class="card-time-label">hrs</span>}
                 </div>
             )
         }

@@ -5,10 +5,12 @@ interface Props {
     poster?: string;
     date: string;
     eventTime?: string;
+    eventEndTime?: string;
     location?: string;
 }
 
-const { slug, title, poster, date, eventTime, location } = Astro.props;
+const { slug, title, poster, date, eventTime, eventEndTime, location } =
+    Astro.props;
 
 const formattedDate = new Date(date).toLocaleDateString("es-MX", {
     weekday: "short",
@@ -48,8 +50,10 @@ import { Image } from "astro:assets";
         {
             eventTime && (
                 <div class="card-time-row">
-                    <span class="card-time">{eventTime}</span>
-                    <span class="card-time-label">hrs</span>
+                    <span class="card-time">
+                        {eventTime} {eventEndTime ? ` - ${eventEndTime}` : ""}
+                    </span>
+                    {!eventEndTime && <span class="card-time-label">hrs</span>}
                 </div>
             )
         }

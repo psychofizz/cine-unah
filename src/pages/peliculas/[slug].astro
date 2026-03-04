@@ -29,11 +29,12 @@ const weekday = new Date(movie.showDate).toLocaleDateString("es-MX", {
     weekday: "long",
 });
 
-const statusLabel: Record<string, string> = {
-    current: "En cartelera",
-    next: "Próxima proyección",
-    past: "Archivo",
-};
+const showDateParsed = new Date(movie.showDate);
+showDateParsed.setHours(0, 0, 0, 0);
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const statusText = showDateParsed < today ? "Archivo" : "En cartelera";
 ---
 
 <BaseLayout
@@ -78,20 +79,21 @@ const statusLabel: Record<string, string> = {
 
                 <!-- Info -->
                 <div class="detail-info">
-                    <span class="detail-tag"
-                        >{statusLabel[movie.status] ?? movie.status}</span
-                    >
+                    <span class="detail-tag">{statusText}</span>
                     <h1 class="detail-title">{movie.title}</h1>
 
                     <!-- BIG TIME BLOCK -->
                     <div
                         class="detail-time-hero"
-                        aria-label={`Proyección: ${weekday} ${formattedDate}${movie.showTime ? " a las " + movie.showTime : ""}`}
+                        aria-label={`Proyección: ${weekday} ${formattedDate}${movie.showTime ? " a las " + movie.showTime : ""}${movie.showEndTime ? " hasta " + movie.showEndTime : ""}`}
                     >
                         {
                             movie.showTime && (
                                 <span class="detail-time-number">
                                     {movie.showTime}
+                                    {movie.showEndTime
+                                        ? ` - ${movie.showEndTime}`
+                                        : ""}
                                 </span>
                             )
                         }
@@ -125,7 +127,7 @@ const statusLabel: Record<string, string> = {
 
                     <ShareButtons
                         title={movie.title}
-                        text={`${movie.title} — ${weekday} ${movie.showTime ?? ""}`}
+                        text={`${movie.title} — ${weekday} ${movie.showTime ?? ""}${movie.showEndTime ? " - " + movie.showEndTime : ""}`}
                     />
 
                     {

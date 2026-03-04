@@ -6,7 +6,7 @@ fragment PeliculaParts on Pelicula {
   credits
   showDate
   showTime
-  status
+  showEndTime
   featured
   duration
   country
@@ -19,6 +19,7 @@ fragment EventoParts on Evento {
   description
   date
   eventTime
+  eventEndTime
   featured
   location
 }

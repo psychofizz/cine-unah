@@ -88,14 +88,9 @@ export default defineConfig({
           },
           {
             type: "string",
-            name: "status",
-            label: "Estado",
-            options: [
-              { value: "current", label: "En cartelera (actual)" },
-              { value: "next", label: "Próxima proyección" },
-              { value: "past", label: "Pasada (archivo)" },
-            ],
-            required: true,
+            name: "showEndTime",
+            label: "Hora de finalización (opcional)",
+            ui: { component: TimePickerField },
           },
           {
             type: "boolean",
@@ -153,6 +148,12 @@ export default defineConfig({
             type: "string",
             name: "eventTime",
             label: "Hora del evento",
+            ui: { component: TimePickerField },
+          },
+          {
+            type: "string",
+            name: "eventEndTime",
+            label: "Hora de finalización (opcional)",
             ui: { component: TimePickerField },
           },
           {

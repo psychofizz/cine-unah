@@ -8,8 +8,16 @@ let pastMovies: any[] = [];
 try {
     const result = await client.queries.peliculaConnection();
     const edges = result.data.peliculaConnection.edges ?? [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     pastMovies = edges
-        .filter((e: any) => e?.node?.status === "past")
+        .filter((e: any) => {
+            if (!e?.node?.showDate) return false;
+            const showDate = new Date(e.node.showDate);
+            showDate.setHours(0, 0, 0, 0);
+            return showDate < today;
+        })
         .map((e: any) => e.node)
         .sort(
             (a: any, b: any) =>
