@@ -1,7 +1,7 @@
 ---
 status: current
 title: 'El Padre, Padre'
-poster: /uploads/2026-03-02 22.45.56.jpg
+poster: /uploads/2026-03-02%2022.45.56.jpg
 synopsis: ''
 credits: |-
   Padre Padre:
