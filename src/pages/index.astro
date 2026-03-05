@@ -44,11 +44,16 @@ const futureEvents = allEvents.filter((e: any) => {
 	return eventDateStr >= todayStr;
 });
 
-// The carousel shows all active movies coming up, sorted by date
-const heroCarouselItems = activeMovies.sort(
-	(a: any, b: any) =>
-		new Date(a.showDate).getTime() - new Date(b.showDate).getTime(),
-);
+// The carousel shows all active movies coming up, sorted by date and time
+const heroCarouselItems = activeMovies.sort((a: any, b: any) => {
+	const dateA = new Date(a.showDate).getTime();
+	const dateB = new Date(b.showDate).getTime();
+	if (dateA !== dateB) return dateA - dateB;
+
+	const timeA = a.showTime || "00:00";
+	const timeB = b.showTime || "00:00";
+	return timeA.localeCompare(timeB);
+});
 
 // ── Grid movies — show ALL active movies (hero stays in grid too) ──
 const gridMovies = activeMovies;
@@ -255,6 +260,10 @@ function formatHeroDate(dateStr: string) {
 						</div>
 					</div>
 				)}
+
+				<div class="hero-progress-bar">
+					<div class="hero-progress-fill" id="heroProgressFill" />
+				</div>
 			</div>
 		)
 	}
@@ -350,6 +359,57 @@ function formatHeroDate(dateStr: string) {
 		const dots = document.querySelectorAll(".hero-dot");
 		const prevBtn = document.querySelector(".hero-nav-btn.prev");
 		const nextBtn = document.querySelector(".hero-nav-btn.next");
+		const progressFill = document.getElementById("heroProgressFill");
+
+		let autoPlayInterval: ReturnType<typeof setInterval>;
+		let scrollTimeout: ReturnType<typeof setTimeout>;
+		const autoPlayDelay = 10000;
+		let isHovered = false;
+
+		const startProgress = () => {
+			if (progressFill) {
+				progressFill.style.transition = "none";
+				progressFill.style.width = "0%";
+				// Force reflow
+				void progressFill.offsetWidth;
+				progressFill.style.transition = `width ${autoPlayDelay}ms linear`;
+				progressFill.style.width = "100%";
+			}
+		};
+
+		const stopProgress = () => {
+			if (progressFill) {
+				const computedWidth =
+					window.getComputedStyle(progressFill).width;
+				progressFill.style.transition = "none";
+				progressFill.style.width = computedWidth;
+			}
+		};
+
+		const advanceSlide = () => {
+			const scrollLeft = carousel.scrollLeft;
+			const slideWidth = carousel.clientWidth;
+			let index = Math.round(scrollLeft / slideWidth);
+
+			if (index >= slides.length - 1) {
+				// Return to first slide
+				carousel.scrollTo({ left: 0, behavior: "smooth" });
+			} else {
+				carousel.scrollBy({ left: slideWidth, behavior: "smooth" });
+			}
+		};
+
+		const resetAutoPlay = () => {
+			clearInterval(autoPlayInterval);
+			if (!isHovered) {
+				startProgress();
+				autoPlayInterval = setInterval(() => {
+					advanceSlide();
+				}, autoPlayDelay);
+			} else {
+				stopProgress();
+			}
+		};
 
 		const updateActiveDot = () => {
 			const scrollLeft = carousel.scrollLeft;
@@ -365,9 +425,38 @@ function formatHeroDate(dateStr: string) {
 
 		// Initial check
 		updateActiveDot();
+		resetAutoPlay();
 
-		// Update on scroll (use a small timeout to debounce if needed, or passive)
-		carousel.addEventListener("scroll", updateActiveDot, { passive: true });
+		// Update on scroll
+		carousel.addEventListener(
+			"scroll",
+			() => {
+				updateActiveDot();
+
+				// Clear intervals while snapping
+				clearInterval(autoPlayInterval);
+				clearTimeout(scrollTimeout);
+
+				// Restart autoplay when scrolling stops
+				scrollTimeout = setTimeout(() => {
+					resetAutoPlay();
+				}, 150);
+			},
+			{ passive: true },
+		);
+
+		// Pause auto-play on hover
+		const wrapper = carousel.closest(".hero-carousel-wrapper");
+		if (wrapper) {
+			wrapper.addEventListener("mouseenter", () => {
+				isHovered = true;
+				resetAutoPlay();
+			});
+			wrapper.addEventListener("mouseleave", () => {
+				isHovered = false;
+				resetAutoPlay();
+			});
+		}
 
 		// Dots navigation
 		dots.forEach((dot, i) => {
