@@ -8,6 +8,8 @@ const {
   pathname = "",
 } = Astro.props;
 
+import { Analytics } from "@vercel/analytics/react";
+
 const canonical = new URL(pathname, Astro.site ?? "https://cineunah.hn").href;
 const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
 ---
@@ -30,6 +32,7 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
     <meta name="twitter:image" content={image} />
     <title>{pageTitle}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <Analytics client:load />
   </head>
 
   <body>
