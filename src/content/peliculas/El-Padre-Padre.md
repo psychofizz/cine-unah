@@ -17,7 +17,7 @@ credits: |-
   Guion
       Abbas Kiarostami
   Reparto
-      Babek Ahmad Poor, Ahmed Ahmed Poor, Kheda Barech Defai, Iran Outari, Aît Ansari
+      Babek Ahmad Poor, Ahmed Ahmed Poor, Kheda Barech Defai, Iran Outari, Aît Ansari.
   Música
       Amine Allah Hessine
   Fotografía
