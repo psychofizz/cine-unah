@@ -10,6 +10,7 @@ fragment PeliculaParts on Pelicula {
   featured
   duration
   country
+  location
 }
 
 fragment EventoParts on Evento {

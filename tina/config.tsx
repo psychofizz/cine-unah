@@ -110,6 +110,12 @@ export default defineConfig({
             label: "País / Año",
             description: "Ej: México, 1975",
           },
+          {
+            type: "string",
+            name: "location",
+            label: "Ubicación (opcional)",
+            description: "Ej: Cine Francisco Salvador",
+          },
         ],
       },
       // ─── EVENTOS ─────────────────────────────────────────────────────────

@@ -101,6 +101,7 @@ type Pelicula implements Node & Document {
   featured: Boolean
   duration: Float
   country: String
+  location: String
   id: ID!
   _sys: SystemInfo!
   _values: JSON!
@@ -154,6 +155,7 @@ input PeliculaFilter {
   featured: BooleanFilter
   duration: NumberFilter
   country: StringFilter
+  location: StringFilter
 }
 
 type PeliculaConnectionEdges {
@@ -237,6 +239,7 @@ input PeliculaMutation {
   featured: Boolean
   duration: Float
   country: String
+  location: String
 }
 
 input EventoMutation {

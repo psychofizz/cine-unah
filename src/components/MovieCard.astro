@@ -8,6 +8,7 @@ interface Props {
     showEndTime?: string;
     country?: string;
     duration?: number;
+    location?: string;
 }
 
 const {
@@ -19,6 +20,7 @@ const {
     showEndTime,
     country,
     duration,
+    location,
 } = Astro.props;
 
 const tz = "America/Tegucigalpa";
@@ -27,10 +29,22 @@ const showDateStr = new Date(showDate).toLocaleDateString("en-CA", {
 });
 const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: tz });
 
-const status = showDateStr < todayStr ? "past" : "current";
+let isLive = false;
+let status = showDateStr < todayStr ? "past" : "current";
+
+if (status === "current" && showDateStr === todayStr && showTime) {
+    const nowTime = new Date().toLocaleTimeString("en-GB", {
+        timeZone: "America/Tegucigalpa",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+    if (nowTime >= showTime) {
+        isLive = true;
+    }
+}
 
 const statusLabel: Record<string, string> = {
-    current: "En cartelera",
+    current: isLive ? "En cartelera" : "Próxima",
     next: "Próxima",
     past: "Pasada",
 };
@@ -88,9 +102,9 @@ import { Image } from "astro:assets";
         <p class="card-date">{formattedDate}</p>
 
         {
-            (country || duration) && (
+            (country || duration || location) && (
                 <p class="card-meta">
-                    {[country, duration ? `${duration} min` : null]
+                    {[country, duration ? `${duration} min` : null, location]
                         .filter(Boolean)
                         .join(" · ")}
                 </p>

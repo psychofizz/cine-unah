@@ -103,10 +103,30 @@ function formatHeroDate(dateStr: string) {
 				<div class="hero-carousel" id="heroCarousel">
 					{heroCarouselItems.map((movie: any, index: number) => {
 						const dateStr = movie.showDate;
-						const time = movie.showTime;
+						const time = movie.showTime || "00:00";
 						const slug = slugFromFilename(movie._sys.filename);
 						const href = `/peliculas/${slug}`;
 						const { weekday, full } = formatHeroDate(dateStr);
+
+						// Live calculation logic
+						const movieDateStr = new Date(
+							dateStr,
+						).toLocaleDateString("en-CA", {
+							timeZone: "America/Tegucigalpa",
+						});
+						const isToday = movieDateStr === todayStr;
+						let isLive = movie.status === "current";
+						if (isToday) {
+							const nowTime = new Date().toLocaleTimeString(
+								"en-GB",
+								{
+									timeZone: "America/Tegucigalpa",
+									hour: "2-digit",
+									minute: "2-digit",
+								},
+							);
+							isLive = nowTime >= time;
+						}
 
 						return (
 							<section
@@ -150,7 +170,7 @@ function formatHeroDate(dateStr: string) {
 												class="hero-label-dot"
 												aria-hidden="true"
 											/>
-											{movie.status === "current"
+											{isLive
 												? "En cartelera"
 												: "Próxima proyección"}
 										</span>
@@ -189,6 +209,11 @@ function formatHeroDate(dateStr: string) {
 											{movie.country && (
 												<span class="hero-chip">
 													{movie.country}
+												</span>
+											)}
+											{movie.location && (
+												<span class="hero-chip">
+													📍 {movie.location}
 												</span>
 											)}
 										</div>
@@ -294,6 +319,7 @@ function formatHeroDate(dateStr: string) {
 								showEndTime={movie.showEndTime}
 								country={movie.country}
 								duration={movie.duration}
+								location={movie.location}
 							/>
 						))}
 					</div>

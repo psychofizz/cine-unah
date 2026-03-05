@@ -195,6 +195,7 @@ export type Pelicula = Node & Document & {
   featured?: Maybe<Scalars['Boolean']['output']>;
   duration?: Maybe<Scalars['Float']['output']>;
   country?: Maybe<Scalars['String']['output']>;
+  location?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   _sys: SystemInfo;
   _values: Scalars['JSON']['output'];
@@ -248,6 +249,7 @@ export type PeliculaFilter = {
   featured?: InputMaybe<BooleanFilter>;
   duration?: InputMaybe<NumberFilter>;
   country?: InputMaybe<StringFilter>;
+  location?: InputMaybe<StringFilter>;
 };
 
 export type PeliculaConnectionEdges = {
@@ -394,6 +396,7 @@ export type PeliculaMutation = {
   featured?: InputMaybe<Scalars['Boolean']['input']>;
   duration?: InputMaybe<Scalars['Float']['input']>;
   country?: InputMaybe<Scalars['String']['input']>;
+  location?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type EventoMutation = {
@@ -407,7 +410,7 @@ export type EventoMutation = {
   location?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type PeliculaPartsFragment = { __typename: 'Pelicula', title: string, poster: string, synopsis?: string | null, credits?: string | null, showDate: string, showTime?: string | null, showEndTime?: string | null, featured?: boolean | null, duration?: number | null, country?: string | null };
+export type PeliculaPartsFragment = { __typename: 'Pelicula', title: string, poster: string, synopsis?: string | null, credits?: string | null, showDate: string, showTime?: string | null, showEndTime?: string | null, featured?: boolean | null, duration?: number | null, country?: string | null, location?: string | null };
 
 export type EventoPartsFragment = { __typename: 'Evento', title: string, poster: string, description?: string | null, date: string, eventTime?: string | null, eventEndTime?: string | null, featured?: boolean | null, location?: string | null };
 
@@ -416,7 +419,7 @@ export type PeliculaQueryVariables = Exact<{
 }>;
 
 
-export type PeliculaQuery = { __typename?: 'Query', pelicula: { __typename: 'Pelicula', id: string, title: string, poster: string, synopsis?: string | null, credits?: string | null, showDate: string, showTime?: string | null, showEndTime?: string | null, featured?: boolean | null, duration?: number | null, country?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } };
+export type PeliculaQuery = { __typename?: 'Query', pelicula: { __typename: 'Pelicula', id: string, title: string, poster: string, synopsis?: string | null, credits?: string | null, showDate: string, showTime?: string | null, showEndTime?: string | null, featured?: boolean | null, duration?: number | null, country?: string | null, location?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } };
 
 export type PeliculaConnectionQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
@@ -428,7 +431,7 @@ export type PeliculaConnectionQueryVariables = Exact<{
 }>;
 
 
-export type PeliculaConnectionQuery = { __typename?: 'Query', peliculaConnection: { __typename?: 'PeliculaConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'PeliculaConnectionEdges', cursor: string, node?: { __typename: 'Pelicula', id: string, title: string, poster: string, synopsis?: string | null, credits?: string | null, showDate: string, showTime?: string | null, showEndTime?: string | null, featured?: boolean | null, duration?: number | null, country?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
+export type PeliculaConnectionQuery = { __typename?: 'Query', peliculaConnection: { __typename?: 'PeliculaConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'PeliculaConnectionEdges', cursor: string, node?: { __typename: 'Pelicula', id: string, title: string, poster: string, synopsis?: string | null, credits?: string | null, showDate: string, showTime?: string | null, showEndTime?: string | null, featured?: boolean | null, duration?: number | null, country?: string | null, location?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
 
 export type EventoQueryVariables = Exact<{
   relativePath: Scalars['String']['input'];
@@ -462,6 +465,7 @@ export const PeliculaPartsFragmentDoc = gql`
   featured
   duration
   country
+  location
 }
     `;
 export const EventoPartsFragmentDoc = gql`
@@ -653,7 +657,7 @@ export const ExperimentalGetTinaClient = () =>
   getSdk(
     generateRequester(
       createClient({
-        url: "https://content.tinajs.io/2.1/content/b1ea52e5-e152-4f8b-a124-bbc329a88c6b/github/main",
+        url: "http://localhost:4001/graphql",
         queries,
       })
     )

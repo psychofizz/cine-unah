@@ -103,6 +103,12 @@ var config_default = defineConfig({
             name: "country",
             label: "Pa\xEDs / A\xF1o",
             description: "Ej: M\xE9xico, 1975"
+          },
+          {
+            type: "string",
+            name: "location",
+            label: "Ubicaci\xF3n (opcional)",
+            description: "Ej: Cine Francisco Salvador"
           }
         ]
       },
