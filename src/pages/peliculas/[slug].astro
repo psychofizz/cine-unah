@@ -66,10 +66,9 @@ const statusText = showDateParsed < today ? "Archivo" : "En cartelera";
                     {
                         movie.poster ? (
                             <Image
-                                src={movie.poster}
+                                src={encodeURI(movie.poster)}
                                 alt={`Poster: ${movie.title}`}
-                                width={600}
-                                height={900}
+                                inferSize={true}
                             />
                         ) : (
                             <div style="aspect-ratio:2/3;background:#111;" />

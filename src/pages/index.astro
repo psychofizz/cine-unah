@@ -145,11 +145,10 @@ function formatHeroDate(dateStr: string) {
 							<div class="hero-poster-bg">
 								{heroItem.poster ? (
 									<Image
-										src={heroItem.poster}
+										src={encodeURI(heroItem.poster)}
 										alt=""
 										aria-hidden="true"
-										width={1200}
-										height={800}
+										inferSize={true}
 									/>
 								) : (
 									<div class="hero-poster-bg-empty" />
@@ -162,10 +161,9 @@ function formatHeroDate(dateStr: string) {
 								<div class="hero-poster-thumb">
 									{heroItem.poster ? (
 										<Image
-											src={heroItem.poster}
+											src={encodeURI(heroItem.poster)}
 											alt={`Poster: ${heroItem.title}`}
-											width={400}
-											height={600}
+											inferSize={true}
 										/>
 									) : (
 										<div style="aspect-ratio:2/3;background:#1a1a1a;" />

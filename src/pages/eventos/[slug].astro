@@ -60,10 +60,9 @@ const weekday = new Date(event.date).toLocaleDateString("es-MX", {
                     {
                         event.poster ? (
                             <Image
-                                src={event.poster}
+                                src={encodeURI(event.poster)}
                                 alt={`Poster: ${event.title}`}
-                                width={600}
-                                height={900}
+                                inferSize={true}
                             />
                         ) : (
                             <div style="aspect-ratio:2/3;background:#111;" />

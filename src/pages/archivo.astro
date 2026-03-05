@@ -67,10 +67,9 @@ function formatDate(dateStr: string) {
                                 <div class="archive-poster">
                                     {movie.poster ? (
                                         <Image
-                                            src={movie.poster}
+                                            src={encodeURI(movie.poster)}
                                             alt={`Poster de ${movie.title}`}
-                                            width={300}
-                                            height={450}
+                                            inferSize={true}
                                             loading="lazy"
                                         />
                                     ) : (
