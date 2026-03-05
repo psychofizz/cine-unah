@@ -1,6 +1,6 @@
 ---
 status: current
-title: 'El Padre, Padre'
+title: ¿Dónde está la casa de mi amigo?
 poster: /uploads/donde-esta-la-casa-de-mi-amigo.jpg
 synopsis: 'Ahmed, de 8 años, se ha llevado por error el cuaderno de notas de su amigo Mohammad. Quiere devolverlo, o su amigo será expulsado de la escuela. Con determinación, el niño se propone encontrar la casa de Mohammad en el pueblo vecino.'
 credits: |-
