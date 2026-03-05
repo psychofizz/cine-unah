@@ -1,32 +1,35 @@
 ---
 status: current
 title: 'El Padre, Padre'
-poster: /uploads/2026-03-02%2022.45.56.jpg
-synopsis: ''
+poster: /uploads/donde-esta-la-casa-de-mi-amigo.jpg
+synopsis: 'Ahmed, de 8 años, se ha llevado por error el cuaderno de notas de su amigo Mohammad. Quiere devolverlo, o su amigo será expulsado de la escuela. Con determinación, el niño se propone encontrar la casa de Mohammad en el pueblo vecino.'
 credits: |-
-  Padre Padre:
-
-  Protagonista: Andrés Andara
-
-  Co-guionista: David Díaz 
-
-  Cámara: Alejandro Ayala
-
-  Dirección y audio: Jeferson Cruz
-
-  Productor: Luis JOH
-
-  Iluminación: Fernando Zelaya
-
-  Agradecimientos:
-  IHCINE
-  VOAE
-  UNAH
-  Cinemateca Universitaria Enrique Ponce Garay
-showDate: 2026-03-05T04:19:39.123Z
-showTime: '12:20'
-showEndTime: '13:50'
-duration: 12
-country: 'Honduras, 2025'
+  Título original
+      Khane-ye Doust Kodjast 
+  Año
+      1987
+  Duración
+      83 min.
+  País
+      Irán Irán
+  Dirección
+      Abbas Kiarostami
+  Guion
+      Abbas Kiarostami
+  Reparto
+      Babek Ahmad Poor, Ahmed Ahmed Poor, Kheda Barech Defai, Iran Outari, Aît Ansari
+  Música
+      Amine Allah Hessine
+  Fotografía
+      Farhad Saba
+  Compañías
+      Productor: Ali Reza Zarrin
+  Género
+      Drama | Infancia 
+showDate: 2026-03-06T04:19:39.123Z
+showTime: '13:00'
+showEndTime: '15:00'
+duration: 82
+country: 'Irán, 1987.'
 ---
 
