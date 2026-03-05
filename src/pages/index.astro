@@ -28,14 +28,6 @@ try {
 }
 
 // ── Hero logic ─────────────────────────────────────────
-// Priority 1: a movie/event with featured:true whose date hasn't passed yet
-// Priority 2: the most upcoming movie (current or next) by date
-// Priority 3: the most upcoming future event by date
-
-function slugFromFilename(f: string) {
-	return f.replace(/\.md$/, "");
-}
-
 const activeMovies = allMovies.filter((m: any) => {
 	if (!m.showDate) return false;
 	const showDateStr = new Date(m.showDate).toLocaleDateString("en-CA", {
@@ -52,59 +44,23 @@ const futureEvents = allEvents.filter((e: any) => {
 	return eventDateStr >= todayStr;
 });
 
-// Find a featured item
-const featuredMovie =
-	activeMovies.find((m: any) => m.featured === true) ?? null;
-const featuredEvent =
-	allEvents.find(
-		(e: any) =>
-			e.featured === true &&
-			new Date(e.date).toLocaleDateString("en-CA", {
-				timeZone: "America/Tegucigalpa",
-			}) >= todayStr,
-	) ?? null;
-
-// Decide hero item (featured beats proximity)
-let heroType: "movie" | "event" | null = null;
-let heroItem: any = null;
-
-if (featuredMovie || featuredEvent) {
-	// Prefer the explicitly featured one; if both, pick movie
-	if (featuredMovie) {
-		heroType = "movie";
-		heroItem = featuredMovie;
-	} else {
-		heroType = "event";
-		heroItem = featuredEvent;
-	}
-} else if (activeMovies.length > 0) {
-	heroType = "movie";
-	heroItem = activeMovies.sort(
-		(a: any, b: any) =>
-			new Date(a.showDate).getTime() - new Date(b.showDate).getTime(),
-	)[0];
-} else if (futureEvents.length > 0) {
-	heroType = "event";
-	heroItem = futureEvents.sort(
-		(a: any, b: any) =>
-			new Date(a.date).getTime() - new Date(b.date).getTime(),
-	)[0];
-}
+// The carousel shows all active movies coming up, sorted by date
+const heroCarouselItems = activeMovies.sort(
+	(a: any, b: any) =>
+		new Date(a.showDate).getTime() - new Date(b.showDate).getTime(),
+);
 
 // ── Grid movies — show ALL active movies (hero stays in grid too) ──
 const gridMovies = activeMovies;
 
-// ── Upcoming events (exclude hero if it's an event) ──────
-const upcomingEvents = futureEvents
-	.filter(
-		(e: any) =>
-			heroType !== "event" ||
-			e._sys.filename !== heroItem?._sys?.filename,
-	)
-	.sort(
-		(a: any, b: any) =>
-			new Date(a.date).getTime() - new Date(b.date).getTime(),
-	);
+// ── Upcoming events ──────
+const upcomingEvents = futureEvents.sort(
+	(a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+);
+
+function slugFromFilename(f: string) {
+	return f.replace(/\.md$/, "");
+}
 
 // ── Format helpers ────────────────────────────────────────
 function formatHeroDate(dateStr: string) {
@@ -127,139 +83,180 @@ function formatHeroDate(dateStr: string) {
 <BaseLayout
 	title="Cartelera"
 	description="Cartelera de Cine UNAH — películas y eventos universitarios."
-	image={heroItem?.poster ?? ""}
+	image={heroCarouselItems[0]?.poster ?? ""}
 >
 	<!-- ════════════════════════════════════════════
-       HERO — featured or most upcoming
+       HERO CAROUSEL — active movies
   ════════════════════════════════════════════ -->
 	{
-		heroItem
-			? (() => {
-					const isMovie = heroType === "movie";
-					const dateStr = isMovie ? heroItem.showDate : heroItem.date;
-					const time = isMovie
-						? heroItem.showTime
-						: heroItem.eventTime;
-					const slug = slugFromFilename(heroItem._sys.filename);
-					const href = isMovie
-						? `/peliculas/${slug}`
-						: `/eventos/${slug}`;
-					const { weekday, full } = formatHeroDate(dateStr);
-					return (
-						<section
-							class="hero"
-							aria-label="Presentación destacada"
-						>
-							{/* Background poster */}
-							<div class="hero-poster-bg">
-								{heroItem.poster ? (
-									<Image
-										src={encodeURI(heroItem.poster)}
-										alt=""
-										aria-hidden="true"
-										inferSize={true}
-									/>
-								) : (
-									<div class="hero-poster-bg-empty" />
-								)}
-							</div>
-							<div class="hero-gradient" aria-hidden="true" />
+		heroCarouselItems.length > 0 && (
+			<div class="hero-carousel-wrapper">
+				<div class="hero-carousel" id="heroCarousel">
+					{heroCarouselItems.map((movie: any, index: number) => {
+						const dateStr = movie.showDate;
+						const time = movie.showTime;
+						const slug = slugFromFilename(movie._sys.filename);
+						const href = `/peliculas/${slug}`;
+						const { weekday, full } = formatHeroDate(dateStr);
 
-							<div class="hero-content container">
-								{/* Thumbnail poster */}
-								<div class="hero-poster-thumb">
-									{heroItem.poster ? (
+						return (
+							<section
+								class="hero hero-slide"
+								id={`hero-slide-${index}`}
+								aria-label={`Película destacada: ${movie.title}`}
+							>
+								{/* Background poster */}
+								<div class="hero-poster-bg">
+									{movie.poster ? (
 										<Image
-											src={encodeURI(heroItem.poster)}
-											alt={`Poster: ${heroItem.title}`}
+											src={encodeURI(movie.poster)}
+											alt=""
+											aria-hidden="true"
 											inferSize={true}
 										/>
 									) : (
-										<div style="aspect-ratio:2/3;background:#1a1a1a;" />
+										<div class="hero-poster-bg-empty" />
 									)}
 								</div>
+								<div class="hero-gradient" aria-hidden="true" />
 
-								{/* Info */}
-								<div class="hero-info">
-									<span class="hero-label">
-										<span
-											class="hero-label-dot"
-											aria-hidden="true"
-										/>
-										{isMovie
-											? heroItem.status === "current"
-												? "En cartelera"
-												: "Próxima proyección"
-											: "Evento"}
-									</span>
-
-									<h1
-										class={`hero-title${!isMovie ? " hero-title-event" : ""}`}
-									>
-										{heroItem.title}
-									</h1>
-
-									{/* BIG TIME */}
-									<div
-										class="hero-datetime"
-										aria-label={`Fecha y hora: ${weekday} ${full} a las ${time}`}
-									>
-										{time && (
-											<span class="hero-time-big">
-												{time}
-											</span>
+								<div class="hero-content container">
+									{/* Thumbnail poster */}
+									<div class="hero-poster-thumb">
+										{movie.poster ? (
+											<Image
+												src={encodeURI(movie.poster)}
+												alt={`Poster: ${movie.title}`}
+												inferSize={true}
+											/>
+										) : (
+											<div style="aspect-ratio:2/3;background:#1a1a1a;" />
 										)}
-										<div class="hero-date-block">
-											<span class="hero-date-day">
-												{weekday}
-											</span>
-											<span class="hero-date-full">
-												{full}
-											</span>
+									</div>
+
+									{/* Info */}
+									<div class="hero-info">
+										<span class="hero-label">
+											<span
+												class="hero-label-dot"
+												aria-hidden="true"
+											/>
+											{movie.status === "current"
+												? "En cartelera"
+												: "Próxima proyección"}
+										</span>
+
+										<h1 class="hero-title">
+											{movie.title}
+										</h1>
+
+										{/* BIG TIME */}
+										<div
+											class="hero-datetime"
+											aria-label={`Fecha y hora: ${weekday} ${full} a las ${time}`}
+										>
+											{time && (
+												<span class="hero-time-big">
+													{time}
+												</span>
+											)}
+											<div class="hero-date-block">
+												<span class="hero-date-day">
+													{weekday}
+												</span>
+												<span class="hero-date-full">
+													{full}
+												</span>
+											</div>
+										</div>
+
+										{/* Meta chips */}
+										<div class="hero-meta">
+											{movie.duration && (
+												<span class="hero-chip">
+													{movie.duration} min
+												</span>
+											)}
+											{movie.country && (
+												<span class="hero-chip">
+													{movie.country}
+												</span>
+											)}
+										</div>
+
+										<div class="hero-actions">
+											<a
+												href={href}
+												class="hero-btn-primary"
+											>
+												Ver detalle
+												<svg
+													width="14"
+													height="14"
+													viewBox="0 0 24 24"
+													fill="none"
+													stroke="currentColor"
+													stroke-width="2.5"
+													aria-hidden="true"
+												>
+													<path d="M5 12h14M12 5l7 7-7 7" />
+												</svg>
+											</a>
 										</div>
 									</div>
-
-									{/* Meta chips */}
-									<div class="hero-meta">
-										{isMovie && heroItem.duration && (
-											<span class="hero-chip">
-												{heroItem.duration} min
-											</span>
-										)}
-										{isMovie && heroItem.country && (
-											<span class="hero-chip">
-												{heroItem.country}
-											</span>
-										)}
-										{!isMovie && heroItem.location && (
-											<span class="hero-chip">
-												📍 {heroItem.location}
-											</span>
-										)}
-									</div>
-
-									<div class="hero-actions">
-										<a href={href} class="hero-btn-primary">
-											Ver detalle
-											<svg
-												width="14"
-												height="14"
-												viewBox="0 0 24 24"
-												fill="none"
-												stroke="currentColor"
-												stroke-width="2.5"
-												aria-hidden="true"
-											>
-												<path d="M5 12h14M12 5l7 7-7 7" />
-											</svg>
-										</a>
-									</div>
 								</div>
-							</div>
-						</section>
-					);
-				})()
-			: null
+							</section>
+						);
+					})}
+				</div>
+
+				{heroCarouselItems.length > 1 && (
+					<div class="hero-carousel-controls container">
+						<div class="hero-carousel-dots">
+							{heroCarouselItems.map((_: any, i: number) => (
+								<button
+									class="hero-dot"
+									data-slide={i}
+									aria-label={`Ir al slide ${i + 1}`}
+								/>
+							))}
+						</div>
+						<div class="hero-nav-buttons">
+							<button
+								class="hero-nav-btn prev"
+								aria-label="Anterior"
+							>
+								<svg
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2.5"
+								>
+									<path d="M15 18l-6-6 6-6" />
+								</svg>
+							</button>
+							<button
+								class="hero-nav-btn next"
+								aria-label="Siguiente"
+							>
+								<svg
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2.5"
+								>
+									<path d="M9 18l6-6-6-6" />
+								</svg>
+							</button>
+						</div>
+					</div>
+				)}
+			</div>
+		)
 	}
 
 	<div class="container">
@@ -292,7 +289,7 @@ function formatHeroDate(dateStr: string) {
 		}
 
 		{
-			gridMovies.length === 0 && !heroItem && (
+			gridMovies.length === 0 && heroCarouselItems.length === 0 && (
 				<section class="section">
 					<div class="section-header">
 						<h2 class="section-title">En Cartelera</h2>
@@ -345,3 +342,60 @@ function formatHeroDate(dateStr: string) {
 		}
 	</div>
 </BaseLayout>
+
+<script>
+	const carousel = document.getElementById("heroCarousel");
+	if (carousel) {
+		const slides = carousel.querySelectorAll(".hero-slide");
+		const dots = document.querySelectorAll(".hero-dot");
+		const prevBtn = document.querySelector(".hero-nav-btn.prev");
+		const nextBtn = document.querySelector(".hero-nav-btn.next");
+
+		const updateActiveDot = () => {
+			const scrollLeft = carousel.scrollLeft;
+			const slideWidth = carousel.clientWidth;
+			// Use Math.round to determine which slide is most visible
+			const index = Math.round(scrollLeft / slideWidth);
+
+			dots.forEach((dot, i) => {
+				if (i === index) dot.classList.add("active");
+				else dot.classList.remove("active");
+			});
+		};
+
+		// Initial check
+		updateActiveDot();
+
+		// Update on scroll (use a small timeout to debounce if needed, or passive)
+		carousel.addEventListener("scroll", updateActiveDot, { passive: true });
+
+		// Dots navigation
+		dots.forEach((dot, i) => {
+			dot.addEventListener("click", () => {
+				slides[i].scrollIntoView({
+					behavior: "smooth",
+					block: "nearest",
+					inline: "start",
+				});
+			});
+		});
+
+		// Buttons navigation
+		if (prevBtn) {
+			prevBtn.addEventListener("click", () => {
+				carousel.scrollBy({
+					left: -carousel.clientWidth,
+					behavior: "smooth",
+				});
+			});
+		}
+		if (nextBtn) {
+			nextBtn.addEventListener("click", () => {
+				carousel.scrollBy({
+					left: carousel.clientWidth,
+					behavior: "smooth",
+				});
+			});
+		}
+	}
+</script>
