@@ -31,5 +31,6 @@ showTime: '13:00'
 showEndTime: '15:00'
 duration: 82
 country: 'Irán, 1987.'
+location: 'Cine Francisco Salvador, Edificio CISE'
 ---
 
