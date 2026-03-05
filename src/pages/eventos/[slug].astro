@@ -20,12 +20,14 @@ export async function getStaticPaths() {
 const { event } = Astro.props;
 
 const formattedDate = new Date(event.date).toLocaleDateString("es-MX", {
+    timeZone: "America/Tegucigalpa",
     weekday: "long",
     day: "numeric",
     month: "long",
     year: "numeric",
 });
 const weekday = new Date(event.date).toLocaleDateString("es-MX", {
+    timeZone: "America/Tegucigalpa",
     weekday: "long",
 });
 ---

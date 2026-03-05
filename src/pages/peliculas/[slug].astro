@@ -20,21 +20,24 @@ export async function getStaticPaths() {
 const { movie } = Astro.props;
 
 const formattedDate = new Date(movie.showDate).toLocaleDateString("es-MX", {
+    timeZone: "America/Tegucigalpa",
     weekday: "long",
     day: "numeric",
     month: "long",
     year: "numeric",
 });
 const weekday = new Date(movie.showDate).toLocaleDateString("es-MX", {
+    timeZone: "America/Tegucigalpa",
     weekday: "long",
 });
 
-const showDateParsed = new Date(movie.showDate);
-showDateParsed.setHours(0, 0, 0, 0);
-const today = new Date();
-today.setHours(0, 0, 0, 0);
+const tz = "America/Tegucigalpa";
+const showDateStr = new Date(movie.showDate).toLocaleDateString("en-CA", {
+    timeZone: tz,
+});
+const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: tz });
 
-const statusText = showDateParsed < today ? "Archivo" : "En cartelera";
+const statusText = showDateStr < todayStr ? "Archivo" : "En cartelera";
 ---
 
 <BaseLayout

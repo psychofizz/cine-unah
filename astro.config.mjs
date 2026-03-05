@@ -10,6 +10,6 @@ export default defineConfig({
         imageService: true,
     }),
     image: {
-        domains: [],
+        domains: ['assets.tina.io'],
     },
 });

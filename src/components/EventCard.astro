@@ -13,6 +13,7 @@ const { slug, title, poster, date, eventTime, eventEndTime, location } =
     Astro.props;
 
 const formattedDate = new Date(date).toLocaleDateString("es-MX", {
+    timeZone: "America/Tegucigalpa",
     weekday: "short",
     day: "numeric",
     month: "short",

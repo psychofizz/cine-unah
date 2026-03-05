@@ -8,15 +8,18 @@ let pastMovies: any[] = [];
 try {
     const result = await client.queries.peliculaConnection();
     const edges = result.data.peliculaConnection.edges ?? [];
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const todayStr = new Date().toLocaleDateString("en-CA", {
+        timeZone: "America/Tegucigalpa",
+    });
 
     pastMovies = edges
         .filter((e: any) => {
             if (!e?.node?.showDate) return false;
-            const showDate = new Date(e.node.showDate);
-            showDate.setHours(0, 0, 0, 0);
-            return showDate < today;
+            const showDateStr = new Date(e.node.showDate).toLocaleDateString(
+                "en-CA",
+                { timeZone: "America/Tegucigalpa" },
+            );
+            return showDateStr < todayStr;
         })
         .map((e: any) => e.node)
         .sort(
@@ -33,6 +36,7 @@ function slugFromFilename(filename: string) {
 
 function formatDate(dateStr: string) {
     return new Date(dateStr).toLocaleDateString("es-MX", {
+        timeZone: "America/Tegucigalpa",
         day: "numeric",
         month: "short",
         year: "numeric",

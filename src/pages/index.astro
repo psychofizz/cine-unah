@@ -9,6 +9,9 @@ import { Image } from "astro:assets";
 let allMovies: any[] = [];
 let allEvents: any[] = [];
 const now = new Date();
+const todayStr = new Date().toLocaleDateString("en-CA", {
+	timeZone: "America/Tegucigalpa",
+});
 
 try {
 	const pelRes = await client.queries.peliculaConnection();
@@ -33,30 +36,32 @@ function slugFromFilename(f: string) {
 	return f.replace(/\.md$/, "");
 }
 
-const today = new Date();
-today.setHours(0, 0, 0, 0);
-
 const activeMovies = allMovies.filter((m: any) => {
-	const showDate = new Date(m.showDate);
-	showDate.setHours(0, 0, 0, 0);
-	return showDate >= today;
+	if (!m.showDate) return false;
+	const showDateStr = new Date(m.showDate).toLocaleDateString("en-CA", {
+		timeZone: "America/Tegucigalpa",
+	});
+	return showDateStr >= todayStr;
 });
 
 const futureEvents = allEvents.filter((e: any) => {
 	if (!e.date) return false;
-	const eventDate = new Date(e.date);
-	eventDate.setHours(0, 0, 0, 0);
-	return eventDate >= today;
+	const eventDateStr = new Date(e.date).toLocaleDateString("en-CA", {
+		timeZone: "America/Tegucigalpa",
+	});
+	return eventDateStr >= todayStr;
 });
 
 // Find a featured item
 const featuredMovie =
-	activeMovies.find(
-		(m: any) => m.featured === true && new Date(m.showDate) >= now,
-	) ?? null;
+	activeMovies.find((m: any) => m.featured === true) ?? null;
 const featuredEvent =
 	allEvents.find(
-		(e: any) => e.featured === true && new Date(e.date) >= now,
+		(e: any) =>
+			e.featured === true &&
+			new Date(e.date).toLocaleDateString("en-CA", {
+				timeZone: "America/Tegucigalpa",
+			}) >= todayStr,
 	) ?? null;
 
 // Decide hero item (featured beats proximity)
@@ -105,8 +110,12 @@ const upcomingEvents = futureEvents
 function formatHeroDate(dateStr: string) {
 	const d = new Date(dateStr);
 	return {
-		weekday: d.toLocaleDateString("es-MX", { weekday: "long" }),
+		weekday: d.toLocaleDateString("es-MX", {
+			timeZone: "America/Tegucigalpa",
+			weekday: "long",
+		}),
 		full: d.toLocaleDateString("es-MX", {
+			timeZone: "America/Tegucigalpa",
 			day: "numeric",
 			month: "long",
 			year: "numeric",

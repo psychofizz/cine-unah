@@ -21,12 +21,13 @@ const {
     duration,
 } = Astro.props;
 
-const showDateParsed = new Date(showDate);
-showDateParsed.setHours(0, 0, 0, 0);
-const today = new Date();
-today.setHours(0, 0, 0, 0);
+const tz = "America/Tegucigalpa";
+const showDateStr = new Date(showDate).toLocaleDateString("en-CA", {
+    timeZone: tz,
+});
+const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: tz });
 
-const status = showDateParsed < today ? "past" : "current";
+const status = showDateStr < todayStr ? "past" : "current";
 
 const statusLabel: Record<string, string> = {
     current: "En cartelera",
@@ -35,6 +36,7 @@ const statusLabel: Record<string, string> = {
 };
 
 const formattedDate = new Date(showDate).toLocaleDateString("es-MX", {
+    timeZone: tz,
     weekday: "short",
     day: "numeric",
     month: "short",
