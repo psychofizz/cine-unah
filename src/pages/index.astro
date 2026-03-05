@@ -46,9 +46,13 @@ const futureEvents = allEvents.filter((e: any) => {
 
 // The carousel shows all active movies coming up, sorted by date and time
 const heroCarouselItems = activeMovies.sort((a: any, b: any) => {
-	const dateA = new Date(a.showDate).getTime();
-	const dateB = new Date(b.showDate).getTime();
-	if (dateA !== dateB) return dateA - dateB;
+	const dateAStr = new Date(a.showDate).toLocaleDateString("en-CA", {
+		timeZone: "America/Tegucigalpa",
+	});
+	const dateBStr = new Date(b.showDate).toLocaleDateString("en-CA", {
+		timeZone: "America/Tegucigalpa",
+	});
+	if (dateAStr !== dateBStr) return dateAStr.localeCompare(dateBStr);
 
 	const timeA = a.showTime || "00:00";
 	const timeB = b.showTime || "00:00";
@@ -365,6 +369,7 @@ function formatHeroDate(dateStr: string) {
 		let scrollTimeout: ReturnType<typeof setTimeout>;
 		const autoPlayDelay = 10000;
 		let isHovered = false;
+		let isAnimating = false;
 
 		const startProgress = () => {
 			if (progressFill) {
@@ -386,6 +391,52 @@ function formatHeroDate(dateStr: string) {
 			}
 		};
 
+		const smoothScrollTo = (targetScrollLeft: number, duration = 800) => {
+			if (isAnimating) return;
+			isAnimating = true;
+
+			const startScrollLeft = carousel.scrollLeft;
+			const distance = targetScrollLeft - startScrollLeft;
+			let startTime: number | null = null;
+
+			// Temporarily disable scroll snapping so it doesn't fight our animation
+			carousel.style.scrollSnapType = "none";
+
+			const easeInOutQuad = (
+				t: number,
+				b: number,
+				c: number,
+				d: number,
+			) => {
+				t /= d / 2;
+				if (t < 1) return (c / 2) * t * t + b;
+				t--;
+				return (-c / 2) * (t * (t - 2) - 1) + b;
+			};
+
+			const animation = (currentTime: number) => {
+				if (startTime === null) startTime = currentTime;
+				const timeElapsed = currentTime - startTime;
+
+				carousel.scrollLeft = easeInOutQuad(
+					timeElapsed,
+					startScrollLeft,
+					distance,
+					duration,
+				);
+
+				if (timeElapsed < duration) {
+					requestAnimationFrame(animation);
+				} else {
+					carousel.scrollLeft = targetScrollLeft;
+					carousel.style.scrollSnapType = ""; // Restore snap
+					isAnimating = false;
+				}
+			};
+
+			requestAnimationFrame(animation);
+		};
+
 		const advanceSlide = () => {
 			const scrollLeft = carousel.scrollLeft;
 			const slideWidth = carousel.clientWidth;
@@ -393,9 +444,9 @@ function formatHeroDate(dateStr: string) {
 
 			if (index >= slides.length - 1) {
 				// Return to first slide
-				carousel.scrollTo({ left: 0, behavior: "smooth" });
+				smoothScrollTo(0, 800);
 			} else {
-				carousel.scrollBy({ left: slideWidth, behavior: "smooth" });
+				smoothScrollTo(scrollLeft + slideWidth, 800);
 			}
 		};
 
@@ -431,7 +482,9 @@ function formatHeroDate(dateStr: string) {
 		carousel.addEventListener(
 			"scroll",
 			() => {
-				updateActiveDot();
+				if (!isAnimating) {
+					updateActiveDot();
+				}
 
 				// Clear intervals while snapping
 				clearInterval(autoPlayInterval);
@@ -439,7 +492,9 @@ function formatHeroDate(dateStr: string) {
 
 				// Restart autoplay when scrolling stops
 				scrollTimeout = setTimeout(() => {
-					resetAutoPlay();
+					if (!isAnimating) {
+						resetAutoPlay();
+					}
 				}, 150);
 			},
 			{ passive: true },
@@ -461,29 +516,23 @@ function formatHeroDate(dateStr: string) {
 		// Dots navigation
 		dots.forEach((dot, i) => {
 			dot.addEventListener("click", () => {
-				slides[i].scrollIntoView({
-					behavior: "smooth",
-					block: "nearest",
-					inline: "start",
-				});
+				smoothScrollTo(i * carousel.clientWidth, 800);
 			});
 		});
 
 		// Buttons navigation
 		if (prevBtn) {
 			prevBtn.addEventListener("click", () => {
-				carousel.scrollBy({
-					left: -carousel.clientWidth,
-					behavior: "smooth",
-				});
+				const slideWidth = carousel.clientWidth;
+				let index = Math.round(carousel.scrollLeft / slideWidth);
+				smoothScrollTo((index - 1) * slideWidth, 800);
 			});
 		}
 		if (nextBtn) {
 			nextBtn.addEventListener("click", () => {
-				carousel.scrollBy({
-					left: carousel.clientWidth,
-					behavior: "smooth",
-				});
+				const slideWidth = carousel.clientWidth;
+				let index = Math.round(carousel.scrollLeft / slideWidth);
+				smoothScrollTo((index + 1) * slideWidth, 800);
 			});
 		}
 	}
