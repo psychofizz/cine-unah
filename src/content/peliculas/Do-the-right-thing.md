@@ -11,28 +11,11 @@ credits: |-
 
   Reparto
   Danny Aiello
-      Sal
-
   Ossie Davis
-      Da Mayor
-
   Ruby Dee
-      Mother Sister
-
   Richard Edson
-      Vito
-
   Giancarlo Esposito
-      Buggin Out
-
   Spike Lee
-      Mookie
-
-  Bill Nunn
-      Radio Raheem
-
-  John Turturro
-      Pino
 
   Música
       Bill Lee
