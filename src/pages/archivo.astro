@@ -28,7 +28,12 @@ try {
             if (showDateStr < todayStr) return true;
             if (showDateStr === todayStr) {
                 const endTime = e.node.showEndTime || e.node.showTime;
-                if (endTime && nowTimeStr > endTime) return true;
+                if (endTime) {
+                    const [h, mStr] = endTime.split(":");
+                    const dropH = (parseInt(h) + 2).toString().padStart(2, "0");
+                    const dropTime = `${dropH}:${mStr}`;
+                    if (nowTimeStr > dropTime) return true;
+                }
             }
             return false;
         })

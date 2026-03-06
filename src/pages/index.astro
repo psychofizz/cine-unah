@@ -42,7 +42,12 @@ const activeMovies = allMovies.filter((m: any) => {
 	if (showDateStr < todayStr) return false;
 	if (showDateStr === todayStr) {
 		const endTime = m.showEndTime || m.showTime;
-		if (endTime && nowTimeStr > endTime) return false;
+		if (endTime) {
+			const [h, mStr] = endTime.split(":");
+			const dropH = (parseInt(h) + 2).toString().padStart(2, "0");
+			const dropTime = `${dropH}:${mStr}`;
+			if (nowTimeStr > dropTime) return false;
+		}
 	}
 	return true;
 });
@@ -56,7 +61,12 @@ const futureEvents = allEvents.filter((e: any) => {
 	if (eventDateStr < todayStr) return false;
 	if (eventDateStr === todayStr) {
 		const endTime = e.eventEndTime || e.eventTime;
-		if (endTime && nowTimeStr > endTime) return false;
+		if (endTime) {
+			const [h, mStr] = endTime.split(":");
+			const dropH = (parseInt(h) + 2).toString().padStart(2, "0");
+			const dropTime = `${dropH}:${mStr}`;
+			if (nowTimeStr > dropTime) return false;
+		}
 	}
 	return true;
 });
@@ -132,7 +142,8 @@ function formatHeroDate(dateStr: string) {
 							timeZone: "America/Tegucigalpa",
 						});
 						const isToday = movieDateStr === todayStr;
-						let isLive = movie.status === "current";
+						let isLive = false;
+						let isPast = false;
 						if (isToday) {
 							const nowTime = new Date().toLocaleTimeString(
 								"en-GB",
@@ -142,8 +153,22 @@ function formatHeroDate(dateStr: string) {
 									minute: "2-digit",
 								},
 							);
-							isLive = nowTime >= time;
+							const endTime =
+								movie.showEndTime ||
+								(() => {
+									const [h, mStr] = time.split(":");
+									return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${mStr}`;
+								})();
+
+							isLive = nowTime >= time && nowTime < endTime;
+							isPast = nowTime >= endTime;
 						}
+
+						const statusLabel = isPast
+							? "Finalizada"
+							: isLive
+								? "Proyectando"
+								: "Próxima proyección";
 
 						return (
 							<section
@@ -187,9 +212,7 @@ function formatHeroDate(dateStr: string) {
 												class="hero-label-dot"
 												aria-hidden="true"
 											/>
-											{isLive
-												? "En cartelera"
-												: "Próxima proyección"}
+											{statusLabel}
 										</span>
 
 										<h1 class="hero-title">
@@ -495,14 +518,10 @@ function formatHeroDate(dateStr: string) {
 
 		const resetAutoPlay = () => {
 			clearInterval(autoPlayInterval);
-			if (!isHovered) {
-				startProgress();
-				autoPlayInterval = setInterval(() => {
-					advanceSlide();
-				}, autoPlayDelay);
-			} else {
-				stopProgress();
-			}
+			startProgress();
+			autoPlayInterval = setInterval(() => {
+				advanceSlide();
+			}, autoPlayDelay);
 		};
 
 		const updateActiveDot = () => {
@@ -542,19 +561,6 @@ function formatHeroDate(dateStr: string) {
 			},
 			{ passive: true },
 		);
-
-		// Pause auto-play on hover
-		const wrapper = carousel.closest(".hero-carousel-wrapper");
-		if (wrapper) {
-			wrapper.addEventListener("mouseenter", () => {
-				isHovered = true;
-				resetAutoPlay();
-			});
-			wrapper.addEventListener("mouseleave", () => {
-				isHovered = false;
-				resetAutoPlay();
-			});
-		}
 
 		// Dots navigation
 		dots.forEach((dot, i) => {

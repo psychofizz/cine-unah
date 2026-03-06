@@ -30,6 +30,7 @@ const showDateStr = new Date(showDate).toLocaleDateString("en-CA", {
 const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: tz });
 
 let isLive = false;
+let isPast = false;
 let status = showDateStr < todayStr ? "past" : "current";
 
 if (status === "current" && showDateStr === todayStr && showTime) {
@@ -38,13 +39,20 @@ if (status === "current" && showDateStr === todayStr && showTime) {
         hour: "2-digit",
         minute: "2-digit",
     });
-    if (nowTime >= showTime) {
-        isLive = true;
-    }
+
+    const endTime =
+        showEndTime ||
+        (() => {
+            const [h, m] = showTime.split(":");
+            return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${m}`;
+        })();
+
+    isLive = nowTime >= showTime && nowTime < endTime;
+    isPast = nowTime >= endTime;
 }
 
 const statusLabel: Record<string, string> = {
-    current: isLive ? "En cartelera" : "Próxima",
+    current: isPast ? "Finalizada" : isLive ? "Proyectando" : "Próxima",
     next: "Próxima",
     past: "Pasada",
 };
