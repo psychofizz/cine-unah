@@ -26,8 +26,8 @@ credits: |-
   Compañías
       40 Acres & A Mule Filmworks. Distribuidora: Universal Pictures
 showDate: 2026-03-13T20:56:49.053Z
-showTime: '01:00'
-showEndTime: '03:00'
+showTime: '13:00'
+showEndTime: '15:00'
 duration: 110
 country: 'Estados Unidos, 1989'
 ---
