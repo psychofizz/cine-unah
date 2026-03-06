@@ -17,6 +17,9 @@ credits: |-
 
   Fotografía
       Emad Burnat
+
+  Compañías
+      Coproducción Palestina-Israel-Francia
 showDate: 2026-03-18T21:57:31.479Z
 showTime: '01:00'
 showEndTime: '03:00'
