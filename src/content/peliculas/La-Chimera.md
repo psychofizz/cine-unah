@@ -10,10 +10,10 @@ credits: |-
       Alice Rohrwacher, Carmela Covino, Marco Pettenello
 
   Reparto
-  Josh O'Connor
-  Carol Duarte
-  Vincenzo Nemolato
-  Isabella Rossellini
+     Josh O'Connor
+     Carol Duarte
+     Vincenzo Nemolato
+     Isabella Rossellini
 
   Fotografía
       Hélène Louvart
