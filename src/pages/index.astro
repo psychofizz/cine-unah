@@ -27,13 +27,24 @@ try {
 	console.warn("TinaCMS data not available.", err);
 }
 
-// ── Hero logic ─────────────────────────────────────────
+const nowTimeStr = new Date().toLocaleTimeString("en-GB", {
+	timeZone: "America/Tegucigalpa",
+	hour: "2-digit",
+	minute: "2-digit",
+});
+
 const activeMovies = allMovies.filter((m: any) => {
 	if (!m.showDate) return false;
 	const showDateStr = new Date(m.showDate).toLocaleDateString("en-CA", {
 		timeZone: "America/Tegucigalpa",
 	});
-	return showDateStr >= todayStr;
+
+	if (showDateStr < todayStr) return false;
+	if (showDateStr === todayStr) {
+		const endTime = m.showEndTime || m.showTime;
+		if (endTime && nowTimeStr > endTime) return false;
+	}
+	return true;
 });
 
 const futureEvents = allEvents.filter((e: any) => {
@@ -41,7 +52,13 @@ const futureEvents = allEvents.filter((e: any) => {
 	const eventDateStr = new Date(e.date).toLocaleDateString("en-CA", {
 		timeZone: "America/Tegucigalpa",
 	});
-	return eventDateStr >= todayStr;
+
+	if (eventDateStr < todayStr) return false;
+	if (eventDateStr === todayStr) {
+		const endTime = e.eventEndTime || e.eventTime;
+		if (endTime && nowTimeStr > endTime) return false;
+	}
+	return true;
 });
 
 // The carousel shows all active movies coming up, sorted by date and time
