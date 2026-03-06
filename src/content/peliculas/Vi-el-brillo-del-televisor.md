@@ -10,10 +10,10 @@ credits: |-
       Jane Schoenbrun
 
   Reparto
-  Justice Smith
-  Helena Howard
-  Lindsey Jordan
-  Danielle Deadwyler
+      Justice Smith
+      Helena Howard
+      Lindsey Jordan
+      Danielle Deadwyler
 
   Música
       Alex G
