@@ -174,7 +174,13 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
 
         document.querySelectorAll(".card[data-date]").forEach((el) => {
           const card = el as HTMLElement;
-          const dateStr = card.getAttribute("data-date") || "";
+          const rawDateStr = card.getAttribute("data-date") || "";
+
+          // Re-format the raw ISO string to match "en-CA" format so comparison works
+          const dateStr = rawDateStr
+            ? new Date(rawDateStr).toLocaleDateString("en-CA", { timeZone: tz })
+            : "";
+
           const time = card.getAttribute("data-time");
           const endTimeRaw = card.getAttribute("data-end-time");
 
@@ -222,7 +228,10 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
 
         document.querySelectorAll(".hero-slide[data-date]").forEach((el) => {
           const slide = el as HTMLElement;
-          const dateStr = slide.getAttribute("data-date") || "";
+          const rawDateStr = slide.getAttribute("data-date") || "";
+          const dateStr = rawDateStr
+            ? new Date(rawDateStr).toLocaleDateString("en-CA", { timeZone: tz })
+            : "";
           const time = slide.getAttribute("data-time");
           const endTimeRaw = slide.getAttribute("data-end-time");
 
