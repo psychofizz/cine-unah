@@ -10,10 +10,10 @@ credits: |-
       Fernando E. Solanas, Octavio Getino
 
   Reparto
-  María de la Paz
-  Fernando E. Solanas
-  Edgardo Suárez
-  Julio Troxler
+      María de la Paz
+      Fernando E. Solanas
+      Edgardo Suárez
+      Julio Troxler
 
   Música
       Roberto Lar, Fernando E. Solanas
