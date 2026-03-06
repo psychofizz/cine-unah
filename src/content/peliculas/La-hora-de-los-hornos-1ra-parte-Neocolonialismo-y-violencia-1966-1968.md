@@ -24,8 +24,8 @@ credits: |-
   Compañías
       Grupo Cine Liberacion, Solanas Productions
 showDate: 2026-03-20T22:16:01.037Z
-showTime: '01:00'
-showEndTime: '03:00'
+showTime: '13:00'
+showEndTime: '15:00'
 duration: 89
 country: 'Argentina, 1968'
 ---
