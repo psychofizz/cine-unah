@@ -24,8 +24,8 @@ credits: |-
   Compañías
       A24, Fruit Tree, Smudge Films. Productor: Luca Intili. Distribuidora: A24
 showDate: 2026-03-27T22:30:00.791Z
-showTime: '01:00'
-showEndTime: '03:00'
+showTime: '13:00'
+showEndTime: '15:00'
 duration: 88
 country: 'Estados Unidos, 2024'
 ---
