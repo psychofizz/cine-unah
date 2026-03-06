@@ -10,10 +10,10 @@ credits: |-
       Pedro Almodóvar
 
   Reparto
-  Carmen Maura
-  Antonio Banderas
-  Julieta Serrano
-  María Barranco
+      Carmen Maura
+      Antonio Banderas
+      Julieta Serrano
+      María Barranco
 
   Música
       Bernardo Bonezzi
