@@ -11,6 +11,11 @@ try {
     const todayStr = new Date().toLocaleDateString("en-CA", {
         timeZone: "America/Tegucigalpa",
     });
+    const nowTimeStr = new Date().toLocaleTimeString("en-GB", {
+        timeZone: "America/Tegucigalpa",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
 
     pastMovies = edges
         .filter((e: any) => {
@@ -19,7 +24,13 @@ try {
                 "en-CA",
                 { timeZone: "America/Tegucigalpa" },
             );
-            return showDateStr < todayStr;
+
+            if (showDateStr < todayStr) return true;
+            if (showDateStr === todayStr) {
+                const endTime = e.node.showEndTime || e.node.showTime;
+                if (endTime && nowTimeStr > endTime) return true;
+            }
+            return false;
         })
         .map((e: any) => e.node)
         .sort(
