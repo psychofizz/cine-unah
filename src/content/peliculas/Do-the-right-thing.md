@@ -22,6 +22,9 @@ credits: |-
 
   Fotografía
       Ernest R. Dickerson
+
+  Compañías
+      40 Acres & A Mule Filmworks. Distribuidora: Universal Pictures
 showDate: 2026-03-13T20:56:49.053Z
 showTime: '01:00'
 showEndTime: '03:00'
