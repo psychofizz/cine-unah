@@ -135,45 +135,13 @@ function formatHeroDate(dateStr: string) {
 						const href = `/peliculas/${slug}`;
 						const { weekday, full } = formatHeroDate(dateStr);
 
-						// Live calculation logic
-						const movieDateStr = new Date(
-							dateStr,
-						).toLocaleDateString("en-CA", {
-							timeZone: "America/Tegucigalpa",
-						});
-						const isToday = movieDateStr === todayStr;
-						let isLive = false;
-						let isPast = false;
-						if (isToday) {
-							const nowTime = new Date().toLocaleTimeString(
-								"en-GB",
-								{
-									timeZone: "America/Tegucigalpa",
-									hour: "2-digit",
-									minute: "2-digit",
-								},
-							);
-							const endTime =
-								movie.showEndTime ||
-								(() => {
-									const [h, mStr] = time.split(":");
-									return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${mStr}`;
-								})();
-
-							isLive = nowTime >= time && nowTime < endTime;
-							isPast = nowTime >= endTime;
-						}
-
-						const statusLabel = isPast
-							? "Finalizada"
-							: isLive
-								? "Proyectando"
-								: "Próxima proyección";
-
 						return (
 							<section
 								class="hero hero-slide"
 								id={`hero-slide-${index}`}
+								data-date={dateStr}
+								data-time={time}
+								data-end-time={movie.showEndTime || ""}
 								aria-label={`Película destacada: ${movie.title}`}
 							>
 								{/* Background poster */}
@@ -207,12 +175,15 @@ function formatHeroDate(dateStr: string) {
 
 									{/* Info */}
 									<div class="hero-info">
-										<span class="hero-label">
+										<span
+											class="hero-label"
+											style="display: none;"
+										>
 											<span
 												class="hero-label-dot"
 												aria-hidden="true"
 											/>
-											{statusLabel}
+											<span class="hero-label-text" />
 										</span>
 
 										<h1 class="hero-title">

@@ -24,38 +24,6 @@ const {
 } = Astro.props;
 
 const tz = "America/Tegucigalpa";
-const showDateStr = new Date(showDate).toLocaleDateString("en-CA", {
-    timeZone: tz,
-});
-const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: tz });
-
-let isLive = false;
-let isPast = false;
-let status = showDateStr < todayStr ? "past" : "current";
-
-if (status === "current" && showDateStr === todayStr && showTime) {
-    const nowTime = new Date().toLocaleTimeString("en-GB", {
-        timeZone: "America/Tegucigalpa",
-        hour: "2-digit",
-        minute: "2-digit",
-    });
-
-    const endTime =
-        showEndTime ||
-        (() => {
-            const [h, m] = showTime.split(":");
-            return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${m}`;
-        })();
-
-    isLive = nowTime >= showTime && nowTime < endTime;
-    isPast = nowTime >= endTime;
-}
-
-const statusLabel: Record<string, string> = {
-    current: isPast ? "Finalizada" : isLive ? "Proyectando" : "Próxima",
-    next: "Próxima",
-    past: "Pasada",
-};
 
 const formattedDate = new Date(showDate).toLocaleDateString("es-MX", {
     timeZone: tz,
@@ -70,6 +38,9 @@ import { Image } from "astro:assets";
 <a
     href={`/peliculas/${slug}`}
     class="card"
+    data-date={showDate}
+    data-time={showTime || ""}
+    data-end-time={showEndTime || ""}
     aria-label={`${title} — ${formattedDate}${showTime ? " " + showTime : ""}`}
 >
     <div class="card-poster">
@@ -88,10 +59,10 @@ import { Image } from "astro:assets";
             )
         }
         {
-            status !== "past" && (
-                <span class="card-badge">{statusLabel[status]}</span>
-            )
+            // We'll initially render a hidden badge.
+            // The client-side script will populate and show it.
         }
+        <span class="card-badge" style="display: none;"></span>
     </div>
     <div class="card-body">
         <h3 class="card-title">{title}</h3>

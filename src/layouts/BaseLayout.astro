@@ -160,6 +160,111 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
           document.body.classList.remove("nav-open");
         });
       });
+
+      // --- Live Movie Status Updates ---
+      function updateMovieStatuses() {
+        const tz = "America/Tegucigalpa";
+        const now = new Date();
+        const todayStr = now.toLocaleDateString("en-CA", { timeZone: tz });
+        const nowTime = now.toLocaleTimeString("en-GB", {
+          timeZone: tz,
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        document.querySelectorAll(".card[data-date]").forEach((el) => {
+          const card = el as HTMLElement;
+          const dateStr = card.getAttribute("data-date") || "";
+          const time = card.getAttribute("data-time");
+          const endTimeRaw = card.getAttribute("data-end-time");
+
+          let status = "next"; // "next", "current", "past", "drop"
+
+          if (dateStr < todayStr) {
+            status = "past";
+          } else if (dateStr === todayStr && time) {
+            const endTime =
+              endTimeRaw ||
+              (() => {
+                const [h, m] = time.split(":");
+                return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${m}`;
+              })();
+            const dropTime = (() => {
+              const [h, m] = endTime.split(":");
+              return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${m}`;
+            })();
+
+            if (nowTime > dropTime) status = "drop";
+            else if (nowTime >= endTime) status = "past";
+            else if (nowTime >= time) status = "current";
+          }
+
+          if (status === "drop") {
+            card.style.display = "none";
+            return;
+          }
+
+          const badge = card.querySelector(".card-badge") as HTMLElement;
+          if (badge) {
+            if (dateStr < todayStr) {
+              badge.style.display = "none";
+            } else {
+              badge.textContent =
+                status === "past"
+                  ? "Finalizada"
+                  : status === "current"
+                    ? "Proyectando"
+                    : "Próxima";
+              badge.style.display = "";
+            }
+          }
+        });
+
+        document.querySelectorAll(".hero-slide[data-date]").forEach((el) => {
+          const slide = el as HTMLElement;
+          const dateStr = slide.getAttribute("data-date") || "";
+          const time = slide.getAttribute("data-time");
+          const endTimeRaw = slide.getAttribute("data-end-time");
+
+          let statusLabel = "Próxima proyección";
+          let drop = false;
+
+          if (dateStr === todayStr && time) {
+            const endTime =
+              endTimeRaw ||
+              (() => {
+                const [h, m] = time.split(":");
+                return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${m}`;
+              })();
+            const dropTime = (() => {
+              const [h, m] = endTime.split(":");
+              return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${m}`;
+            })();
+
+            if (nowTime > dropTime) drop = true;
+            else if (nowTime >= endTime) statusLabel = "Finalizada";
+            else if (nowTime >= time) statusLabel = "Proyectando";
+          }
+
+          if (drop) {
+            slide.style.display = "none";
+          } else {
+            const labelContainer = slide.querySelector(
+              ".hero-label",
+            ) as HTMLElement;
+            const labelText = slide.querySelector(
+              ".hero-label-text",
+            ) as HTMLElement;
+            if (labelContainer && labelText) {
+              labelText.textContent = statusLabel;
+              labelContainer.style.display = "";
+            }
+          }
+        });
+      }
+
+      updateMovieStatuses();
+      setInterval(updateMovieStatuses, 60000);
     </script>
   </body>
 </html>
