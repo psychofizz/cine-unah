@@ -20,6 +20,9 @@ credits: |-
 
   Fotografía
       José Luis Alcaine
+
+  Compañías
+      El Deseo, LaurenFilm S.A
 showDate: 2026-03-17T21:43:15.355Z
 showTime: '01:00'
 showEndTime: '03:00'
