@@ -10,12 +10,12 @@ credits: |-
       Spike Lee
 
   Reparto
-  Danny Aiello
-  Ossie Davis
-  Ruby Dee
-  Richard Edson
-  Giancarlo Esposito
-  Spike Lee
+     Danny Aiello
+     Ossie Davis
+     Ruby Dee
+     Richard Edson
+     Giancarlo Esposito
+     Spike Lee
 
   Música
       Bill Lee
