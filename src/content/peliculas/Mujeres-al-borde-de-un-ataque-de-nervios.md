@@ -24,8 +24,8 @@ credits: |-
   Compañías
       El Deseo, LaurenFilm S.A
 showDate: 2026-03-17T21:43:15.355Z
-showTime: '01:00'
-showEndTime: '03:00'
+showTime: '13:00'
+showEndTime: '15:00'
 duration: 89
 country: 'España, 1988'
 ---
