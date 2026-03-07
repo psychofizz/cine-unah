@@ -34,9 +34,9 @@ export default defineConfig({
     publicFolder: "public",
   },
   media: {
-    tina: {
-      mediaRoot: "uploads",
-      publicFolder: "public",
+    loadCustomStore: async () => {
+      const pack = await import("next-tinacms-cloudinary");
+      return pack.TinaCloudCloudinaryMediaStore;
     },
   },
   schema: {
@@ -47,6 +47,20 @@ export default defineConfig({
         label: "Películas",
         path: "src/content/peliculas",
         format: "md",
+        ui: {
+          filename: {
+            slugify: (values) => {
+              const titleSlug = (values?.title || "pelicula")
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "");
+              const hash = Math.random().toString(36).substring(2, 9);
+              return `${titleSlug}-${hash}`;
+            },
+          },
+        },
         fields: [
           {
             type: "string",
@@ -60,6 +74,12 @@ export default defineConfig({
             name: "poster",
             label: "Poster",
             required: true,
+          },
+          {
+            type: "string",
+            name: "youtubeTrailer",
+            label: "Tráiler de YouTube (URL)",
+            description: "Ej: https://www.youtube.com/watch?v=dQw4w9WgXcQ",
           },
           {
             type: "string",
@@ -124,6 +144,20 @@ export default defineConfig({
         label: "Eventos",
         path: "src/content/eventos",
         format: "md",
+        ui: {
+          filename: {
+            slugify: (values) => {
+              const titleSlug = (values?.title || "evento")
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "");
+              const hash = Math.random().toString(36).substring(2, 9);
+              return `${titleSlug}-${hash}`;
+            },
+          },
+        },
         fields: [
           {
             type: "string",
@@ -137,6 +171,12 @@ export default defineConfig({
             name: "poster",
             label: "Poster del evento",
             required: true,
+          },
+          {
+            type: "string",
+            name: "youtubeTrailer",
+            label: "Tráiler de YouTube (URL)",
+            description: "Ej: https://www.youtube.com/watch?v=dQw4w9WgXcQ",
           },
           {
             type: "string",

@@ -93,6 +93,7 @@ union DocumentNode = Pelicula | Evento | Folder
 type Pelicula implements Node & Document {
   title: String!
   poster: String!
+  youtubeTrailer: String
   synopsis: String
   credits: String
   showDate: String!
@@ -147,6 +148,7 @@ input NumberFilter {
 input PeliculaFilter {
   title: StringFilter
   poster: ImageFilter
+  youtubeTrailer: StringFilter
   synopsis: StringFilter
   credits: StringFilter
   showDate: DatetimeFilter
@@ -172,6 +174,7 @@ type PeliculaConnection implements Connection {
 type Evento implements Node & Document {
   title: String!
   poster: String!
+  youtubeTrailer: String
   description: String
   date: String!
   eventTime: String
@@ -186,6 +189,7 @@ type Evento implements Node & Document {
 input EventoFilter {
   title: StringFilter
   poster: ImageFilter
+  youtubeTrailer: StringFilter
   description: StringFilter
   date: DatetimeFilter
   eventTime: StringFilter
@@ -231,6 +235,7 @@ input DocumentMutation {
 input PeliculaMutation {
   title: String
   poster: String
+  youtubeTrailer: String
   synopsis: String
   credits: String
   showDate: String
@@ -245,6 +250,7 @@ input PeliculaMutation {
 input EventoMutation {
   title: String
   poster: String
+  youtubeTrailer: String
   description: String
   date: String
   eventTime: String
