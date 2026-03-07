@@ -77,7 +77,8 @@ const weekday = new Date(event.date).toLocaleDateString("es-MX", {
                             <Image
                                 src={encodeURI(event.poster)}
                                 alt={`Poster: ${event.title}`}
-                                inferSize={true}
+                                width={800}
+                                height={1200}
                                 id="detail-poster-img"
                                 class="interactive-poster"
                                 title="Ampliar poster"
@@ -196,7 +197,8 @@ const weekday = new Date(event.date).toLocaleDateString("es-MX", {
                         src={encodeURI(event.poster)}
                         alt="Poster Ampliado"
                         class="poster-fullscreen"
-                        inferSize={true}
+                        width={1200}
+                        height={1800}
                     />
                 )
             }

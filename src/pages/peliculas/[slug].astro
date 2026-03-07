@@ -86,7 +86,8 @@ const statusText = showDateStr < todayStr ? "Archivo" : "En cartelera";
                             <Image
                                 src={encodeURI(movie.poster)}
                                 alt={`Poster: ${movie.title}`}
-                                inferSize={true}
+                                width={800}
+                                height={1200}
                                 id="detail-poster-img"
                                 class="interactive-poster"
                                 title="Ampliar poster"
@@ -221,7 +222,8 @@ const statusText = showDateStr < todayStr ? "Archivo" : "En cartelera";
                         src={encodeURI(movie.poster)}
                         alt="Poster Ampliado"
                         class="poster-fullscreen"
-                        inferSize={true}
+                        width={1200}
+                        height={1800}
                     />
                 )
             }

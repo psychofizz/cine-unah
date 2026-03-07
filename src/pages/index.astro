@@ -151,7 +151,9 @@ function formatHeroDate(dateStr: string) {
 											src={encodeURI(movie.poster)}
 											alt=""
 											aria-hidden="true"
-											inferSize={true}
+											width={1920}
+											height={1080}
+											class="w-full h-full object-cover"
 										/>
 									) : (
 										<div class="hero-poster-bg-empty" />
@@ -166,7 +168,8 @@ function formatHeroDate(dateStr: string) {
 											<Image
 												src={encodeURI(movie.poster)}
 												alt={`Poster: ${movie.title}`}
-												inferSize={true}
+												width={400}
+												height={600}
 											/>
 										) : (
 											<div style="aspect-ratio:2/3;background:#1a1a1a;" />
