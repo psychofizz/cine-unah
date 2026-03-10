@@ -1,6 +1,7 @@
 ---
 title: ' Un día de furia '
 poster: /uploads/Duglas.jpg
+youtubeTrailer: 'https://youtu.be/BD5ofrSNDFA'
 synopsis: 'Un hombre ordinario, frustrado por los problemas de la sociedad, empieza una campaña de violencia.'
 credits: |-
   Título original
@@ -28,5 +29,6 @@ showTime: '10:00'
 showEndTime: '12:00'
 duration: 112
 country: Estados Unidos.
+location: Cine Francisco Salvador
 ---
 

@@ -30,8 +30,8 @@ var config_default = defineConfig({
   },
   media: {
     tina: {
-      mediaRoot: "uploads",
-      publicFolder: "public"
+      publicFolder: "public",
+      mediaRoot: "uploads"
     }
   },
   schema: {
@@ -42,6 +42,15 @@ var config_default = defineConfig({
         label: "Pel\xEDculas",
         path: "src/content/peliculas",
         format: "md",
+        ui: {
+          filename: {
+            slugify: (values) => {
+              const titleSlug = (values?.title || "pelicula").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+              const datePart = values?.showDate ? new Date(values.showDate).toISOString().split("T")[0] : "";
+              return datePart ? `${titleSlug}-${datePart}` : titleSlug;
+            }
+          }
+        },
         fields: [
           {
             type: "string",
@@ -55,6 +64,12 @@ var config_default = defineConfig({
             name: "poster",
             label: "Poster",
             required: true
+          },
+          {
+            type: "string",
+            name: "youtubeTrailer",
+            label: "Tr\xE1iler de YouTube (URL)",
+            description: "Ej: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
           },
           {
             type: "string",
@@ -118,6 +133,15 @@ var config_default = defineConfig({
         label: "Eventos",
         path: "src/content/eventos",
         format: "md",
+        ui: {
+          filename: {
+            slugify: (values) => {
+              const titleSlug = (values?.title || "evento").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+              const datePart = values?.date ? new Date(values.date).toISOString().split("T")[0] : "";
+              return datePart ? `${titleSlug}-${datePart}` : titleSlug;
+            }
+          }
+        },
         fields: [
           {
             type: "string",
@@ -131,6 +155,12 @@ var config_default = defineConfig({
             name: "poster",
             label: "Poster del evento",
             required: true
+          },
+          {
+            type: "string",
+            name: "youtubeTrailer",
+            label: "Tr\xE1iler de YouTube (URL)",
+            description: "Ej: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
           },
           {
             type: "string",

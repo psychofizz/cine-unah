@@ -5,7 +5,7 @@ import vercel from '@astrojs/vercel';
 // https://astro.build/config
 export default defineConfig({
     site: 'https://taquilla.cine',
-    output: 'static',
+    output: 'server',
     adapter: vercel({
         imageService: true,
     }),
