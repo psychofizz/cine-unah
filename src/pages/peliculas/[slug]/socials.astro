@@ -1,0 +1,261 @@
+---
+import { client } from "../../../../tina/__generated__/client";
+import { Image } from "astro:assets";
+
+const { slug } = Astro.params;
+
+let movie: any = null;
+try {
+    const result = await client.queries.pelicula({
+        relativePath: `${slug}.md`,
+    });
+    movie = result.data?.pelicula;
+} catch (e) {
+    console.error("Error fetching pelicula by relativePath:", e);
+}
+
+// Fallback search
+if (!movie) {
+    try {
+        const connResult = await client.queries.peliculaConnection();
+        const edges = connResult.data.peliculaConnection.edges ?? [];
+        const match = edges.find(
+            (edge: any) => edge.node._sys.filename === slug,
+        );
+        if (match) movie = match.node;
+    } catch (e) {
+        // Fallback also failed
+    }
+}
+
+if (!movie) {
+    return Astro.redirect("/404");
+}
+
+const formattedDate = new Date(movie.showDate).toLocaleDateString("es-MX", {
+    timeZone: "America/Tegucigalpa",
+    day: "numeric",
+    month: "long",
+});
+const weekday = new Date(movie.showDate).toLocaleDateString("es-MX", {
+    timeZone: "America/Tegucigalpa",
+    weekday: "long",
+});
+---
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Social Export - {movie.title}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --cine-red: #e62117;
+            --bg-color: #050505;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100dvh;
+            font-family: var(--font-sans);
+            color: #fff;
+        }
+
+        /* The Mobile Canvas */
+        .story-canvas {
+            position: relative;
+            width: 100%;
+            height: 100dvh;
+            max-width: 540px; /* Limits size on ultra-wide desktop monitors */
+            background: linear-gradient(145deg, #180a2b 0%, #301438 40%, #000000 100%); /* Vivid cinematic gradient */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Dynamic Background Blur */
+        .story-bg-blur {
+            position: absolute;
+            inset: -10%;
+            width: 120%;
+            height: 120%;
+            object-fit: cover;
+            filter: blur(80px) brightness(0.3);
+            z-index: 0;
+            opacity: 0.8;
+        }
+
+        .story-content {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* Top Brand Header */
+        .story-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .brand-logo {
+            font-size: 1.2rem;
+            font-weight: 900;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .brand-logo span {
+            opacity: 0.5;
+            font-weight: 400;
+        }
+
+        .eyebrow {
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--cine-red);
+            background: rgba(230, 33, 23, 0.1);
+            padding: 4px 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        /* Poster Area */
+        .poster-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .poster-img {
+            max-width: 90%;
+            max-height: 55vh;
+            object-fit: contain;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
+        }
+
+        /* Bottom Info Area */
+        .info-area {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            padding-bottom: env(safe-area-inset-bottom, 5px);
+        }
+
+        .movie-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 6vw, 2.2rem);
+            line-height: 1.05;
+            font-weight: 700;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            margin-bottom: 0px;
+        }
+
+        /* Date & Time Block */
+        .datetime-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 0.25rem;
+        }
+
+        .date-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            color: #ccc;
+        }
+
+        .time-text {
+            font-size: 1.8rem;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        /* Location */
+        .location-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="story-canvas">
+        <div class="story-content">
+            <header class="story-header">
+                <div class="brand-logo">CINE <span>UNAH</span></div>
+                {movie.isPartOfEvent && (
+                    <div class="eyebrow">⚡ Función Doble</div>
+                )}
+            </header>
+
+            <div class="poster-wrapper">
+                {movie.poster ? (
+                    <img src={encodeURI(movie.poster)} class="poster-img" alt={movie.title} />
+                ) : (
+                    <div class="poster-img" style="width: 100%; aspect-ratio: 2/3; background: #222;"></div>
+                )}
+            </div>
+
+            <div class="info-area">
+                <h1 class="movie-title">{movie.title}</h1>
+                
+                <div class="datetime-block">
+                    <div class="date-text">{weekday}, {formattedDate}</div>
+                    {movie.showTime && (
+                        <div class="time-text">
+                            {movie.showTime}{movie.showEndTime ? ` - ${movie.showEndTime}` : ''}
+                        </div>
+                    )}
+                </div>
+
+                {movie.location && (
+                    <div class="location-chip">
+                        📍 {typeof movie.location === 'object' ? (movie.location.title || movie.location.id) : movie.location}
+                    </div>
+                )}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
