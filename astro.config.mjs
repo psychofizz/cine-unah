@@ -10,6 +10,6 @@ export default defineConfig({
         imageService: true,
     }),
     image: {
-        domains: ['assets.tina.io', 'res.cloudinary.com'],
+        domains: ['assets.tina.io'],
     },
 });

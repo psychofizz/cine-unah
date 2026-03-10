@@ -29,9 +29,9 @@ var config_default = defineConfig({
     publicFolder: "public"
   },
   media: {
-    loadCustomStore: async () => {
-      const pack = await import("next-tinacms-cloudinary");
-      return pack.TinaCloudCloudinaryMediaStore;
+    tina: {
+      publicFolder: "public",
+      mediaRoot: "uploads"
     }
   },
   schema: {
@@ -46,8 +46,8 @@ var config_default = defineConfig({
           filename: {
             slugify: (values) => {
               const titleSlug = (values?.title || "pelicula").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-              const hash = Math.random().toString(36).substring(2, 9);
-              return `${titleSlug}-${hash}`;
+              const datePart = values?.showDate ? new Date(values.showDate).toISOString().split("T")[0] : "";
+              return datePart ? `${titleSlug}-${datePart}` : titleSlug;
             }
           }
         },
@@ -137,8 +137,8 @@ var config_default = defineConfig({
           filename: {
             slugify: (values) => {
               const titleSlug = (values?.title || "evento").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-              const hash = Math.random().toString(36).substring(2, 9);
-              return `${titleSlug}-${hash}`;
+              const datePart = values?.date ? new Date(values.date).toISOString().split("T")[0] : "";
+              return datePart ? `${titleSlug}-${datePart}` : titleSlug;
             }
           }
         },
