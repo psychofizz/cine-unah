@@ -25,5 +25,6 @@ showTime: '13:00'
 showEndTime: '15:00'
 duration: 90
 country: 'Palestina, 2011'
+location: src/content/ubicaciones/cise.md
 ---
 

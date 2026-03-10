@@ -8,7 +8,8 @@ interface Props {
     showEndTime?: string;
     country?: string;
     duration?: number;
-    location?: string;
+    location?: any;
+    isPartOfEvent?: any;
 }
 
 const {
@@ -21,6 +22,7 @@ const {
     country,
     duration,
     location,
+    isPartOfEvent,
 } = Astro.props;
 
 const tz = "America/Tegucigalpa";
@@ -60,6 +62,13 @@ import { Image } from "astro:assets";
             )
         }
         {
+            isPartOfEvent && (
+                <div class="card-event-badge">
+                    ⚡ Función Doble
+                </div>
+            )
+        }
+        {
             // We'll initially render a hidden badge.
             // The client-side script will populate and show it.
         }
@@ -84,7 +93,7 @@ import { Image } from "astro:assets";
         {
             (country || duration || location) && (
                 <p class="card-meta">
-                    {[country, duration ? `${duration} min` : null, location]
+                    {[country, duration ? `${duration} min` : null, typeof location === 'object' ? location?.title : location]
                         .filter(Boolean)
                         .join(" · ")}
                 </p>

@@ -28,5 +28,6 @@ showTime: '13:00'
 showEndTime: '16:00'
 duration: 84
 country: 'Italia, 1952.'
+location: src/content/ubicaciones/cise.md
 ---
 

@@ -1,0 +1,294 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { client } from "../../../tina/__generated__/client";
+import { Image } from "astro:assets";
+
+const { slug } = Astro.params;
+
+let loc: any = null;
+try {
+    const result = await client.queries.ubicacion({
+        relativePath: `${slug}.md`,
+    });
+    loc = result.data?.ubicacion;
+} catch (e) {
+    console.error(`Error fetching ubicacion for slug ${slug}:`, e);
+}
+
+// Fallback search in case relativePath fails
+if (!loc) {
+    try {
+        const connResult = await client.queries.ubicacionConnection();
+        const edges = connResult.data.ubicacionConnection.edges ?? [];
+        const match = edges.find(
+            (edge: any) => edge.node._sys.filename === slug,
+        );
+        if (match) loc = match.node;
+    } catch (e) {
+        // Fallback also failed
+    }
+}
+
+if (!loc) {
+    return Astro.redirect('/404');
+}
+
+let mapUrlEmbed = "";
+let mapUrlExternal = "";
+if (loc.mapCoordinates) {
+    const query = encodeURIComponent(loc.mapCoordinates.trim());
+    mapUrlEmbed = `https://maps.google.com/maps?q=${query}&hl=es&z=19&t=k&output=embed`;
+    mapUrlExternal = `https://maps.google.com/maps?q=${query}&hl=es&z=19&t=k`;
+}
+---
+
+<BaseLayout
+    title={loc.title}
+    description={`Ubicación y cómo llegar a: ${loc.title}`}
+    image={loc.image}
+    pathname={`/ubicacion/${Astro.params.slug}`}
+>
+    <div class="container ubicacion-page">
+        <div class="detail-page">
+            <div class="location-card">
+                <div class="location-main">
+                    {loc.image && (
+                        <div class="location-image">
+                            <Image
+                                src={encodeURI(loc.image)}
+                                alt={loc.title}
+                                width={800}
+                                height={500}
+                                class="w-full h-auto object-cover"
+                            />
+                        </div>
+                    )}
+                    <div class="location-content">
+                        <h1 class="location-title">{loc.title}</h1>
+                        {loc.address && (
+                            <p class="location-address">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                {loc.address}
+                            </p>
+                        )}
+                        
+                        <div class="location-actions">
+                            {mapUrlExternal && (
+                                <a href={mapUrlExternal} target="_blank" rel="noopener noreferrer" class="map-btn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    Google Maps
+                                </a>
+                            )}
+                            {loc.instagramReel && (
+                                <a href={loc.instagramReel} target="_blank" rel="noopener noreferrer" class="insta-btn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                    </svg>
+                                    Instagram
+                                </a>
+                            )}
+                        </div>
+                    </div>
+                </div>
+                
+                {mapUrlEmbed && (
+                    <div class="location-map-wrapper">
+                        <iframe
+                            src={mapUrlEmbed}
+                            style="border:0;"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title={`Mapa de ${loc.title}`}
+                        ></iframe>
+                    </div>
+                )}
+            </div>
+        </div>
+    </div>
+</BaseLayout>
+
+<style>
+    .ubicacion-page {
+        padding-top: 40px;
+        padding-bottom: 80px;
+    }
+    
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #888;
+        text-decoration: none;
+        font-family: var(--font-sans);
+        font-weight: 500;
+        margin-bottom: 24px;
+        transition: color 0.2s ease;
+    }
+    .back-link:hover {
+        color: #fff;
+    }
+    
+    .location-card {
+        background: var(--color-bg-card);
+        border-radius: var(--radius);
+        overflow: hidden;
+        border: 1px solid var(--color-border);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3); /* Softer shadow like other cards */
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .location-main {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .location-image {
+        width: 100%;
+        max-height: 400px;
+        overflow: hidden;
+        display: flex;
+    }
+    
+    .location-image :global(img) {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .location-content {
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;
+    }
+    
+    .location-title {
+        font-family: var(--font-display);
+        font-size: clamp(2rem, 5vw, 3rem); /* Responsive like detail pages */
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: var(--sp-4);
+        color: var(--color-white);
+        line-height: 1.1;
+    }
+    
+    .location-address {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-3);
+        color: var(--color-off-white);
+        font-size: 1rem;
+        margin-bottom: var(--sp-6);
+        line-height: 1.5;
+        opacity: 0.85;
+    }
+    
+    .location-address svg {
+        flex-shrink: 0;
+        color: #e62117;
+    }
+
+    .location-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--sp-3);
+        margin-top: var(--sp-2);
+    }
+    
+    .map-btn, .insta-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--sp-2);
+        padding: var(--sp-3) var(--sp-5);
+        border-radius: var(--radius-sm);
+        font-family: var(--font-sans);
+        font-weight: 600;
+        font-size: 0.95rem; /* Slightly smaller, sharper font */
+        letter-spacing: 0.02em;
+        text-decoration: none;
+        transition: all var(--ease);
+        border: 1px solid transparent;
+    }
+    
+    .map-btn {
+        background: var(--color-white);
+        color: var(--color-bg);
+    }
+    
+    .map-btn:hover {
+        transform: translateY(-2px);
+        background: var(--color-off-white);
+        box-shadow: 0 4px 12px rgba(255,255,255,0.15);
+    }
+
+    .insta-btn {
+        background: transparent;
+        color: var(--color-white);
+        border-color: rgba(255,255,255,0.2);
+    }
+    
+    .insta-btn:hover {
+        border-color: var(--color-white);
+        background: rgba(255,255,255,0.05);
+    }
+    
+    .insta-btn svg {
+        opacity: 0.8;
+    }
+    
+    .location-map-wrapper {
+        display: none; /* Hidden on mobile */
+    }
+
+    @media (min-width: 992px) {
+        .location-card {
+            flex-direction: row;
+            min-height: 500px;
+        }
+        .location-main {
+            width: 50%;
+            border-right: 1px solid var(--color-border);
+            background: var(--color-bg-card-2);
+        }
+        .location-image {
+            max-height: 350px;
+        }
+        .location-content {
+            padding: var(--sp-8) var(--sp-6);
+        }
+        .location-map-wrapper {
+            display: block;
+            width: 50%;
+            background: var(--color-surface);
+            position: relative;
+        }
+        .location-map-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    }
+    
+    @media (max-width: 991px) {
+        .location-title {
+            font-size: 1.8rem;
+        }
+        .location-content {
+            padding: 24px;
+        }
+    }
+</style>

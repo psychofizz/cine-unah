@@ -131,10 +131,17 @@ export default defineConfig({
             description: "Ej: México, 1975",
           },
           {
-            type: "string",
+            type: "reference",
             name: "location",
-            label: "Ubicación (opcional)",
-            description: "Ej: Cine Francisco Salvador",
+            label: "Ubicación",
+            collections: ["ubicacion"],
+          },
+          {
+            type: "reference",
+            name: "isPartOfEvent",
+            label: "Parte del Evento (Ej: Double Feature)",
+            description: "Si esta película es parte de un evento más grande (ej: Función Doble de Barbenheimer), selecciona el Evento padre aquí.",
+            collections: ["evento"],
           },
         ],
       },
@@ -210,9 +217,79 @@ export default defineConfig({
               "Si está activo, este evento ocupa el hero principal hasta que la fecha pase.",
           },
           {
-            type: "string",
+            type: "reference",
             name: "location",
-            label: "Lugar (opcional)",
+            label: "Lugar",
+            collections: ["ubicacion"],
+          },
+          {
+            type: "object",
+            list: true,
+            name: "shortFilms",
+            label: "Cortometrajes (Lineup)",
+            description: "Si este evento es una función de varios cortos, agrégalos aquí en lugar de crear una página de Película completa para cada uno.",
+            ui: {
+              itemProps: (item) => {
+                return { label: item?.title ? `${item?.title} (${item?.duration || '?'} min)` : 'Nuevo Corto' }
+              }
+            },
+            fields: [
+              { type: "string", name: "title", label: "Título", required: true },
+              { type: "string", name: "director", label: "Director" },
+              { type: "number", name: "duration", label: "Duración (min)" },
+              { type: "string", name: "synopsis", label: "Sinopsis breve", ui: { component: "textarea" } },
+            ]
+          },
+        ],
+      },
+      // ─── UBICACIONES ───────────────────────────────────────────────────────
+      {
+        name: "ubicacion",
+        label: "Ubicaciones",
+        path: "src/content/ubicaciones",
+        format: "md",
+        ui: {
+          filename: {
+            slugify: (values) => {
+              const titleSlug = (values?.title || "ubicacion")
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "");
+              return titleSlug;
+            },
+          },
+        },
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Nombre de la ubicación",
+            isTitle: true,
+            required: true,
+          },
+          {
+            type: "string",
+            name: "address",
+            label: "Dirección",
+            description: "Ej: 3RMM+WQ3, Tegucigalpa, Francisco Morazán",
+          },
+          {
+            type: "string",
+            name: "mapCoordinates",
+            label: "Coordenadas del Mapa (Lat, Lng)",
+            description: "Ej: 14.084587, -87.165553",
+          },
+          {
+            type: "string",
+            name: "instagramReel",
+            label: "URL del Reel de Instagram",
+          },
+          {
+            type: "image",
+            name: "image",
+            label: "Imagen de la ubicación",
           },
         ],
       },

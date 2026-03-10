@@ -25,5 +25,6 @@ showTime: '13:00'
 showEndTime: '15:00'
 duration: 130
 country: 'Italia, 2023'
+location: src/content/ubicaciones/cise.md
 ---
 

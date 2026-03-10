@@ -28,5 +28,6 @@ showTime: '13:00'
 showEndTime: '15:00'
 duration: 88
 country: 'Estados Unidos, 2024'
+location: src/content/ubicaciones/cise.md
 ---
 
