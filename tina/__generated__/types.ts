@@ -203,6 +203,8 @@ export type DocumentNode = Pelicula | Evento | Ubicacion | Folder;
 
 export type PeliculaLocation = Ubicacion;
 
+export type PeliculaIsPartOfEvent = Evento;
+
 export type Pelicula = Node & Document & {
   __typename?: 'Pelicula';
   title: Scalars['String']['output'];
@@ -217,6 +219,7 @@ export type Pelicula = Node & Document & {
   duration?: Maybe<Scalars['Float']['output']>;
   country?: Maybe<Scalars['String']['output']>;
   location?: Maybe<PeliculaLocation>;
+  isPartOfEvent?: Maybe<PeliculaIsPartOfEvent>;
   id: Scalars['ID']['output'];
   _sys: SystemInfo;
   _values: Scalars['JSON']['output'];
@@ -263,6 +266,10 @@ export type PeliculaLocationFilter = {
   ubicacion?: InputMaybe<UbicacionFilter>;
 };
 
+export type PeliculaIsPartOfEventFilter = {
+  evento?: InputMaybe<EventoFilter>;
+};
+
 export type PeliculaFilter = {
   title?: InputMaybe<StringFilter>;
   poster?: InputMaybe<ImageFilter>;
@@ -276,6 +283,7 @@ export type PeliculaFilter = {
   duration?: InputMaybe<NumberFilter>;
   country?: InputMaybe<StringFilter>;
   location?: InputMaybe<PeliculaLocationFilter>;
+  isPartOfEvent?: InputMaybe<PeliculaIsPartOfEventFilter>;
 };
 
 export type PeliculaConnectionEdges = {
@@ -293,6 +301,14 @@ export type PeliculaConnection = Connection & {
 
 export type EventoLocation = Ubicacion;
 
+export type EventoShortFilms = {
+  __typename?: 'EventoShortFilms';
+  title: Scalars['String']['output'];
+  director?: Maybe<Scalars['String']['output']>;
+  duration?: Maybe<Scalars['Float']['output']>;
+  synopsis?: Maybe<Scalars['String']['output']>;
+};
+
 export type Evento = Node & Document & {
   __typename?: 'Evento';
   title: Scalars['String']['output'];
@@ -304,6 +320,7 @@ export type Evento = Node & Document & {
   eventEndTime?: Maybe<Scalars['String']['output']>;
   featured?: Maybe<Scalars['Boolean']['output']>;
   location?: Maybe<EventoLocation>;
+  shortFilms?: Maybe<Array<Maybe<EventoShortFilms>>>;
   id: Scalars['ID']['output'];
   _sys: SystemInfo;
   _values: Scalars['JSON']['output'];
@@ -311,6 +328,13 @@ export type Evento = Node & Document & {
 
 export type EventoLocationFilter = {
   ubicacion?: InputMaybe<UbicacionFilter>;
+};
+
+export type EventoShortFilmsFilter = {
+  title?: InputMaybe<StringFilter>;
+  director?: InputMaybe<StringFilter>;
+  duration?: InputMaybe<NumberFilter>;
+  synopsis?: InputMaybe<StringFilter>;
 };
 
 export type EventoFilter = {
@@ -323,6 +347,7 @@ export type EventoFilter = {
   eventEndTime?: InputMaybe<StringFilter>;
   featured?: InputMaybe<BooleanFilter>;
   location?: InputMaybe<EventoLocationFilter>;
+  shortFilms?: InputMaybe<EventoShortFilmsFilter>;
 };
 
 export type EventoConnectionEdges = {
@@ -481,6 +506,14 @@ export type PeliculaMutation = {
   duration?: InputMaybe<Scalars['Float']['input']>;
   country?: InputMaybe<Scalars['String']['input']>;
   location?: InputMaybe<Scalars['String']['input']>;
+  isPartOfEvent?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type EventoShortFilmsMutation = {
+  title?: InputMaybe<Scalars['String']['input']>;
+  director?: InputMaybe<Scalars['String']['input']>;
+  duration?: InputMaybe<Scalars['Float']['input']>;
+  synopsis?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type EventoMutation = {
@@ -493,6 +526,7 @@ export type EventoMutation = {
   eventEndTime?: InputMaybe<Scalars['String']['input']>;
   featured?: InputMaybe<Scalars['Boolean']['input']>;
   location?: InputMaybe<Scalars['String']['input']>;
+  shortFilms?: InputMaybe<Array<InputMaybe<EventoShortFilmsMutation>>>;
 };
 
 export type UbicacionMutation = {
@@ -503,9 +537,9 @@ export type UbicacionMutation = {
   image?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type PeliculaPartsFragment = { __typename: 'Pelicula', title: string, poster: string, youtubeTrailer?: string | null, synopsis?: string | null, credits?: string | null, showDate: string, showTime?: string | null, showEndTime?: string | null, featured?: boolean | null, duration?: number | null, country?: string | null, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null };
+export type PeliculaPartsFragment = { __typename: 'Pelicula', title: string, poster: string, youtubeTrailer?: string | null, synopsis?: string | null, credits?: string | null, showDate: string, showTime?: string | null, showEndTime?: string | null, featured?: boolean | null, duration?: number | null, country?: string | null, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null, isPartOfEvent?: { __typename: 'Evento', title: string, poster: string, youtubeTrailer?: string | null, description?: string | null, date: string, eventTime?: string | null, eventEndTime?: string | null, featured?: boolean | null, id: string, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null, shortFilms?: Array<{ __typename: 'EventoShortFilms', title: string, director?: string | null, duration?: number | null, synopsis?: string | null } | null> | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null };
 
-export type EventoPartsFragment = { __typename: 'Evento', title: string, poster: string, youtubeTrailer?: string | null, description?: string | null, date: string, eventTime?: string | null, eventEndTime?: string | null, featured?: boolean | null, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null };
+export type EventoPartsFragment = { __typename: 'Evento', title: string, poster: string, youtubeTrailer?: string | null, description?: string | null, date: string, eventTime?: string | null, eventEndTime?: string | null, featured?: boolean | null, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null, shortFilms?: Array<{ __typename: 'EventoShortFilms', title: string, director?: string | null, duration?: number | null, synopsis?: string | null } | null> | null };
 
 export type UbicacionPartsFragment = { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null };
 
@@ -514,7 +548,7 @@ export type PeliculaQueryVariables = Exact<{
 }>;
 
 
-export type PeliculaQuery = { __typename?: 'Query', pelicula: { __typename: 'Pelicula', id: string, title: string, poster: string, youtubeTrailer?: string | null, synopsis?: string | null, credits?: string | null, showDate: string, showTime?: string | null, showEndTime?: string | null, featured?: boolean | null, duration?: number | null, country?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } };
+export type PeliculaQuery = { __typename?: 'Query', pelicula: { __typename: 'Pelicula', id: string, title: string, poster: string, youtubeTrailer?: string | null, synopsis?: string | null, credits?: string | null, showDate: string, showTime?: string | null, showEndTime?: string | null, featured?: boolean | null, duration?: number | null, country?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null, isPartOfEvent?: { __typename: 'Evento', title: string, poster: string, youtubeTrailer?: string | null, description?: string | null, date: string, eventTime?: string | null, eventEndTime?: string | null, featured?: boolean | null, id: string, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null, shortFilms?: Array<{ __typename: 'EventoShortFilms', title: string, director?: string | null, duration?: number | null, synopsis?: string | null } | null> | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } };
 
 export type PeliculaConnectionQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
@@ -526,14 +560,14 @@ export type PeliculaConnectionQueryVariables = Exact<{
 }>;
 
 
-export type PeliculaConnectionQuery = { __typename?: 'Query', peliculaConnection: { __typename?: 'PeliculaConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'PeliculaConnectionEdges', cursor: string, node?: { __typename: 'Pelicula', id: string, title: string, poster: string, youtubeTrailer?: string | null, synopsis?: string | null, credits?: string | null, showDate: string, showTime?: string | null, showEndTime?: string | null, featured?: boolean | null, duration?: number | null, country?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null } | null> | null } };
+export type PeliculaConnectionQuery = { __typename?: 'Query', peliculaConnection: { __typename?: 'PeliculaConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'PeliculaConnectionEdges', cursor: string, node?: { __typename: 'Pelicula', id: string, title: string, poster: string, youtubeTrailer?: string | null, synopsis?: string | null, credits?: string | null, showDate: string, showTime?: string | null, showEndTime?: string | null, featured?: boolean | null, duration?: number | null, country?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null, isPartOfEvent?: { __typename: 'Evento', title: string, poster: string, youtubeTrailer?: string | null, description?: string | null, date: string, eventTime?: string | null, eventEndTime?: string | null, featured?: boolean | null, id: string, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null, shortFilms?: Array<{ __typename: 'EventoShortFilms', title: string, director?: string | null, duration?: number | null, synopsis?: string | null } | null> | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null } | null> | null } };
 
 export type EventoQueryVariables = Exact<{
   relativePath: Scalars['String']['input'];
 }>;
 
 
-export type EventoQuery = { __typename?: 'Query', evento: { __typename: 'Evento', id: string, title: string, poster: string, youtubeTrailer?: string | null, description?: string | null, date: string, eventTime?: string | null, eventEndTime?: string | null, featured?: boolean | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } };
+export type EventoQuery = { __typename?: 'Query', evento: { __typename: 'Evento', id: string, title: string, poster: string, youtubeTrailer?: string | null, description?: string | null, date: string, eventTime?: string | null, eventEndTime?: string | null, featured?: boolean | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null, shortFilms?: Array<{ __typename: 'EventoShortFilms', title: string, director?: string | null, duration?: number | null, synopsis?: string | null } | null> | null } };
 
 export type EventoConnectionQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
@@ -545,7 +579,7 @@ export type EventoConnectionQueryVariables = Exact<{
 }>;
 
 
-export type EventoConnectionQuery = { __typename?: 'Query', eventoConnection: { __typename?: 'EventoConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'EventoConnectionEdges', cursor: string, node?: { __typename: 'Evento', id: string, title: string, poster: string, youtubeTrailer?: string | null, description?: string | null, date: string, eventTime?: string | null, eventEndTime?: string | null, featured?: boolean | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null } | null> | null } };
+export type EventoConnectionQuery = { __typename?: 'Query', eventoConnection: { __typename?: 'EventoConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'EventoConnectionEdges', cursor: string, node?: { __typename: 'Evento', id: string, title: string, poster: string, youtubeTrailer?: string | null, description?: string | null, date: string, eventTime?: string | null, eventEndTime?: string | null, featured?: boolean | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null, shortFilms?: Array<{ __typename: 'EventoShortFilms', title: string, director?: string | null, duration?: number | null, synopsis?: string | null } | null> | null } | null } | null> | null } };
 
 export type UbicacionQueryVariables = Exact<{
   relativePath: Scalars['String']['input'];
@@ -602,6 +636,60 @@ export const PeliculaPartsFragmentDoc = gql`
       id
     }
   }
+  isPartOfEvent {
+    ... on Evento {
+      __typename
+      title
+      poster
+      youtubeTrailer
+      description
+      date
+      eventTime
+      eventEndTime
+      featured
+      location {
+        ... on Ubicacion {
+          __typename
+          title
+          address
+          mapCoordinates
+          instagramReel
+          image
+        }
+        ... on Document {
+          _sys {
+            filename
+            basename
+            hasReferences
+            breadcrumbs
+            path
+            relativePath
+            extension
+          }
+          id
+        }
+      }
+      shortFilms {
+        __typename
+        title
+        director
+        duration
+        synopsis
+      }
+    }
+    ... on Document {
+      _sys {
+        filename
+        basename
+        hasReferences
+        breadcrumbs
+        path
+        relativePath
+        extension
+      }
+      id
+    }
+  }
 }
     `;
 export const EventoPartsFragmentDoc = gql`
@@ -636,6 +724,13 @@ export const EventoPartsFragmentDoc = gql`
       }
       id
     }
+  }
+  shortFilms {
+    __typename
+    title
+    director
+    duration
+    synopsis
   }
 }
     `;

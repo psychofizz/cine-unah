@@ -95,6 +95,8 @@ union DocumentNode = Pelicula | Evento | Ubicacion | Folder
 
 union PeliculaLocation = Ubicacion
 
+union PeliculaIsPartOfEvent = Evento
+
 type Pelicula implements Node & Document {
   title: String!
   poster: String!
@@ -108,6 +110,7 @@ type Pelicula implements Node & Document {
   duration: Float
   country: String
   location: PeliculaLocation
+  isPartOfEvent: PeliculaIsPartOfEvent
   id: ID!
   _sys: SystemInfo!
   _values: JSON!
@@ -154,6 +157,10 @@ input PeliculaLocationFilter {
   ubicacion: UbicacionFilter
 }
 
+input PeliculaIsPartOfEventFilter {
+  evento: EventoFilter
+}
+
 input PeliculaFilter {
   title: StringFilter
   poster: ImageFilter
@@ -167,6 +174,7 @@ input PeliculaFilter {
   duration: NumberFilter
   country: StringFilter
   location: PeliculaLocationFilter
+  isPartOfEvent: PeliculaIsPartOfEventFilter
 }
 
 type PeliculaConnectionEdges {
@@ -182,6 +190,13 @@ type PeliculaConnection implements Connection {
 
 union EventoLocation = Ubicacion
 
+type EventoShortFilms {
+  title: String!
+  director: String
+  duration: Float
+  synopsis: String
+}
+
 type Evento implements Node & Document {
   title: String!
   poster: String!
@@ -192,6 +207,7 @@ type Evento implements Node & Document {
   eventEndTime: String
   featured: Boolean
   location: EventoLocation
+  shortFilms: [EventoShortFilms]
   id: ID!
   _sys: SystemInfo!
   _values: JSON!
@@ -199,6 +215,13 @@ type Evento implements Node & Document {
 
 input EventoLocationFilter {
   ubicacion: UbicacionFilter
+}
+
+input EventoShortFilmsFilter {
+  title: StringFilter
+  director: StringFilter
+  duration: NumberFilter
+  synopsis: StringFilter
 }
 
 input EventoFilter {
@@ -211,6 +234,7 @@ input EventoFilter {
   eventEndTime: StringFilter
   featured: BooleanFilter
   location: EventoLocationFilter
+  shortFilms: EventoShortFilmsFilter
 }
 
 type EventoConnectionEdges {
@@ -294,6 +318,14 @@ input PeliculaMutation {
   duration: Float
   country: String
   location: String
+  isPartOfEvent: String
+}
+
+input EventoShortFilmsMutation {
+  title: String
+  director: String
+  duration: Float
+  synopsis: String
 }
 
 input EventoMutation {
@@ -306,6 +338,7 @@ input EventoMutation {
   eventEndTime: String
   featured: Boolean
   location: String
+  shortFilms: [EventoShortFilmsMutation]
 }
 
 input UbicacionMutation {

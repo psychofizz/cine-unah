@@ -165,12 +165,19 @@ function formatHeroDate(dateStr: string) {
 									{/* Thumbnail poster */}
 									<div class="hero-poster-thumb">
 										{movie.poster ? (
-											<Image
-												src={encodeURI(movie.poster)}
-												alt={`Poster: ${movie.title}`}
-												width={400}
-												height={600}
-											/>
+											<div class="thumb-poster-wrapper" style="position: relative; width: 100%; height: 100%;">
+												<Image
+													src={encodeURI(movie.poster)}
+													alt={`Poster: ${movie.title}`}
+													width={400}
+													height={600}
+												/>
+												{movie.isPartOfEvent && (
+													<div class="event-badge">
+														Función Doble: {movie.isPartOfEvent.title}
+													</div>
+												)}
+											</div>
 										) : (
 											<div style="aspect-ratio:2/3;background:#1a1a1a;" />
 										)}

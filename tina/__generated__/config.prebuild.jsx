@@ -124,6 +124,13 @@ var config_default = defineConfig({
             name: "location",
             label: "Ubicaci\xF3n",
             collections: ["ubicacion"]
+          },
+          {
+            type: "reference",
+            name: "isPartOfEvent",
+            label: "Parte del Evento (Ej: Double Feature)",
+            description: "Si esta pel\xEDcula es parte de un evento m\xE1s grande (ej: Funci\xF3n Doble de Barbenheimer), selecciona el Evento padre aqu\xED.",
+            collections: ["evento"]
           }
         ]
       },
@@ -197,6 +204,24 @@ var config_default = defineConfig({
             name: "location",
             label: "Lugar",
             collections: ["ubicacion"]
+          },
+          {
+            type: "object",
+            list: true,
+            name: "shortFilms",
+            label: "Cortometrajes (Lineup)",
+            description: "Si este evento es una funci\xF3n de varios cortos, agr\xE9galos aqu\xED en lugar de crear una p\xE1gina de Pel\xEDcula completa para cada uno.",
+            ui: {
+              itemProps: (item) => {
+                return { label: item?.title ? `${item?.title} (${item?.duration || "?"} min)` : "Nuevo Corto" };
+              }
+            },
+            fields: [
+              { type: "string", name: "title", label: "T\xEDtulo", required: true },
+              { type: "string", name: "director", label: "Director" },
+              { type: "number", name: "duration", label: "Duraci\xF3n (min)" },
+              { type: "string", name: "synopsis", label: "Sinopsis breve", ui: { component: "textarea" } }
+            ]
           }
         ]
       },

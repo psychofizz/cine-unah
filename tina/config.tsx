@@ -136,6 +136,13 @@ export default defineConfig({
             label: "Ubicación",
             collections: ["ubicacion"],
           },
+          {
+            type: "reference",
+            name: "isPartOfEvent",
+            label: "Parte del Evento (Ej: Double Feature)",
+            description: "Si esta película es parte de un evento más grande (ej: Función Doble de Barbenheimer), selecciona el Evento padre aquí.",
+            collections: ["evento"],
+          },
         ],
       },
       // ─── EVENTOS ─────────────────────────────────────────────────────────
@@ -214,6 +221,24 @@ export default defineConfig({
             name: "location",
             label: "Lugar",
             collections: ["ubicacion"],
+          },
+          {
+            type: "object",
+            list: true,
+            name: "shortFilms",
+            label: "Cortometrajes (Lineup)",
+            description: "Si este evento es una función de varios cortos, agrégalos aquí en lugar de crear una página de Película completa para cada uno.",
+            ui: {
+              itemProps: (item) => {
+                return { label: item?.title ? `${item?.title} (${item?.duration || '?'} min)` : 'Nuevo Corto' }
+              }
+            },
+            fields: [
+              { type: "string", name: "title", label: "Título", required: true },
+              { type: "string", name: "director", label: "Director" },
+              { type: "number", name: "duration", label: "Duración (min)" },
+              { type: "string", name: "synopsis", label: "Sinopsis breve", ui: { component: "textarea" } },
+            ]
           },
         ],
       },

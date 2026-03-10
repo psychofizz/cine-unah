@@ -170,6 +170,32 @@ const weekday = new Date(event.date).toLocaleDateString("es-MX", {
                             <p class="detail-synopsis">{event.description}</p>
                         )
                     }
+
+                    {
+                        event.shortFilms && event.shortFilms.length > 0 && (
+                            <div class="short-films-section">
+                                <h3 class="short-films-title">Cortometrajes en este evento</h3>
+                                <div class="short-films-list">
+                                    {event.shortFilms.map((short: any) => (
+                                        <div class="short-film-item" key={short.title}>
+                                            <div class="short-film-header">
+                                                <h4 class="short-film-name">{short.title}</h4>
+                                                {short.duration && (
+                                                    <span class="short-film-duration">{short.duration} min</span>
+                                                )}
+                                            </div>
+                                            {short.director && (
+                                                <p class="short-film-director">Dir. {short.director}</p>
+                                            )}
+                                            {short.synopsis && (
+                                                <p class="short-film-synopsis">{short.synopsis}</p>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         </div>
@@ -213,6 +239,67 @@ const weekday = new Date(event.date).toLocaleDateString("es-MX", {
 </BaseLayout>
 
 <style>
+    .short-films-section {
+        margin-top: var(--sp-8);
+        padding-top: var(--sp-6);
+        border-top: 1px solid var(--color-border);
+    }
+    .short-films-title {
+        font-family: var(--font-sans);
+        font-size: 1.2rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--color-white);
+        margin-bottom: var(--sp-5);
+    }
+    .short-films-list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--sp-5);
+    }
+    .short-film-item {
+        background: var(--color-bg-card-2);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius);
+        padding: var(--sp-4) var(--sp-5);
+    }
+    .short-film-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: var(--sp-3);
+        margin-bottom: var(--sp-1);
+    }
+    .short-film-name {
+        font-family: var(--font-display);
+        font-size: 1.4rem;
+        color: var(--color-white);
+        margin: 0;
+    }
+    .short-film-duration {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--color-white);
+        background: rgba(255, 255, 255, 0.1);
+        padding: 2px 8px;
+        border-radius: 4px;
+        white-space: nowrap;
+    }
+    .short-film-director {
+        font-size: 0.9rem;
+        color: var(--color-muted);
+        font-weight: 600;
+        margin-bottom: var(--sp-2);
+    }
+    .short-film-synopsis {
+        font-size: 0.95rem;
+        color: var(--color-off-white);
+        opacity: 0.85;
+        line-height: 1.6;
+        margin: 0;
+    }
+
     .interactive-poster {
         cursor: zoom-in;
         transition: transform 0.3s ease;
