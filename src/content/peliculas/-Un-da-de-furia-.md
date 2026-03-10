@@ -29,6 +29,6 @@ showTime: '10:00'
 showEndTime: '12:00'
 duration: 112
 country: Estados Unidos.
-location: Cine Francisco Salvador
+location: src/content/ubicaciones/cise.md
 ---
 

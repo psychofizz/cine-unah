@@ -58,11 +58,14 @@ type Query {
   peliculaConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: PeliculaFilter): PeliculaConnection!
   evento(relativePath: String): Evento!
   eventoConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: EventoFilter): EventoConnection!
+  ubicacion(relativePath: String): Ubicacion!
+  ubicacionConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: UbicacionFilter): UbicacionConnection!
 }
 
 input DocumentFilter {
   pelicula: PeliculaFilter
   evento: EventoFilter
+  ubicacion: UbicacionFilter
 }
 
 type DocumentConnectionEdges {
@@ -88,7 +91,9 @@ type Collection {
   documents(before: String, after: String, first: Float, last: Float, sort: String, filter: DocumentFilter, folder: String): DocumentConnection!
 }
 
-union DocumentNode = Pelicula | Evento | Folder
+union DocumentNode = Pelicula | Evento | Ubicacion | Folder
+
+union PeliculaLocation = Ubicacion
 
 type Pelicula implements Node & Document {
   title: String!
@@ -102,7 +107,7 @@ type Pelicula implements Node & Document {
   featured: Boolean
   duration: Float
   country: String
-  location: String
+  location: PeliculaLocation
   id: ID!
   _sys: SystemInfo!
   _values: JSON!
@@ -145,6 +150,10 @@ input NumberFilter {
   in: [Float]
 }
 
+input PeliculaLocationFilter {
+  ubicacion: UbicacionFilter
+}
+
 input PeliculaFilter {
   title: StringFilter
   poster: ImageFilter
@@ -157,7 +166,7 @@ input PeliculaFilter {
   featured: BooleanFilter
   duration: NumberFilter
   country: StringFilter
-  location: StringFilter
+  location: PeliculaLocationFilter
 }
 
 type PeliculaConnectionEdges {
@@ -171,6 +180,8 @@ type PeliculaConnection implements Connection {
   edges: [PeliculaConnectionEdges]
 }
 
+union EventoLocation = Ubicacion
+
 type Evento implements Node & Document {
   title: String!
   poster: String!
@@ -180,10 +191,14 @@ type Evento implements Node & Document {
   eventTime: String
   eventEndTime: String
   featured: Boolean
-  location: String
+  location: EventoLocation
   id: ID!
   _sys: SystemInfo!
   _values: JSON!
+}
+
+input EventoLocationFilter {
+  ubicacion: UbicacionFilter
 }
 
 input EventoFilter {
@@ -195,7 +210,7 @@ input EventoFilter {
   eventTime: StringFilter
   eventEndTime: StringFilter
   featured: BooleanFilter
-  location: StringFilter
+  location: EventoLocationFilter
 }
 
 type EventoConnectionEdges {
@@ -209,6 +224,36 @@ type EventoConnection implements Connection {
   edges: [EventoConnectionEdges]
 }
 
+type Ubicacion implements Node & Document {
+  title: String!
+  address: String
+  mapCoordinates: String
+  instagramReel: String
+  image: String
+  id: ID!
+  _sys: SystemInfo!
+  _values: JSON!
+}
+
+input UbicacionFilter {
+  title: StringFilter
+  address: StringFilter
+  mapCoordinates: StringFilter
+  instagramReel: StringFilter
+  image: ImageFilter
+}
+
+type UbicacionConnectionEdges {
+  cursor: String!
+  node: Ubicacion
+}
+
+type UbicacionConnection implements Connection {
+  pageInfo: PageInfo!
+  totalCount: Float!
+  edges: [UbicacionConnectionEdges]
+}
+
 type Mutation {
   addPendingDocument(collection: String!, relativePath: String!, template: String): DocumentNode!
   updateDocument(collection: String, relativePath: String!, params: DocumentUpdateMutation!): DocumentNode!
@@ -219,17 +264,21 @@ type Mutation {
   createPelicula(relativePath: String!, params: PeliculaMutation!): Pelicula!
   updateEvento(relativePath: String!, params: EventoMutation!): Evento!
   createEvento(relativePath: String!, params: EventoMutation!): Evento!
+  updateUbicacion(relativePath: String!, params: UbicacionMutation!): Ubicacion!
+  createUbicacion(relativePath: String!, params: UbicacionMutation!): Ubicacion!
 }
 
 input DocumentUpdateMutation {
   pelicula: PeliculaMutation
   evento: EventoMutation
+  ubicacion: UbicacionMutation
   relativePath: String
 }
 
 input DocumentMutation {
   pelicula: PeliculaMutation
   evento: EventoMutation
+  ubicacion: UbicacionMutation
 }
 
 input PeliculaMutation {
@@ -257,6 +306,14 @@ input EventoMutation {
   eventEndTime: String
   featured: Boolean
   location: String
+}
+
+input UbicacionMutation {
+  title: String
+  address: String
+  mapCoordinates: String
+  instagramReel: String
+  image: String
 }
 
 schema {

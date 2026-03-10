@@ -130,7 +130,7 @@ const statusText = showDateStr < todayStr ? "Archivo" : "En cartelera";
                     </div>
 
                     {
-                        (movie.country || movie.duration) && (
+                        (movie.country || movie.duration || movie.location) && (
                             <div class="detail-meta-row">
                                 {movie.country && (
                                     <span class="detail-meta-chip">
@@ -141,6 +141,17 @@ const statusText = showDateStr < todayStr ? "Archivo" : "En cartelera";
                                     <span class="detail-meta-chip">
                                         {movie.duration} min
                                     </span>
+                                )}
+                                {movie.location && (
+                                    typeof movie.location === 'object' ? (
+                                        <a href={`/ubicacion/${movie.location._sys.filename}`} class="detail-meta-chip location-link">
+                                            📍 {movie.location.title || movie.location.id}
+                                        </a>
+                                    ) : (
+                                        <span class="detail-meta-chip">
+                                            📍 {movie.location}
+                                        </span>
+                                    )
                                 )}
                             </div>
                         )

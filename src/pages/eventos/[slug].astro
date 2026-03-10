@@ -123,9 +123,15 @@ const weekday = new Date(event.date).toLocaleDateString("es-MX", {
                     {
                         event.location && (
                             <div class="detail-meta-row">
-                                <span class="detail-meta-chip">
-                                    📍 {event.location}
-                                </span>
+                                {typeof event.location === 'object' ? (
+                                    <a href={`/ubicacion/${event.location._sys.filename}`} class="detail-meta-chip location-link">
+                                        📍 {event.location.title || event.location.id}
+                                    </a>
+                                ) : (
+                                    <span class="detail-meta-chip">
+                                        📍 {event.location}
+                                    </span>
+                                )}
                             </div>
                         )
                     }

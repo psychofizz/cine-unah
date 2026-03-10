@@ -11,7 +11,28 @@ fragment PeliculaParts on Pelicula {
   featured
   duration
   country
-  location
+  location {
+    ... on Ubicacion {
+      __typename
+      title
+      address
+      mapCoordinates
+      instagramReel
+      image
+    }
+    ... on Document {
+      _sys {
+        filename
+        basename
+        hasReferences
+        breadcrumbs
+        path
+        relativePath
+        extension
+      }
+      id
+    }
+  }
 }
 
 fragment EventoParts on Evento {
@@ -24,5 +45,35 @@ fragment EventoParts on Evento {
   eventTime
   eventEndTime
   featured
-  location
+  location {
+    ... on Ubicacion {
+      __typename
+      title
+      address
+      mapCoordinates
+      instagramReel
+      image
+    }
+    ... on Document {
+      _sys {
+        filename
+        basename
+        hasReferences
+        breadcrumbs
+        path
+        relativePath
+        extension
+      }
+      id
+    }
+  }
+}
+
+fragment UbicacionParts on Ubicacion {
+  __typename
+  title
+  address
+  mapCoordinates
+  instagramReel
+  image
 }

@@ -6,7 +6,7 @@ interface Props {
     date: string;
     eventTime?: string;
     eventEndTime?: string;
-    location?: string;
+    location?: any;
 }
 
 const { slug, title, poster, date, eventTime, eventEndTime, location } =
@@ -60,6 +60,6 @@ import { Image } from "astro:assets";
         }
 
         <p class="card-date">{formattedDate}</p>
-        {location && <p class="card-meta">{location}</p>}
+        {location && <p class="card-meta">{typeof location === 'object' ? location?.title : location}</p>}
     </div>
 </a>

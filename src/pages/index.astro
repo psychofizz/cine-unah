@@ -226,9 +226,15 @@ function formatHeroDate(dateStr: string) {
 												</span>
 											)}
 											{movie.location && (
-												<span class="hero-chip">
-													📍 {movie.location}
-												</span>
+												typeof movie.location === 'object' ? (
+													<a href={`/ubicacion/${movie.location._sys.filename}`} class="hero-chip location-link" style="text-decoration: none; display: inline-flex; align-items: center;">
+														📍 {movie.location.title || movie.location.id}
+													</a>
+												) : (
+													<span class="hero-chip">
+														📍 {movie.location}
+													</span>
+												)
 											)}
 										</div>
 

@@ -30,5 +30,6 @@ showTime: '13:00'
 showEndTime: '15:00'
 duration: 110
 country: 'Estados Unidos, 1989'
+location: src/content/ubicaciones/cise.md
 ---
 

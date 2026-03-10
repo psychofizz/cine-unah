@@ -8,7 +8,7 @@ interface Props {
     showEndTime?: string;
     country?: string;
     duration?: number;
-    location?: string;
+    location?: any;
 }
 
 const {
@@ -84,7 +84,7 @@ import { Image } from "astro:assets";
         {
             (country || duration || location) && (
                 <p class="card-meta">
-                    {[country, duration ? `${duration} min` : null, location]
+                    {[country, duration ? `${duration} min` : null, typeof location === 'object' ? location?.title : location]
                         .filter(Boolean)
                         .join(" · ")}
                 </p>
