@@ -10,6 +10,7 @@ interface Props {
     duration?: number;
     location?: any;
     isPartOfEvent?: any;
+    cancelled?: boolean;
 }
 
 const {
@@ -23,6 +24,7 @@ const {
     duration,
     location,
     isPartOfEvent,
+    cancelled,
 } = Astro.props;
 
 const tz = "America/Tegucigalpa";
@@ -73,6 +75,13 @@ import { Image } from "astro:assets";
             // The client-side script will populate and show it.
         }
         <span class="card-badge" style="display: none;"></span>
+        {
+            cancelled && (
+                <div class="card-cancelled-badge" aria-label="Proyección cancelada">
+                    CANCELADA
+                </div>
+            )
+        }
     </div>
     <div class="card-body">
         <h3 class="card-title">{title}</h3>

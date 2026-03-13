@@ -96,28 +96,43 @@ const weekday = new Date(event.date).toLocaleDateString("es-MX", {
 
                     <!-- BIG TIME BLOCK -->
                     <div
-                        class="detail-time-hero"
-                        aria-label={`Evento: ${weekday} ${formattedDate}${event.eventTime ? " a las " + event.eventTime : ""}${event.eventEndTime ? " hasta " + event.eventEndTime : ""}`}
+                        class={`detail-time-hero${event.cancelled ? " detail-time-hero--cancelled" : ""}`}
+                        aria-label={event.cancelled ? "Evento cancelado" : `Evento: ${weekday} ${formattedDate}${event.eventTime ? " a las " + event.eventTime : ""}${event.eventEndTime ? " hasta " + event.eventEndTime : ""}`}
                     >
                         {
-                            event.eventTime && (
-                                <span class="detail-time-number">
-                                    {event.eventTime}
-                                    {event.eventEndTime
-                                        ? ` - ${event.eventEndTime}`
-                                        : ""}
-                                </span>
+                            event.cancelled ? (
+                                <div class="detail-cancelled-banner">
+                                    <span class="detail-cancelled-icon" aria-hidden="true">🚫</span>
+                                    <div class="detail-cancelled-text">
+                                        <span class="detail-cancelled-label">Evento cancelado</span>
+                                        <span class="detail-cancelled-date">
+                                            {weekday} · {formattedDate.replace(weekday + ", ", "")}
+                                            {event.eventTime ? ` · ${event.eventTime}` : ""}
+                                        </span>
+                                    </div>
+                                </div>
+                            ) : (
+                                <>
+                                    {event.eventTime && (
+                                        <span class="detail-time-number">
+                                            {event.eventTime}
+                                            {event.eventEndTime
+                                                ? ` - ${event.eventEndTime}`
+                                                : ""}
+                                        </span>
+                                    )}
+                                    <div class="detail-time-info">
+                                        <span class="detail-time-label">Evento</span>
+                                        <span class="detail-date-str"
+                                            >{weekday}
+                                            {
+                                                formattedDate.replace(weekday + ", ", "")
+                                            }</span
+                                        >
+                                    </div>
+                                </>
                             )
                         }
-                        <div class="detail-time-info">
-                            <span class="detail-time-label">Evento</span>
-                            <span class="detail-date-str"
-                                >{weekday}
-                                {
-                                    formattedDate.replace(weekday + ", ", "")
-                                }</span
-                            >
-                        </div>
                     </div>
 
                     {

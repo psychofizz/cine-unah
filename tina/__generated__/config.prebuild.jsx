@@ -66,6 +66,12 @@ var config_default = defineConfig({
             required: true
           },
           {
+            type: "boolean",
+            name: "cancelled",
+            label: "\u{1F6AB} Cancelada (proyecci\xF3n cancelada)",
+            description: "Activa esto si la proyecci\xF3n fue cancelada. Se mostrar\xE1 un aviso de cancelaci\xF3n en la cartelera y en la p\xE1gina de la pel\xEDcula."
+          },
+          {
             type: "string",
             name: "youtubeTrailer",
             label: "Tr\xE1iler de YouTube (URL)",
@@ -162,6 +168,12 @@ var config_default = defineConfig({
             name: "poster",
             label: "Poster del evento",
             required: true
+          },
+          {
+            type: "boolean",
+            name: "cancelled",
+            label: "\u{1F6AB} Cancelado (evento cancelado)",
+            description: "Activa esto si el evento fue cancelado. Se mostrar\xE1 un aviso de cancelaci\xF3n en la lista de eventos y en la p\xE1gina del evento."
           },
           {
             type: "string",

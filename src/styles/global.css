@@ -1029,18 +1029,23 @@ a.hero-chip:hover {
 /* BIG time on detail page */
 .detail-time-hero {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   flex-wrap: wrap;
-  gap: var(--sp-3) var(--sp-5);
-  padding: var(--sp-4) 0;
+  gap: var(--sp-4) var(--sp-6);
+  padding: var(--sp-6) 0;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
   margin-bottom: var(--sp-5);
 }
 
+/* Cancelled variant — subtle red border tint */
+.detail-time-hero--cancelled {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
 .detail-time-number {
   font-family: var(--font-sans);
-  font-size: clamp(2rem, 10vw, 4rem);
+  font-size: clamp(2.4rem, 12vw, 5rem);
   font-weight: 900;
   color: var(--color-white);
   letter-spacing: -0.03em;
@@ -1064,11 +1069,69 @@ a.hero-chip:hover {
 }
 
 .detail-date-str {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--color-white);
   text-transform: capitalize;
 }
+
+/* ─── Cancelled Banner (inside detail-time-hero) ─── */
+.detail-cancelled-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  width: 100%;
+}
+
+.detail-cancelled-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.detail-cancelled-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.detail-cancelled-label {
+  font-family: var(--font-sans);
+  font-size: clamp(1.3rem, 6vw, 2.2rem);
+  font-weight: 900;
+  color: #ef4444;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.detail-cancelled-date {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-muted);
+  text-transform: capitalize;
+}
+
+/* ─── Card Cancelled Badge (listing) ─── */
+.card-cancelled-badge {
+  position: absolute;
+  bottom: var(--sp-2);
+  left: 0;
+  right: 0;
+  background: rgba(239, 68, 68, 0.92);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding: 6px var(--sp-2);
+  text-align: center;
+  z-index: 10;
+}
+
 
 .detail-meta-row {
   display: flex;

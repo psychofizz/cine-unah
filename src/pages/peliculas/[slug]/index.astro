@@ -105,28 +105,43 @@ const statusText = showDateStr < todayStr ? "Archivo" : "En cartelera";
 
                     <!-- BIG TIME BLOCK -->
                     <div
-                        class="detail-time-hero"
-                        aria-label={`Proyección: ${weekday} ${formattedDate}${movie.showTime ? " a las " + movie.showTime : ""}${movie.showEndTime ? " hasta " + movie.showEndTime : ""}`}
+                        class={`detail-time-hero${movie.cancelled ? " detail-time-hero--cancelled" : ""}`}
+                        aria-label={movie.cancelled ? "Proyección cancelada" : `Proyección: ${weekday} ${formattedDate}${movie.showTime ? " a las " + movie.showTime : ""}${movie.showEndTime ? " hasta " + movie.showEndTime : ""}`}
                     >
                         {
-                            movie.showTime && (
-                                <span class="detail-time-number">
-                                    {movie.showTime}
-                                    {movie.showEndTime
-                                        ? ` - ${movie.showEndTime}`
-                                        : ""}
-                                </span>
+                            movie.cancelled ? (
+                                <div class="detail-cancelled-banner">
+                                    <span class="detail-cancelled-icon" aria-hidden="true">🚫</span>
+                                    <div class="detail-cancelled-text">
+                                        <span class="detail-cancelled-label">Proyección cancelada</span>
+                                        <span class="detail-cancelled-date">
+                                            {weekday} · {formattedDate.replace(weekday + ", ", "")}
+                                            {movie.showTime ? ` · ${movie.showTime}` : ""}
+                                        </span>
+                                    </div>
+                                </div>
+                            ) : (
+                                <>
+                                    {movie.showTime && (
+                                        <span class="detail-time-number">
+                                            {movie.showTime}
+                                            {movie.showEndTime
+                                                ? ` - ${movie.showEndTime}`
+                                                : ""}
+                                        </span>
+                                    )}
+                                    <div class="detail-time-info">
+                                        <span class="detail-time-label">Proyección</span>
+                                        <span class="detail-date-str"
+                                            >{weekday}
+                                            {
+                                                formattedDate.replace(weekday + ", ", "")
+                                            }</span
+                                        >
+                                    </div>
+                                </>
                             )
                         }
-                        <div class="detail-time-info">
-                            <span class="detail-time-label">Proyección</span>
-                            <span class="detail-date-str"
-                                >{weekday}
-                                {
-                                    formattedDate.replace(weekday + ", ", "")
-                                }</span
-                            >
-                        </div>
                     </div>
 
                     {
