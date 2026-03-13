@@ -1075,60 +1075,43 @@ a.hero-chip:hover {
   text-transform: capitalize;
 }
 
-/* ─── Cancelled Banner (inside detail-time-hero) ─── */
-.detail-cancelled-banner {
-  display: flex;
+/* ─── Cancelled: detail-tag variant ─── */
+.detail-tag--cancelled {
+  display: inline-flex;
   align-items: center;
-  gap: var(--sp-4);
-  width: 100%;
-}
-
-.detail-cancelled-icon {
-  font-size: 2rem;
-  flex-shrink: 0;
-  line-height: 1;
-}
-
-.detail-cancelled-text {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.detail-cancelled-label {
-  font-family: var(--font-sans);
-  font-size: clamp(1.3rem, 6vw, 2.2rem);
-  font-weight: 900;
+  gap: 5px;
   color: #ef4444;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  line-height: 1;
+  border-color: rgba(239, 68, 68, 0.4);
+  margin-bottom: var(--sp-3);
 }
 
-.detail-cancelled-date {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--color-muted);
-  text-transform: capitalize;
+/* Strikethrough + dim on the time number */
+.detail-time-number--cancelled {
+  text-decoration: line-through;
+  opacity: 0.35;
 }
 
 /* ─── Card Cancelled Badge (listing) ─── */
+/* Matches .card-event-badge style — top-right corner */
 .card-cancelled-badge {
   position: absolute;
-  bottom: var(--sp-2);
-  left: 0;
-  right: 0;
-  background: rgba(239, 68, 68, 0.92);
+  top: var(--sp-2);
+  right: var(--sp-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(17, 17, 17, 0.85);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  color: #fff;
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.5);
   font-family: var(--font-sans);
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  padding: 6px var(--sp-2);
-  text-align: center;
+  letter-spacing: 0.12em;
+  padding: 4px 7px;
+  border-radius: 3px;
   z-index: 10;
 }
 
