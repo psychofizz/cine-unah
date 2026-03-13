@@ -28,5 +28,7 @@ showTime: '13:00'
 showEndTime: '15:00'
 duration: 89
 country: 'Argentina, 1968'
+location: src/content/ubicaciones/cise.md
+isPartOfEvent: ''
 ---
 
