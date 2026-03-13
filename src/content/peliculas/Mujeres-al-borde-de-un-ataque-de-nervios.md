@@ -28,5 +28,7 @@ showTime: '13:00'
 showEndTime: '15:00'
 duration: 89
 country: 'España, 1988'
+location: src/content/ubicaciones/cise.md
+isPartOfEvent: ''
 ---
 
