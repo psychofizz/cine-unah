@@ -7,9 +7,10 @@ interface Props {
     eventTime?: string;
     eventEndTime?: string;
     location?: any;
+    cancelled?: boolean;
 }
 
-const { slug, title, poster, date, eventTime, eventEndTime, location } =
+const { slug, title, poster, date, eventTime, eventEndTime, location, cancelled } =
     Astro.props;
 
 const formattedDate = new Date(date).toLocaleDateString("es-MX", {
@@ -44,6 +45,26 @@ import { Image } from "astro:assets";
             )
         }
         <span class="card-badge">Evento</span>
+        {
+            cancelled && (
+                <div class="card-cancelled-badge" aria-label="Evento cancelado">
+                    <svg
+                        width="8"
+                        height="8"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3.5"
+                        stroke-linecap="round"
+                        aria-hidden="true"
+                    >
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                    Cancelado
+                </div>
+            )
+        }
     </div>
     <div class="card-body">
         <h3 class="card-title">{title}</h3>

@@ -100,6 +100,7 @@ union PeliculaIsPartOfEvent = Evento
 type Pelicula implements Node & Document {
   title: String!
   poster: String!
+  cancelled: Boolean
   youtubeTrailer: String
   synopsis: String
   credits: String
@@ -130,17 +131,17 @@ input ImageFilter {
   in: [String]
 }
 
+input BooleanFilter {
+  eq: Boolean
+  exists: Boolean
+}
+
 input DatetimeFilter {
   after: String
   before: String
   eq: String
   exists: Boolean
   in: [String]
-}
-
-input BooleanFilter {
-  eq: Boolean
-  exists: Boolean
 }
 
 input NumberFilter {
@@ -164,6 +165,7 @@ input PeliculaIsPartOfEventFilter {
 input PeliculaFilter {
   title: StringFilter
   poster: ImageFilter
+  cancelled: BooleanFilter
   youtubeTrailer: StringFilter
   synopsis: StringFilter
   credits: StringFilter
@@ -200,6 +202,7 @@ type EventoShortFilms {
 type Evento implements Node & Document {
   title: String!
   poster: String!
+  cancelled: Boolean
   youtubeTrailer: String
   description: String
   date: String!
@@ -227,6 +230,7 @@ input EventoShortFilmsFilter {
 input EventoFilter {
   title: StringFilter
   poster: ImageFilter
+  cancelled: BooleanFilter
   youtubeTrailer: StringFilter
   description: StringFilter
   date: DatetimeFilter
@@ -308,6 +312,7 @@ input DocumentMutation {
 input PeliculaMutation {
   title: String
   poster: String
+  cancelled: Boolean
   youtubeTrailer: String
   synopsis: String
   credits: String
@@ -331,6 +336,7 @@ input EventoShortFilmsMutation {
 input EventoMutation {
   title: String
   poster: String
+  cancelled: Boolean
   youtubeTrailer: String
   description: String
   date: String

@@ -76,6 +76,12 @@ export default defineConfig({
             required: true,
           },
           {
+            type: "boolean",
+            name: "cancelled",
+            label: "🚫 Cancelada (proyección cancelada)",
+            description: "Activa esto si la proyección fue cancelada. Se mostrará un aviso de cancelación en la cartelera y en la página de la película.",
+          },
+          {
             type: "string",
             name: "youtubeTrailer",
             label: "Tráiler de YouTube (URL)",
@@ -178,6 +184,12 @@ export default defineConfig({
             name: "poster",
             label: "Poster del evento",
             required: true,
+          },
+          {
+            type: "boolean",
+            name: "cancelled",
+            label: "🚫 Cancelado (evento cancelado)",
+            description: "Activa esto si el evento fue cancelado. Se mostrará un aviso de cancelación en la lista de eventos y en la página del evento.",
           },
           {
             type: "string",

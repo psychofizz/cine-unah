@@ -2,6 +2,7 @@ fragment PeliculaParts on Pelicula {
   __typename
   title
   poster
+  cancelled
   youtubeTrailer
   synopsis
   credits
@@ -38,6 +39,7 @@ fragment PeliculaParts on Pelicula {
       __typename
       title
       poster
+      cancelled
       youtubeTrailer
       description
       date
@@ -93,6 +95,7 @@ fragment EventoParts on Evento {
   __typename
   title
   poster
+  cancelled
   youtubeTrailer
   description
   date
