@@ -18,5 +18,12 @@ shortFilms:
       continuar luchando por los derechos de las mujeres iraníes y las mujeres del mundo.
       Inspiradas por el movimiento Miércoles Blancos, comparten un testimonio de
       resistencia, valentía y transformación.
+  - title: 'Cuchara caliente, ají picante'
+    synopsis: |-
+      Jennifer, mujer migrante ecuatoriana activista, nos muestra su vínculo
+      con la cocina como una forma de resistencia, memoria e identidad. Su relato nos
+      lleva al lecho del río Turia, donde otras mujeres migrantes sudamericanas venden
+      comida típica de sus países para sostenerse a sí mismas y a sus familias,
+      trabajadoras de "la cuchara caliente y el ají picante".
 ---
 
