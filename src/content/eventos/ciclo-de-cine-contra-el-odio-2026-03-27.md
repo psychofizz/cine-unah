@@ -35,5 +35,15 @@ shortFilms:
       Fatimetu Bucharaya es una mujer saharaui que en 2019 fundó SMAWT, una
       asociación de mujeres voluntarias dedicadas a la detección de minas antipersonas
       en los campamentos de población refugiada saharaui en Tinduf (Argelia).
+  - title: Carmela
+    synopsis: |-
+      Tras la guerra civil española, Carmela se une a las milicias junto a miles
+      de mujeres. Su lucha es doble: enfrentar al fascismo y defender las libertades
+      ganadas en la Segunda República. En combate, una granada casera le amputa la
+      mano que había. Tras la guerra civil española, Carmela se une a las milicias junto a
+      miles de mujeres. Su lucha es doble: enfrentar al fascismo y defender las libertades
+      ganadas en la Segunda República. En combate, una granada casera le amputa la
+      mano que había usado para sostener sus ideales y su arma en defensa de sus
+      derechos.
 ---
 
