@@ -11,5 +11,12 @@ shortFilms:
       En clave de humor y como sí de un infocomercial se tratara, aborda las
       dificultades que tienen las personas migrantes para obtener el empadronamiento, y
       consejos para abordar con éxito tan ardua tarea.
+  - title: Las chicas de la calle revolución
+    synopsis: |-
+      Este documental narra la historia de dos chicas iraníes que buscan la
+      libertad que les fue arrebatada en su país. En España encontraron un lugar donde
+      continuar luchando por los derechos de las mujeres iraníes y las mujeres del mundo.
+      Inspiradas por el movimiento Miércoles Blancos, comparten un testimonio de
+      resistencia, valentía y transformación.
 ---
 
