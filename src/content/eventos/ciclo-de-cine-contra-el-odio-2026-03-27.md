@@ -25,6 +25,11 @@ shortFilms:
       lleva al lecho del río Turia, donde otras mujeres migrantes sudamericanas venden
       comida típica de sus países para sostenerse a sí mismas y a sus familias,
       trabajadoras de "la cuchara caliente y el ají picante".
+  - title: 'Idiomas: identidad y memoria'
+    synopsis: |-
+      Un grupo de mujeres de diferentes orígenes -migrantes y valencianas de
+      padres migrantes-, explican que el idioma valencià y otras lenguas supone para
+      ellas su identidad y el respeto a la diversidad cultural.
   - {}
 ---
 
