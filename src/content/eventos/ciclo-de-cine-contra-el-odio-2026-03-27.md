@@ -30,6 +30,10 @@ shortFilms:
       Un grupo de mujeres de diferentes orígenes -migrantes y valencianas de
       padres migrantes-, explican que el idioma valencià y otras lenguas supone para
       ellas su identidad y el respeto a la diversidad cultural.
-  - {}
+  - title: Disonancia
+    synopsis: |-
+      Fatimetu Bucharaya es una mujer saharaui que en 2019 fundó SMAWT, una
+      asociación de mujeres voluntarias dedicadas a la detección de minas antipersonas
+      en los campamentos de población refugiada saharaui en Tinduf (Argelia).
 ---
 
