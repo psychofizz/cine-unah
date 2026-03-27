@@ -619,16 +619,15 @@ p {
 .hero-datetime {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  column-gap: var(--sp-4);
-  row-gap: var(--sp-1);
-  margin-top: var(--sp-1);
+  align-items: center;
+  column-gap: var(--sp-3);
+  row-gap: var(--sp-2);
+  margin-top: var(--sp-2);
 }
 
 .hero-time-big {
   font-family: var(--font-sans);
-  /* Slightly smaller time per user request */
-  font-size: clamp(2rem, 16vw, 5.5rem);
+  font-size: clamp(2.5rem, 12vw, 4.5rem);
   font-weight: 900;
   line-height: 1;
   color: var(--color-white);
@@ -643,22 +642,27 @@ p {
 .hero-date-block {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 2px;
   min-width: 0;
+  /* Optical alignment: shift up to compensate for the big numbers' unused descender space */
+  transform: translateY(-0.12em);
 }
 
 .hero-date-day {
-  font-size: clamp(0.9rem, 3vw, 1.25rem);
-  font-weight: 700;
+  font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+  font-weight: 800;
   color: var(--color-white);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
+  line-height: 1;
 }
 
 .hero-date-full {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.5);
-  font-weight: 400;
+  font-size: clamp(13px, 3vw, 15px);
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 500;
+  line-height: 1.2;
 }
 
 /* ─── Hero Meta Chips ────────────────────────────────── */

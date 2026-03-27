@@ -1,6 +1,7 @@
 ---
 title: Por tu bien
 poster: /uploads/Resumen-6-de-junio-2025-2.jpeg
+cancelled: true
 youtubeTrailer: 'https://www.youtube.com/watch?v=JZep9DWYVyo'
 synopsis: |-
   Zulma es una adolecente que crece en un poblado rural aceptando los
@@ -47,6 +48,6 @@ showEndTime: '12:00'
 duration: 77
 country: 'Argentina, 2024'
 location: src/content/ubicaciones/cise.md
-isPartOfEvent: ''
+isPartOfEvent: src/content/eventos/cine-contra-el-odio-2026-03-26.md
 ---
 

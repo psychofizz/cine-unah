@@ -60,12 +60,15 @@ type Query {
   eventoConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: EventoFilter): EventoConnection!
   ubicacion(relativePath: String): Ubicacion!
   ubicacionConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: UbicacionFilter): UbicacionConnection!
+  quienesSomos(relativePath: String): QuienesSomos!
+  quienesSomosConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: QuienesSomosFilter): QuienesSomosConnection!
 }
 
 input DocumentFilter {
   pelicula: PeliculaFilter
   evento: EventoFilter
   ubicacion: UbicacionFilter
+  quienesSomos: QuienesSomosFilter
 }
 
 type DocumentConnectionEdges {
@@ -91,7 +94,7 @@ type Collection {
   documents(before: String, after: String, first: Float, last: Float, sort: String, filter: DocumentFilter, folder: String): DocumentConnection!
 }
 
-union DocumentNode = Pelicula | Evento | Ubicacion | Folder
+union DocumentNode = Pelicula | Evento | Ubicacion | QuienesSomos | Folder
 
 union PeliculaLocation = Ubicacion
 
@@ -282,6 +285,38 @@ type UbicacionConnection implements Connection {
   edges: [UbicacionConnectionEdges]
 }
 
+type QuienesSomos implements Node & Document {
+  title: String!
+  image: String
+  content: JSON
+  id: ID!
+  _sys: SystemInfo!
+  _values: JSON!
+}
+
+input RichTextFilter {
+  startsWith: String
+  eq: String
+  exists: Boolean
+}
+
+input QuienesSomosFilter {
+  title: StringFilter
+  image: ImageFilter
+  content: RichTextFilter
+}
+
+type QuienesSomosConnectionEdges {
+  cursor: String!
+  node: QuienesSomos
+}
+
+type QuienesSomosConnection implements Connection {
+  pageInfo: PageInfo!
+  totalCount: Float!
+  edges: [QuienesSomosConnectionEdges]
+}
+
 type Mutation {
   addPendingDocument(collection: String!, relativePath: String!, template: String): DocumentNode!
   updateDocument(collection: String, relativePath: String!, params: DocumentUpdateMutation!): DocumentNode!
@@ -294,12 +329,15 @@ type Mutation {
   createEvento(relativePath: String!, params: EventoMutation!): Evento!
   updateUbicacion(relativePath: String!, params: UbicacionMutation!): Ubicacion!
   createUbicacion(relativePath: String!, params: UbicacionMutation!): Ubicacion!
+  updateQuienesSomos(relativePath: String!, params: QuienesSomosMutation!): QuienesSomos!
+  createQuienesSomos(relativePath: String!, params: QuienesSomosMutation!): QuienesSomos!
 }
 
 input DocumentUpdateMutation {
   pelicula: PeliculaMutation
   evento: EventoMutation
   ubicacion: UbicacionMutation
+  quienesSomos: QuienesSomosMutation
   relativePath: String
 }
 
@@ -307,6 +345,7 @@ input DocumentMutation {
   pelicula: PeliculaMutation
   evento: EventoMutation
   ubicacion: UbicacionMutation
+  quienesSomos: QuienesSomosMutation
 }
 
 input PeliculaMutation {
@@ -353,6 +392,12 @@ input UbicacionMutation {
   mapCoordinates: String
   instagramReel: String
   image: String
+}
+
+input QuienesSomosMutation {
+  title: String
+  image: String
+  content: JSON
 }
 
 schema {

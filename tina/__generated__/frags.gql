@@ -141,3 +141,10 @@ fragment UbicacionParts on Ubicacion {
   instagramReel
   image
 }
+
+fragment QuienesSomosParts on QuienesSomos {
+  __typename
+  title
+  image
+  content
+}

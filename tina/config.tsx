@@ -305,6 +305,40 @@ export default defineConfig({
           },
         ],
       },
+      // ─── QUIÉNES SOMOS ───────────────────────────────────────────────────
+      {
+        name: "quienesSomos",
+        label: "Quiénes Somos",
+        path: "src/content/quienes-somos",
+        format: "md",
+        ui: {
+          allowedActions: {
+            create: false,
+            delete: false,
+          },
+          router: () => "/quienes-somos",
+        },
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Título",
+            isTitle: true,
+            required: true,
+          },
+          {
+            type: "image",
+            name: "image",
+            label: "Imagen de cabecera",
+          },
+          {
+            type: "rich-text",
+            name: "content",
+            label: "Contenido",
+            isBody: true,
+          },
+        ],
+      },
     ],
   },
 });
