@@ -33,7 +33,7 @@ credits: |-
 
   Género
       Terror. Fantástico | Sobrenatural. Vampiros. Expresionismo alemán 
-showDate: 2026-03-31T21:55:52.759Z
+showDate: 2026-04-07T21:55:52.759Z
 showTime: '09:30'
 showEndTime: '12:00'
 duration: 68
