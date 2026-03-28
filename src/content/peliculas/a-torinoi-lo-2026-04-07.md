@@ -28,7 +28,7 @@ credits: |-
 
   Género
       Drama | Siglo XIX. Pobreza 
-showDate: 2026-04-07T23:14:46.569Z
+showDate: 2026-04-14T23:14:46.569Z
 showTime: '09:30'
 showEndTime: '12:00'
 duration: 146
