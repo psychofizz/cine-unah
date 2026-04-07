@@ -1,6 +1,7 @@
 ---
 title: Vampyr - Der Traum des Allan Grey
 poster: /uploads/vampyr_der_traum_des_allan_grey-882779053-large.jpg
+cancelled: true
 youtubeTrailer: 'https://www.youtube.com/watch?v=acZJwgwmk4w'
 synopsis: 'Un joven viajero, Allan Gray, se aloja en un extraño castillo, cuya atmósfera densa y enrarecida recuerda la de las pesadillas. El joven comienza a tener espeluznantes visiones, de las cuales la más terrible es el descubrimiento de una mujer inconsciente que ha sido atacada por un vampiro en forma de bruja.'
 credits: |-
