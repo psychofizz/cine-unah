@@ -1,6 +1,7 @@
 ---
 title: A torinói ló
 poster: /uploads/Tarr_torinoi-lo_pp.jpg
+cancelled: true
 youtubeTrailer: 'https://www.youtube.com/watch?v=ZNkN_xCXozw'
 synopsis: 'Una monumental tormenta de viento y el rechazo de un caballo a trabajar y comer, marcan el inicio del fin para un granjero humilde y su hija.'
 credits: |-
