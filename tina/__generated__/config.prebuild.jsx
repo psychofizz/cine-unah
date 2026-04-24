@@ -282,6 +282,40 @@ var config_default = defineConfig({
             label: "Imagen de la ubicaci\xF3n"
           }
         ]
+      },
+      // ─── QUIÉNES SOMOS ───────────────────────────────────────────────────
+      {
+        name: "quienesSomos",
+        label: "Qui\xE9nes Somos",
+        path: "src/content/quienes-somos",
+        format: "md",
+        ui: {
+          allowedActions: {
+            create: false,
+            delete: false
+          },
+          router: () => "/quienes-somos"
+        },
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "T\xEDtulo",
+            isTitle: true,
+            required: true
+          },
+          {
+            type: "image",
+            name: "image",
+            label: "Imagen de cabecera"
+          },
+          {
+            type: "rich-text",
+            name: "content",
+            label: "Contenido",
+            isBody: true
+          }
+        ]
       }
     ]
   }

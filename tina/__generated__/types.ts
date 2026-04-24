@@ -88,6 +88,8 @@ export type Query = {
   eventoConnection: EventoConnection;
   ubicacion: Ubicacion;
   ubicacionConnection: UbicacionConnection;
+  quienesSomos: QuienesSomos;
+  quienesSomosConnection: QuienesSomosConnection;
 };
 
 
@@ -156,10 +158,26 @@ export type QueryUbicacionConnectionArgs = {
   filter?: InputMaybe<UbicacionFilter>;
 };
 
+
+export type QueryQuienesSomosArgs = {
+  relativePath?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryQuienesSomosConnectionArgs = {
+  before?: InputMaybe<Scalars['String']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Float']['input']>;
+  last?: InputMaybe<Scalars['Float']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<QuienesSomosFilter>;
+};
+
 export type DocumentFilter = {
   pelicula?: InputMaybe<PeliculaFilter>;
   evento?: InputMaybe<EventoFilter>;
   ubicacion?: InputMaybe<UbicacionFilter>;
+  quienesSomos?: InputMaybe<QuienesSomosFilter>;
 };
 
 export type DocumentConnectionEdges = {
@@ -199,7 +217,7 @@ export type CollectionDocumentsArgs = {
   folder?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type DocumentNode = Pelicula | Evento | Ubicacion | Folder;
+export type DocumentNode = Pelicula | Evento | Ubicacion | QuienesSomos | Folder;
 
 export type PeliculaLocation = Ubicacion;
 
@@ -400,6 +418,41 @@ export type UbicacionConnection = Connection & {
   edges?: Maybe<Array<Maybe<UbicacionConnectionEdges>>>;
 };
 
+export type QuienesSomos = Node & Document & {
+  __typename?: 'QuienesSomos';
+  title: Scalars['String']['output'];
+  image?: Maybe<Scalars['String']['output']>;
+  content?: Maybe<Scalars['JSON']['output']>;
+  id: Scalars['ID']['output'];
+  _sys: SystemInfo;
+  _values: Scalars['JSON']['output'];
+};
+
+export type RichTextFilter = {
+  startsWith?: InputMaybe<Scalars['String']['input']>;
+  eq?: InputMaybe<Scalars['String']['input']>;
+  exists?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type QuienesSomosFilter = {
+  title?: InputMaybe<StringFilter>;
+  image?: InputMaybe<ImageFilter>;
+  content?: InputMaybe<RichTextFilter>;
+};
+
+export type QuienesSomosConnectionEdges = {
+  __typename?: 'QuienesSomosConnectionEdges';
+  cursor: Scalars['String']['output'];
+  node?: Maybe<QuienesSomos>;
+};
+
+export type QuienesSomosConnection = Connection & {
+  __typename?: 'QuienesSomosConnection';
+  pageInfo: PageInfo;
+  totalCount: Scalars['Float']['output'];
+  edges?: Maybe<Array<Maybe<QuienesSomosConnectionEdges>>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addPendingDocument: DocumentNode;
@@ -413,6 +466,8 @@ export type Mutation = {
   createEvento: Evento;
   updateUbicacion: Ubicacion;
   createUbicacion: Ubicacion;
+  updateQuienesSomos: QuienesSomos;
+  createQuienesSomos: QuienesSomos;
 };
 
 
@@ -484,10 +539,23 @@ export type MutationCreateUbicacionArgs = {
   params: UbicacionMutation;
 };
 
+
+export type MutationUpdateQuienesSomosArgs = {
+  relativePath: Scalars['String']['input'];
+  params: QuienesSomosMutation;
+};
+
+
+export type MutationCreateQuienesSomosArgs = {
+  relativePath: Scalars['String']['input'];
+  params: QuienesSomosMutation;
+};
+
 export type DocumentUpdateMutation = {
   pelicula?: InputMaybe<PeliculaMutation>;
   evento?: InputMaybe<EventoMutation>;
   ubicacion?: InputMaybe<UbicacionMutation>;
+  quienesSomos?: InputMaybe<QuienesSomosMutation>;
   relativePath?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -495,6 +563,7 @@ export type DocumentMutation = {
   pelicula?: InputMaybe<PeliculaMutation>;
   evento?: InputMaybe<EventoMutation>;
   ubicacion?: InputMaybe<UbicacionMutation>;
+  quienesSomos?: InputMaybe<QuienesSomosMutation>;
 };
 
 export type PeliculaMutation = {
@@ -543,11 +612,19 @@ export type UbicacionMutation = {
   image?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type QuienesSomosMutation = {
+  title?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
+  content?: InputMaybe<Scalars['JSON']['input']>;
+};
+
 export type PeliculaPartsFragment = { __typename: 'Pelicula', title: string, poster: string, cancelled?: boolean | null, youtubeTrailer?: string | null, synopsis?: string | null, credits?: string | null, showDate: string, showTime?: string | null, showEndTime?: string | null, featured?: boolean | null, duration?: number | null, country?: string | null, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null, isPartOfEvent?: { __typename: 'Evento', title: string, poster: string, cancelled?: boolean | null, youtubeTrailer?: string | null, description?: string | null, date: string, eventTime?: string | null, eventEndTime?: string | null, featured?: boolean | null, id: string, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null, shortFilms?: Array<{ __typename: 'EventoShortFilms', title: string, director?: string | null, duration?: number | null, synopsis?: string | null } | null> | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null };
 
 export type EventoPartsFragment = { __typename: 'Evento', title: string, poster: string, cancelled?: boolean | null, youtubeTrailer?: string | null, description?: string | null, date: string, eventTime?: string | null, eventEndTime?: string | null, featured?: boolean | null, location?: { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, id: string, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null, shortFilms?: Array<{ __typename: 'EventoShortFilms', title: string, director?: string | null, duration?: number | null, synopsis?: string | null } | null> | null };
 
 export type UbicacionPartsFragment = { __typename: 'Ubicacion', title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null };
+
+export type QuienesSomosPartsFragment = { __typename: 'QuienesSomos', title: string, image?: string | null, content?: any | null };
 
 export type PeliculaQueryVariables = Exact<{
   relativePath: Scalars['String']['input'];
@@ -605,6 +682,25 @@ export type UbicacionConnectionQueryVariables = Exact<{
 
 
 export type UbicacionConnectionQuery = { __typename?: 'Query', ubicacionConnection: { __typename?: 'UbicacionConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'UbicacionConnectionEdges', cursor: string, node?: { __typename: 'Ubicacion', id: string, title: string, address?: string | null, mapCoordinates?: string | null, instagramReel?: string | null, image?: string | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
+
+export type QuienesSomosQueryVariables = Exact<{
+  relativePath: Scalars['String']['input'];
+}>;
+
+
+export type QuienesSomosQuery = { __typename?: 'Query', quienesSomos: { __typename: 'QuienesSomos', id: string, title: string, image?: string | null, content?: any | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } };
+
+export type QuienesSomosConnectionQueryVariables = Exact<{
+  before?: InputMaybe<Scalars['String']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Float']['input']>;
+  last?: InputMaybe<Scalars['Float']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<QuienesSomosFilter>;
+}>;
+
+
+export type QuienesSomosConnectionQuery = { __typename?: 'Query', quienesSomosConnection: { __typename?: 'QuienesSomosConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'QuienesSomosConnectionEdges', cursor: string, node?: { __typename: 'QuienesSomos', id: string, title: string, image?: string | null, content?: any | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
 
 export const PeliculaPartsFragmentDoc = gql`
     fragment PeliculaParts on Pelicula {
@@ -751,6 +847,14 @@ export const UbicacionPartsFragmentDoc = gql`
   mapCoordinates
   instagramReel
   image
+}
+    `;
+export const QuienesSomosPartsFragmentDoc = gql`
+    fragment QuienesSomosParts on QuienesSomos {
+  __typename
+  title
+  image
+  content
 }
     `;
 export const PeliculaDocument = gql`
@@ -924,6 +1028,63 @@ export const UbicacionConnectionDocument = gql`
   }
 }
     ${UbicacionPartsFragmentDoc}`;
+export const QuienesSomosDocument = gql`
+    query quienesSomos($relativePath: String!) {
+  quienesSomos(relativePath: $relativePath) {
+    ... on Document {
+      _sys {
+        filename
+        basename
+        hasReferences
+        breadcrumbs
+        path
+        relativePath
+        extension
+      }
+      id
+    }
+    ...QuienesSomosParts
+  }
+}
+    ${QuienesSomosPartsFragmentDoc}`;
+export const QuienesSomosConnectionDocument = gql`
+    query quienesSomosConnection($before: String, $after: String, $first: Float, $last: Float, $sort: String, $filter: QuienesSomosFilter) {
+  quienesSomosConnection(
+    before: $before
+    after: $after
+    first: $first
+    last: $last
+    sort: $sort
+    filter: $filter
+  ) {
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+      startCursor
+      endCursor
+    }
+    totalCount
+    edges {
+      cursor
+      node {
+        ... on Document {
+          _sys {
+            filename
+            basename
+            hasReferences
+            breadcrumbs
+            path
+            relativePath
+            extension
+          }
+          id
+        }
+        ...QuienesSomosParts
+      }
+    }
+  }
+}
+    ${QuienesSomosPartsFragmentDoc}`;
 export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
   export function getSdk<C>(requester: Requester<C>) {
     return {
@@ -944,6 +1105,12 @@ export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) 
       },
     ubicacionConnection(variables?: UbicacionConnectionQueryVariables, options?: C): Promise<{data: UbicacionConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: UbicacionConnectionQueryVariables, query: string}> {
         return requester<{data: UbicacionConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: UbicacionConnectionQueryVariables, query: string}, UbicacionConnectionQueryVariables>(UbicacionConnectionDocument, variables, options);
+      },
+    quienesSomos(variables: QuienesSomosQueryVariables, options?: C): Promise<{data: QuienesSomosQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: QuienesSomosQueryVariables, query: string}> {
+        return requester<{data: QuienesSomosQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: QuienesSomosQueryVariables, query: string}, QuienesSomosQueryVariables>(QuienesSomosDocument, variables, options);
+      },
+    quienesSomosConnection(variables?: QuienesSomosConnectionQueryVariables, options?: C): Promise<{data: QuienesSomosConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: QuienesSomosConnectionQueryVariables, query: string}> {
+        return requester<{data: QuienesSomosConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: QuienesSomosConnectionQueryVariables, query: string}, QuienesSomosConnectionQueryVariables>(QuienesSomosConnectionDocument, variables, options);
       }
     };
   }

@@ -71,8 +71,46 @@ const futureEvents = allEvents.filter((e: any) => {
 	return true;
 });
 
-// The carousel shows all active movies coming up, sorted by date and time
-const heroCarouselItems = activeMovies.sort((a: any, b: any) => {
+// ── Ongoing Events for Carousel ──────────────
+const ongoingEvents = allEvents.filter((e: any) => {
+	if (!e.date || !e.eventTime) return false;
+	const eventDateStr = new Date(e.date).toLocaleDateString("en-CA", {
+		timeZone: "America/Tegucigalpa",
+	});
+
+	if (eventDateStr !== todayStr) return false;
+
+	const toMins = (t: string) => {
+		const [h, m] = t.split(":");
+		return parseInt(h) * 60 + parseInt(m);
+	};
+
+	const nowMins = toMins(nowTimeStr);
+	const startMins = toMins(e.eventTime);
+	const endTime = e.eventEndTime || e.eventTime;
+	const endMins = toMins(endTime) + 120; // 2 hours after end
+
+	// < 3 hr before event and while event is live
+	return nowMins >= startMins - 180 && nowMins <= endMins;
+});
+
+// The carousel shows all active movies and ongoing events coming up, sorted by date and time
+const heroCarouselItems = [...activeMovies, ...ongoingEvents].sort((a: any, b: any) => {
+	const dateAStr = new Date(a.showDate || a.date).toLocaleDateString("en-CA", {
+		timeZone: "America/Tegucigalpa",
+	});
+	const dateBStr = new Date(b.showDate || b.date).toLocaleDateString("en-CA", {
+		timeZone: "America/Tegucigalpa",
+	});
+	if (dateAStr !== dateBStr) return dateAStr.localeCompare(dateBStr);
+
+	const timeA = a.showTime || a.eventTime || "00:00";
+	const timeB = b.showTime || b.eventTime || "00:00";
+	return timeA.localeCompare(timeB);
+});
+
+// ── Grid movies — show ALL active movies (hero stays in grid too) ──
+const gridMovies = [...activeMovies].sort((a: any, b: any) => {
 	const dateAStr = new Date(a.showDate).toLocaleDateString("en-CA", {
 		timeZone: "America/Tegucigalpa",
 	});
@@ -85,9 +123,6 @@ const heroCarouselItems = activeMovies.sort((a: any, b: any) => {
 	const timeB = b.showTime || "00:00";
 	return timeA.localeCompare(timeB);
 });
-
-// ── Grid movies — show ALL active movies (hero stays in grid too) ──
-const gridMovies = activeMovies;
 
 // ── Upcoming events ──────
 const upcomingEvents = futureEvents.sort(
@@ -129,10 +164,12 @@ function formatHeroDate(dateStr: string) {
 			<div class="hero-carousel-wrapper">
 				<div class="hero-carousel" id="heroCarousel">
 					{heroCarouselItems.map((movie: any, index: number) => {
-						const dateStr = movie.showDate;
-						const time = movie.showTime || "00:00";
+						const isEvent = !!movie.eventTime;
+						const dateStr = movie.showDate || movie.date;
+						const time = movie.showTime || movie.eventTime || "00:00";
+						const endTime = movie.showEndTime || movie.eventEndTime || "";
 						const slug = slugFromFilename(movie._sys.filename);
-						const href = `/peliculas/${slug}`;
+						const href = isEvent ? `/eventos/${slug}` : `/peliculas/${slug}`;
 						const { weekday, full } = formatHeroDate(dateStr);
 
 						return (
@@ -141,8 +178,8 @@ function formatHeroDate(dateStr: string) {
 								id={`hero-slide-${index}`}
 								data-date={dateStr}
 								data-time={time}
-								data-end-time={movie.showEndTime || ""}
-								aria-label={`Película destacada: ${movie.title}`}
+								data-end-time={endTime}
+								aria-label={`${isEvent ? 'Evento' : 'Película'} destacada: ${movie.title}`}
 							>
 								{/* Background poster */}
 								<div class="hero-poster-bg">
@@ -172,11 +209,15 @@ function formatHeroDate(dateStr: string) {
 													width={400}
 													height={600}
 												/>
-												{movie.isPartOfEvent && (
+												{isEvent ? (
+													<div class="event-badge">
+														Evento
+													</div>
+												) : movie.isPartOfEvent ? (
 													<div class="event-badge">
 														Función Doble: {movie.isPartOfEvent.title}
 													</div>
-												)}
+												) : null}
 											</div>
 										) : (
 											<div style="aspect-ratio:2/3;background:#1a1a1a;" />
