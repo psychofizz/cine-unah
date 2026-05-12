@@ -14,9 +14,6 @@ credits: |-
       Dorothy Comingore
       Ray Collins
 
-  Género
-      Drama. Drama Psicológico. Periodismo Política. Película de culto
-
   Guion
       Herman J. Mankiewicz
       Orson Welles
@@ -30,6 +27,9 @@ credits: |-
   Compañías
       RKO Radio Pictures(Productora)
       Mercury Theatre Productions(Productora)
+
+  Género
+      Drama. Drama Psicológico. Periodismo Política. Película de culto.
 showDate: 2026-05-14T04:54:43.633Z
 showTime: '10:00'
 showEndTime: '12:00'
