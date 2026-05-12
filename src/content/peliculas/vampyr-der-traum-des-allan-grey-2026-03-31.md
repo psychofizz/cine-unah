@@ -1,7 +1,7 @@
 ---
 title: Vampyr - Der Traum des Allan Grey
 poster: /uploads/vampyr_der_traum_des_allan_grey-882779053-large.jpg
-cancelled: true
+cancelled: false
 youtubeTrailer: 'https://www.youtube.com/watch?v=acZJwgwmk4w'
 synopsis: 'Un joven viajero, Allan Gray, se aloja en un extraño castillo, cuya atmósfera densa y enrarecida recuerda la de las pesadillas. El joven comienza a tener espeluznantes visiones, de las cuales la más terrible es el descubrimiento de una mujer inconsciente que ha sido atacada por un vampiro en forma de bruja.'
 credits: |-
@@ -34,7 +34,7 @@ credits: |-
 
   Género
       Terror. Fantástico | Sobrenatural. Vampiros. Expresionismo alemán 
-showDate: 2026-04-07T21:55:52.759Z
+showDate: 2026-05-13T04:12:01.940Z
 showTime: '09:30'
 showEndTime: '12:00'
 duration: 68
