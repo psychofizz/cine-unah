@@ -32,8 +32,8 @@ credits: |-
   Género
       Ciencia Ficción. Drama. Distopía. Steampunk. Robots. Expresionismo Alemán. Película de Culto. Cine Mudo.
 showDate: 2026-05-20T16:56:55.301Z
-showTime: '10:00'
-showEndTime: '12:00'
+showTime: '13:00'
+showEndTime: '15:00'
 duration: 153
 country: 'Alemania, 1927'
 location: src/content/ubicaciones/cise.md
