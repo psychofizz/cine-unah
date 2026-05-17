@@ -37,7 +37,7 @@ credits: |-
       Drama. Siglo XIX. Histórico.
 showDate: 2026-05-20T17:09:48.507Z
 showTime: '17:00'
-showEndTime: '18:10'
+showEndTime: '18:00'
 duration: 186
 country: 'Italia, 1963'
 location: src/content/ubicaciones/cise.md
