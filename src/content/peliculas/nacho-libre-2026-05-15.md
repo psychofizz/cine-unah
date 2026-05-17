@@ -33,7 +33,7 @@ credits: |-
 
   Género
       Comedia Wrestling/Lucha libre
-showDate: 2026-05-15T05:29:20.889Z
+showDate: 2026-05-23T05:29:20.889Z
 showTime: '10:00'
 showEndTime: '12:00'
 duration: 100
