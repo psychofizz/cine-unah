@@ -32,7 +32,7 @@ credits: |-
 
   Género
       Animación. Terror. Thriller. Drama. Drama Psicológico. Thriller Psicológico. Internet/Informática. Música. Película de Culto.
-showDate: 2026-05-15T05:41:43.546Z
+showDate: 2026-05-23T05:41:43.546Z
 showTime: '13:00'
 showEndTime: '15:00'
 duration: 81
