@@ -9,7 +9,9 @@ fragment PeliculaParts on Pelicula {
   showDate
   showTime
   showEndTime
-  featured
+  forceShow
+  category
+  hiddenFromCartelera
   duration
   country
   location {
@@ -45,7 +47,6 @@ fragment PeliculaParts on Pelicula {
       date
       eventTime
       eventEndTime
-      featured
       location {
         ... on Ubicacion {
           __typename
@@ -101,7 +102,6 @@ fragment EventoParts on Evento {
   date
   eventTime
   eventEndTime
-  featured
   location {
     ... on Ubicacion {
       __typename

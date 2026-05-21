@@ -33,7 +33,20 @@ const nowTimeStr = new Date().toLocaleTimeString("en-GB", {
 	minute: "2-digit",
 });
 
+// ── Current week boundaries (Sunday to Saturday) in Tegucigalpa ──
+const todayTegucigalpa = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Tegucigalpa" }));
+const currentDayOfWeek = todayTegucigalpa.getDay(); // 0 is Sunday, 6 is Saturday
+
+const startOfWeek = new Date(todayTegucigalpa);
+startOfWeek.setDate(todayTegucigalpa.getDate() - currentDayOfWeek);
+const startOfWeekStr = startOfWeek.toLocaleDateString("en-CA"); // YYYY-MM-DD
+
+const endOfWeek = new Date(startOfWeek);
+endOfWeek.setDate(startOfWeek.getDate() + 6);
+const endOfWeekStr = endOfWeek.toLocaleDateString("en-CA"); // YYYY-MM-DD
+
 const activeMovies = allMovies.filter((m: any) => {
+	if (m.hiddenFromCartelera) return false;
 	if (!m.showDate) return false;
 	const showDateStr = new Date(m.showDate).toLocaleDateString("en-CA", {
 		timeZone: "America/Tegucigalpa",
@@ -71,31 +84,11 @@ const futureEvents = allEvents.filter((e: any) => {
 	return true;
 });
 
-// ── Ongoing Events for Carousel ──────────────
-const ongoingEvents = allEvents.filter((e: any) => {
-	if (!e.date || !e.eventTime) return false;
-	const eventDateStr = new Date(e.date).toLocaleDateString("en-CA", {
-		timeZone: "America/Tegucigalpa",
-	});
-
-	if (eventDateStr !== todayStr) return false;
-
-	const toMins = (t: string) => {
-		const [h, m] = t.split(":");
-		return parseInt(h) * 60 + parseInt(m);
-	};
-
-	const nowMins = toMins(nowTimeStr);
-	const startMins = toMins(e.eventTime);
-	const endTime = e.eventEndTime || e.eventTime;
-	const endMins = toMins(endTime) + 120; // 2 hours after end
-
-	// < 3 hr before event and while event is live
-	return nowMins >= startMins - 180 && nowMins <= endMins;
-});
-
-// The carousel shows all active movies and ongoing events coming up, sorted by date and time
-const heroCarouselItems = [...activeMovies, ...ongoingEvents].sort((a: any, b: any) => {
+// The carousel shows all active non-reservado movies and future events coming up, sorted by date and time
+const heroCarouselItems = [
+	...activeMovies.filter((m: any) => m.category !== "reservado"),
+	...futureEvents
+].sort((a: any, b: any) => {
 	const dateAStr = new Date(a.showDate || a.date).toLocaleDateString("en-CA", {
 		timeZone: "America/Tegucigalpa",
 	});
@@ -109,20 +102,29 @@ const heroCarouselItems = [...activeMovies, ...ongoingEvents].sort((a: any, b: a
 	return timeA.localeCompare(timeB);
 });
 
-// ── Grid movies — show ALL active movies (hero stays in grid too) ──
-const gridMovies = [...activeMovies].sort((a: any, b: any) => {
-	const dateAStr = new Date(a.showDate).toLocaleDateString("en-CA", {
-		timeZone: "America/Tegucigalpa",
-	});
-	const dateBStr = new Date(b.showDate).toLocaleDateString("en-CA", {
-		timeZone: "America/Tegucigalpa",
-	});
-	if (dateAStr !== dateBStr) return dateAStr.localeCompare(dateBStr);
+// ── Grid movies — show ALL active movies of the current week (unless forceShow is true) ──
+const gridMovies = [...activeMovies]
+	.filter((m: any) => {
+		if (m.forceShow) return true;
+		
+		const showDateStr = new Date(m.showDate).toLocaleDateString("en-CA", {
+			timeZone: "America/Tegucigalpa",
+		});
+		return showDateStr >= startOfWeekStr && showDateStr <= endOfWeekStr;
+	})
+	.sort((a: any, b: any) => {
+		const dateAStr = new Date(a.showDate).toLocaleDateString("en-CA", {
+			timeZone: "America/Tegucigalpa",
+		});
+		const dateBStr = new Date(b.showDate).toLocaleDateString("en-CA", {
+			timeZone: "America/Tegucigalpa",
+		});
+		if (dateAStr !== dateBStr) return dateAStr.localeCompare(dateBStr);
 
-	const timeA = a.showTime || "00:00";
-	const timeB = b.showTime || "00:00";
-	return timeA.localeCompare(timeB);
-});
+		const timeA = a.showTime || "00:00";
+		const timeB = b.showTime || "00:00";
+		return timeA.localeCompare(timeB);
+	});
 
 // ── Upcoming events ──────
 const upcomingEvents = futureEvents.sort(
@@ -426,6 +428,7 @@ function formatHeroDate(dateStr: string) {
 								duration={movie.duration}
 								location={movie.location}
 								cancelled={movie.cancelled}
+								category={movie.category}
 							/>
 						))}
 					</div>
@@ -580,7 +583,7 @@ function formatHeroDate(dateStr: string) {
 				// Return to first slide
 				smoothScrollTo(0, 800);
 			} else {
-				smoothScrollTo(scrollLeft + slideWidth, 800);
+				smoothScrollTo((index + 1) * slideWidth, 800);
 			}
 		};
 

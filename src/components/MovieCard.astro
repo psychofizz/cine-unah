@@ -11,6 +11,7 @@ interface Props {
     location?: any;
     isPartOfEvent?: any;
     cancelled?: boolean;
+    category?: string;
 }
 
 const {
@@ -25,6 +26,7 @@ const {
     location,
     isPartOfEvent,
     cancelled,
+    category,
 } = Astro.props;
 
 const tz = "America/Tegucigalpa";
@@ -93,6 +95,13 @@ import { Image } from "astro:assets";
                         <line x1="6" y1="6" x2="18" y2="18" />
                     </svg>
                     Cancelada
+                </div>
+            )
+        }
+        {
+            category === "reservado" && (
+                <div class="card-reserved-badge" aria-label="Función reservada">
+                    Reservada
                 </div>
             )
         }

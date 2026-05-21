@@ -1125,6 +1125,38 @@ a.hero-chip:hover {
   z-index: 10;
 }
 
+/* ─── Reserved: detail-tag variant ─── */
+.detail-tag--reserved {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.4);
+  margin-bottom: var(--sp-3);
+}
+
+/* ─── Card Reserved Badge (listing) ─── */
+.card-reserved-badge {
+  position: absolute;
+  top: var(--sp-2);
+  right: var(--sp-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(17, 17, 17, 0.85);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  font-family: var(--font-sans);
+  font-size: 8px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 4px 7px;
+  border-radius: 3px;
+  z-index: 10;
+}
 
 .detail-meta-row {
   display: flex;

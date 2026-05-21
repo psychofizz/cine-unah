@@ -110,7 +110,9 @@ type Pelicula implements Node & Document {
   showDate: String!
   showTime: String
   showEndTime: String
-  featured: Boolean
+  forceShow: Boolean
+  category: String
+  hiddenFromCartelera: Boolean
   duration: Float
   country: String
   location: PeliculaLocation
@@ -175,7 +177,9 @@ input PeliculaFilter {
   showDate: DatetimeFilter
   showTime: StringFilter
   showEndTime: StringFilter
-  featured: BooleanFilter
+  forceShow: BooleanFilter
+  category: StringFilter
+  hiddenFromCartelera: BooleanFilter
   duration: NumberFilter
   country: StringFilter
   location: PeliculaLocationFilter
@@ -211,7 +215,6 @@ type Evento implements Node & Document {
   date: String!
   eventTime: String
   eventEndTime: String
-  featured: Boolean
   location: EventoLocation
   shortFilms: [EventoShortFilms]
   id: ID!
@@ -239,7 +242,6 @@ input EventoFilter {
   date: DatetimeFilter
   eventTime: StringFilter
   eventEndTime: StringFilter
-  featured: BooleanFilter
   location: EventoLocationFilter
   shortFilms: EventoShortFilmsFilter
 }
@@ -358,7 +360,9 @@ input PeliculaMutation {
   showDate: String
   showTime: String
   showEndTime: String
-  featured: Boolean
+  forceShow: Boolean
+  category: String
+  hiddenFromCartelera: Boolean
   duration: Float
   country: String
   location: String
@@ -381,7 +385,6 @@ input EventoMutation {
   date: String
   eventTime: String
   eventEndTime: String
-  featured: Boolean
   location: String
   shortFilms: [EventoShortFilmsMutation]
 }

@@ -52,7 +52,7 @@ const showDateStr = new Date(movie.showDate).toLocaleDateString("en-CA", {
 });
 const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: tz });
 
-const statusText = showDateStr < todayStr ? "Archivo" : "En cartelera";
+const statusText = movie.category === "reservado" ? "Reservado" : (showDateStr < todayStr ? "Archivo" : "En cartelera");
 ---
 
 <BaseLayout
@@ -100,7 +100,7 @@ const statusText = showDateStr < todayStr ? "Archivo" : "En cartelera";
 
                 <!-- Info -->
                 <div class="detail-info">
-                    <span class="detail-tag">{statusText}</span>
+                    <span class={`detail-tag${movie.category === "reservado" ? " detail-tag--reserved" : ""}`}>{statusText}</span>
                     <h1 class="detail-title">{movie.title}</h1>
 
                     <!-- BIG TIME BLOCK -->
