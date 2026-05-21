@@ -345,7 +345,8 @@ p {
 }
 
 .hero-slide {
-  flex: 0 0 100vw;
+  flex: 0 0 100%;
+  width: 100%;
   scroll-snap-align: start;
 }
 
