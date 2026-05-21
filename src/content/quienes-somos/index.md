@@ -3,16 +3,16 @@ title: "¿Quiénes Somos?"
 image: "/uploads/Gemini_Generated_Image_tjwj0ftjwj0ftjwj.jpg"
 ---
 
-Bienvenidos a **Cine UNAH**, la comunidad del cine universitario.
+Somos una comunidad cinematográfica universitaria que forma cineastas con la metodología del neorrealismo de posguerra: convertir la escasez en estética, la cámara en oficio y el cine en herramienta real —de empleabilidad, de salud mental, de memoria histórica— para jóvenes universitarios hondureños.
 
-Somos un espacio dedicado a la difusión de la cultura cinematográfica dentro de la Universidad Nacional Autónoma de Honduras. Nuestra misión es acercar el séptimo arte a la comunidad universitaria a través de proyecciones, eventos y espacios de diálogo.
+### Misión
 
-### Nuestra Historia
-Cine UNAH nació de la pasión por compartir historias que nos mueven y nos hacen reflexionar. Desde nuestros inicios, hemos buscado ser una "pantalla" para todos.
+Formar cineastas socialmente comprometidos. Transformar la carencia en lenguaje propio. Hacer del cine algo que sirva, no solo algo que se ve.
 
-![Cine UNAH](/uploads/cine-unah-logo.svg)
+### Lo que nos mueve
 
-### ¿Qué hacemos?
-- **Proyecciones semanales:** Lo mejor del cine mundial en el campus.
-- **Ciclos temáticos:** Exploramos directores, géneros y cinematografías diversas.
-- **Colaboraciones:** Trabajamos con otras facultades y centros culturales.
+- **Autogestión** — Economía propia, decisiones colectivas. Sin depender de nadie para existir.
+- **Solidaridad** — La comunidad se salva a sí misma. Siempre.
+- **Experimentación** — Libertad creativa sin miedo al riesgo artístico.
+- **Inclusión** — Prioridad a quienes tienen menos acceso. Punto.
+- **Resistencia** — Defendemos el espacio. Ante lo que sea.

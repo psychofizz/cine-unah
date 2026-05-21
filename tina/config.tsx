@@ -118,12 +118,28 @@ export default defineConfig({
             label: "Hora de finalización (opcional)",
             ui: { component: TimePickerField },
           },
+
           {
             type: "boolean",
-            name: "featured",
-            label: "⭐ Destacada (Hero Principal)",
-            description:
-              "Si está activo, esta película ocupa el hero principal hasta que la fecha pase. Solo una debe estar activa a la vez.",
+            name: "forceShow",
+            label: "🔓 Mostrar Siempre (Ignorar filtro de semana)",
+            description: "Si está activo, esta película siempre se mostrará en cartelera sin importar que corresponda a semanas futuras.",
+          },
+          {
+            type: "string",
+            name: "category",
+            label: "Categoría de Película/Proyección",
+            options: [
+              { value: "publica", label: "Proyección Pública" },
+              { value: "reservado", label: "Reservado (Evento no público/privado)" }
+            ],
+            description: "Las proyecciones reservadas tienen un trato especial: no aparecen en el hero banner, tienen menos campos obligatorios y pueden ocultarse de la cartelera principal.",
+          },
+          {
+            type: "boolean",
+            name: "hiddenFromCartelera",
+            label: "👁️ Ocultar de la Cartelera Principal",
+            description: "Si está activo, esta proyección no aparecerá en la cartelera principal y solo será accesible mediante enlace directo.",
           },
           {
             type: "number",
@@ -221,13 +237,7 @@ export default defineConfig({
             label: "Hora de finalización (opcional)",
             ui: { component: TimePickerField },
           },
-          {
-            type: "boolean",
-            name: "featured",
-            label: "⭐ Destacado (Hero Principal)",
-            description:
-              "Si está activo, este evento ocupa el hero principal hasta que la fecha pase.",
-          },
+
           {
             type: "reference",
             name: "location",

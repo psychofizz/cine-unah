@@ -14,7 +14,6 @@ try {
     console.error("Error fetching evento by relativePath:", e);
 }
 
-// Fallback search
 if (!event) {
     try {
         const connResult = await client.queries.eventoConnection();
@@ -25,6 +24,23 @@ if (!event) {
         if (match) event = match.node;
     } catch (e) {
         // Fallback also failed
+    }
+}
+
+if (!event) {
+    try {
+        const localEventsGlob = import.meta.glob("../../content/eventos/*.md", { eager: true });
+        const matchKey = Object.keys(localEventsGlob).find(k => k.endsWith(`/${slug}.md`));
+        if (matchKey) {
+            const mod: any = localEventsGlob[matchKey];
+            event = {
+                _sys: { filename: slug },
+                id: slug,
+                ...mod.frontmatter,
+            };
+        }
+    } catch (e) {
+        // Local fallback failed
     }
 }
 

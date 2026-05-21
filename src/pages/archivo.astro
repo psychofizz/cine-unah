@@ -4,6 +4,7 @@ import { client } from "../../tina/__generated__/client";
 
 let pastMovies: any[] = [];
 let pastEvents: any[] = [];
+let pastReserved: any[] = [];
 
 const todayStr = new Date().toLocaleDateString("en-CA", {
     timeZone: "America/Tegucigalpa",
@@ -32,9 +33,16 @@ function isPast(dateStr: string, endTime?: string, startTime?: string): boolean 
 
 try {
     const pelRes = await client.queries.peliculaConnection();
-    pastMovies = (pelRes.data.peliculaConnection.edges ?? [])
+    const allPastMovies = (pelRes.data.peliculaConnection.edges ?? [])
         .map((e: any) => e.node)
-        .filter((m: any) => m.showDate && isPast(m.showDate, m.showEndTime, m.showTime))
+        .filter((m: any) => m.showDate && isPast(m.showDate, m.showEndTime, m.showTime));
+
+    pastMovies = allPastMovies
+        .filter((m: any) => m.category !== "reservado")
+        .sort((a: any, b: any) => new Date(b.showDate).getTime() - new Date(a.showDate).getTime());
+
+    pastReserved = allPastMovies
+        .filter((m: any) => m.category === "reservado")
         .sort((a: any, b: any) => new Date(b.showDate).getTime() - new Date(a.showDate).getTime());
 } catch (err) {
     console.warn("TinaCMS peliculas not available.", err);
@@ -50,6 +58,42 @@ try {
     console.warn("TinaCMS eventos not available.", err);
 }
 
+// Fallback to local files if TinaCMS query returns empty or failed
+if (!pastMovies || pastMovies.length === 0) {
+    const localMoviesGlob = import.meta.glob("../content/peliculas/*.md", { eager: true });
+    const allPastMovies = Object.entries(localMoviesGlob).map(([filePath, mod]: any) => {
+        const filename = filePath.split("/").pop()?.replace(/\.md$/, "") || "";
+        return {
+            _sys: { filename },
+            id: filename,
+            ...mod.frontmatter,
+        };
+    }).filter((m: any) => m.showDate && isPast(m.showDate, m.showEndTime, m.showTime));
+
+    pastMovies = allPastMovies
+        .filter((m: any) => m.category !== "reservado")
+        .sort((a: any, b: any) => new Date(b.showDate).getTime() - new Date(a.showDate).getTime());
+
+    pastReserved = allPastMovies
+        .filter((m: any) => m.category === "reservado")
+        .sort((a: any, b: any) => new Date(b.showDate).getTime() - new Date(a.showDate).getTime());
+}
+
+if (!pastEvents || pastEvents.length === 0) {
+    const localEventsGlob = import.meta.glob("../content/eventos/*.md", { eager: true });
+    pastEvents = Object.entries(localEventsGlob).map(([filePath, mod]: any) => {
+        const filename = filePath.split("/").pop()?.replace(/\.md$/, "") || "";
+        return {
+            _sys: { filename },
+            id: filename,
+            ...mod.frontmatter,
+        };
+    })
+    .filter((ev: any) => ev.date && isPast(ev.date, ev.eventEndTime, ev.eventTime))
+    .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+
 function slugFromFilename(filename: string) {
     return filename.replace(/\.md$/, "");
 }
@@ -62,6 +106,8 @@ function formatDate(dateStr: string) {
         year: "numeric",
     });
 }
+
+const PAGE_SIZE = 6;
 ---
 
 <BaseLayout
@@ -82,39 +128,56 @@ function formatDate(dateStr: string) {
 
             {
                 pastMovies.length > 0 ? (
-                    <div class="archive-grid">
-                        {pastMovies.map((movie: any) => (
-                            <a
-                                href={`/peliculas/${slugFromFilename(movie._sys.filename)}`}
-                                class="archive-card"
-                                aria-label={`${movie.title} — ${formatDate(movie.showDate)}`}
-                            >
-                                <div class="archive-poster">
-                                    {movie.poster ? (
-                                        <img
-                                            src={encodeURI(movie.poster)}
-                                            alt={`Poster de ${movie.title}`}
-                                            loading="lazy"
-                                        />
-                                    ) : (
-                                        <div
-                                            class="card-poster-placeholder"
-                                            style="height:100%; display:flex; align-items:center; justify-content:center; font-size:2.5rem;"
-                                            aria-hidden="true"
-                                        >
-                                            🎬
-                                        </div>
-                                    )}
-                                </div>
-                                <div class="archive-body">
-                                    <p class="archive-title">{movie.title}</p>
-                                    <p class="archive-date">
-                                        {formatDate(movie.showDate)}
-                                    </p>
-                                </div>
-                            </a>
-                        ))}
-                    </div>
+                    <>
+                        <div
+                            class="archive-grid"
+                            id="movies-grid"
+                            data-page-size={PAGE_SIZE}
+                            data-current-page="1"
+                        >
+                            {pastMovies.map((movie: any, i: number) => (
+                                <a
+                                    href={`/peliculas/${slugFromFilename(movie._sys.filename)}`}
+                                    class="archive-card"
+                                    aria-label={`${movie.title} — ${formatDate(movie.showDate)}`}
+                                    data-index={i}
+                                >
+                                    <div class="archive-poster is-loading" data-archive-poster>
+                                        {movie.poster ? (
+                                            <img
+                                                src={encodeURI(movie.poster)}
+                                                alt={`Poster de ${movie.title}`}
+                                                loading="lazy"
+                                                decoding="async"
+                                            />
+                                        ) : (
+                                            <div
+                                                class="card-poster-placeholder"
+                                                style="height:100%; display:flex; align-items:center; justify-content:center; font-size:2.5rem;"
+                                                aria-hidden="true"
+                                            >
+                                                🎬
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div class="archive-body">
+                                        <p class="archive-title">{movie.title}</p>
+                                        <p class="archive-date">
+                                            {formatDate(movie.showDate)}
+                                        </p>
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+
+                        {pastMovies.length > PAGE_SIZE && (
+                            <nav
+                                class="archive-paginator"
+                                id="movies-paginator"
+                                aria-label="Paginación de películas"
+                            />
+                        )}
+                    </>
                 ) : (
                     <div class="empty-state">
                         <div class="empty-state-icon" aria-hidden="true">
@@ -141,19 +204,26 @@ function formatDate(dateStr: string) {
                             </h2>
                             <div class="section-line" aria-hidden="true" />
                         </div>
-                        <div class="archive-grid">
-                            {pastEvents.map((event: any) => (
+                        <div
+                            class="archive-grid"
+                            id="events-grid"
+                            data-page-size={PAGE_SIZE}
+                            data-current-page="1"
+                        >
+                            {pastEvents.map((event: any, i: number) => (
                                 <a
                                     href={`/eventos/${slugFromFilename(event._sys.filename)}`}
                                     class="archive-card"
                                     aria-label={`${event.title} — ${formatDate(event.date)}`}
+                                    data-index={i}
                                 >
-                                    <div class="archive-poster">
+                                    <div class="archive-poster is-loading" data-archive-poster>
                                         {event.poster ? (
                                             <img
                                                 src={encodeURI(event.poster)}
                                                 alt={`Poster de ${event.title}`}
                                                 loading="lazy"
+                                                decoding="async"
                                             />
                                         ) : (
                                             <div
@@ -174,6 +244,82 @@ function formatDate(dateStr: string) {
                                 </a>
                             ))}
                         </div>
+
+                        {pastEvents.length > PAGE_SIZE && (
+                            <nav
+                                class="archive-paginator"
+                                id="events-paginator"
+                                aria-label="Paginación de eventos"
+                            />
+                        )}
+                    </section>
+                </>
+            )
+        }
+
+        <!-- ── RESERVACIONES ── -->
+        {
+            pastReserved.length > 0 && (
+                <>
+                    <hr class="divider" aria-hidden="true" />
+                    <section class="section" aria-labelledby="archivo-reservado-title">
+                        <div class="section-header">
+                            <h2 class="section-title" id="archivo-reservado-title">
+                                Funciones Reservadas / Eventos Privados
+                            </h2>
+                            <div class="section-line" aria-hidden="true" />
+                        </div>
+                        <div
+                            class="archive-grid"
+                            id="reserved-grid"
+                            data-page-size={PAGE_SIZE}
+                            data-current-page="1"
+                        >
+                            {pastReserved.map((movie: any, i: number) => (
+                                <a
+                                    href={`/peliculas/${slugFromFilename(movie._sys.filename)}`}
+                                    class="archive-card"
+                                    aria-label={`${movie.title} — ${formatDate(movie.showDate)}`}
+                                    data-index={i}
+                                >
+                                    <div class="archive-poster is-loading" data-archive-poster>
+                                        {movie.poster ? (
+                                            <img
+                                                src={encodeURI(movie.poster)}
+                                                alt={`Poster de ${movie.title}`}
+                                                loading="lazy"
+                                                decoding="async"
+                                            />
+                                        ) : (
+                                            <div
+                                                class="card-poster-placeholder"
+                                                style="height:100%; display:flex; align-items:center; justify-content:center; font-size:2.5rem;"
+                                                aria-hidden="true"
+                                            >
+                                                🔒
+                                            </div>
+                                        )}
+                                        <div class="card-reserved-badge" style="top: 10px; right: 10px;" aria-label="Función reservada">
+                                            Reservada
+                                        </div>
+                                    </div>
+                                    <div class="archive-body">
+                                        <p class="archive-title">{movie.title}</p>
+                                        <p class="archive-date archive-date--reserved">
+                                            Reservado · {formatDate(movie.showDate)}
+                                        </p>
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+
+                        {pastReserved.length > PAGE_SIZE && (
+                            <nav
+                                class="archive-paginator"
+                                id="reserved-paginator"
+                                aria-label="Paginación de reservas"
+                            />
+                        )}
                     </section>
                 </>
             )
@@ -182,10 +328,136 @@ function formatDate(dateStr: string) {
 </BaseLayout>
 
 <style>
-    .archive-date--event {
+    .archive-date--event, .archive-date--reserved {
         color: var(--color-muted);
     }
-    .archive-date--event::before {
+    .archive-date--event::before, .archive-date--reserved::before {
         content: "";
     }
 </style>
+
+<script>
+// ─── Skeleton removal ──────────────────────────────────
+document.querySelectorAll("[data-archive-poster]").forEach((wrap) => {
+    const img = wrap.querySelector("img");
+    if (!img) {
+        wrap.classList.remove("is-loading");
+        return;
+    }
+    if (img.complete) {
+        wrap.classList.remove("is-loading");
+    } else {
+        img.addEventListener("load", () => wrap.classList.remove("is-loading"), { once: true });
+    }
+});
+
+// ─── Paginator ────────────────────────────────────────
+type PaginatorConfig = {
+    gridId: string;
+    paginatorId: string;
+};
+
+function initPaginator({ gridId, paginatorId }: PaginatorConfig) {
+    const grid = document.getElementById(gridId);
+    const paginatorEl = document.getElementById(paginatorId);
+    if (!grid || !paginatorEl) return;
+
+    const pageSize = parseInt(grid.dataset.pageSize ?? "20", 10);
+    const cards = Array.from(grid.querySelectorAll<HTMLElement>(".archive-card"));
+    const total = cards.length;
+    const totalPages = Math.ceil(total / pageSize);
+
+    if (totalPages <= 1) {
+        paginatorEl.style.display = "none";
+        return;
+    }
+
+    let currentPage = 1;
+
+    function showPage(page: number) {
+        currentPage = page;
+        grid!.dataset.currentPage = String(page);
+
+        const start = (page - 1) * pageSize;
+        const end = start + pageSize;
+
+        cards.forEach((card, i) => {
+            card.style.display = i >= start && i < end ? "" : "none";
+        });
+
+        // Scroll to section top
+        grid!.scrollIntoView({ behavior: "smooth", block: "start" });
+
+        renderPaginator();
+
+        // Re-trigger skeleton removal for newly visible images
+        cards.slice(start, end).forEach((card) => {
+            const wrap = card.querySelector("[data-archive-poster]");
+            if (!wrap) return;
+            const img = wrap.querySelector("img");
+            if (!img) { wrap.classList.remove("is-loading"); return; }
+            if (img.complete) wrap.classList.remove("is-loading");
+            else img.addEventListener("load", () => wrap.classList.remove("is-loading"), { once: true });
+        });
+    }
+
+    function renderPaginator() {
+        if (!paginatorEl) return;
+        paginatorEl.innerHTML = "";
+
+        const makeBtn = (label: string, page: number, disabled = false, active = false) => {
+            const btn = document.createElement("button");
+            btn.className = "archive-paginator-btn" + (active ? " is-active" : "");
+            btn.textContent = label;
+            btn.disabled = disabled;
+            btn.setAttribute("aria-label", `Página ${page}`);
+            if (active) btn.setAttribute("aria-current", "page");
+            if (!disabled) btn.addEventListener("click", () => showPage(page));
+            return btn;
+        };
+
+        const makeEllipsis = () => {
+            const span = document.createElement("span");
+            span.className = "archive-paginator-ellipsis";
+            span.textContent = "…";
+            span.setAttribute("aria-hidden", "true");
+            return span;
+        };
+
+        // Prev
+        paginatorEl.appendChild(makeBtn("←", currentPage - 1, currentPage === 1));
+
+        // Page pills with smart ellipsis
+        const pages: (number | "…")[] = [];
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) pages.push(i);
+        } else {
+            pages.push(1);
+            if (currentPage > 3) pages.push("…");
+            for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+                pages.push(i);
+            }
+            if (currentPage < totalPages - 2) pages.push("…");
+            pages.push(totalPages);
+        }
+
+        pages.forEach((p) => {
+            if (p === "…") {
+                paginatorEl.appendChild(makeEllipsis());
+            } else {
+                paginatorEl.appendChild(makeBtn(String(p), p, false, p === currentPage));
+            }
+        });
+
+        // Next
+        paginatorEl.appendChild(makeBtn("→", currentPage + 1, currentPage === totalPages));
+    }
+
+    // Initial render
+    showPage(1);
+}
+
+initPaginator({ gridId: "movies-grid", paginatorId: "movies-paginator" });
+initPaginator({ gridId: "events-grid", paginatorId: "events-paginator" });
+initPaginator({ gridId: "reserved-grid", paginatorId: "reserved-paginator" });
+</script>

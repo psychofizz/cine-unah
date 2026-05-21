@@ -110,9 +110,25 @@ var config_default = defineConfig({
           },
           {
             type: "boolean",
-            name: "featured",
-            label: "\u2B50 Destacada (Hero Principal)",
-            description: "Si est\xE1 activo, esta pel\xEDcula ocupa el hero principal hasta que la fecha pase. Solo una debe estar activa a la vez."
+            name: "forceShow",
+            label: "\u{1F513} Mostrar Siempre (Ignorar filtro de semana)",
+            description: "Si est\xE1 activo, esta pel\xEDcula siempre se mostrar\xE1 en cartelera sin importar que corresponda a semanas futuras."
+          },
+          {
+            type: "string",
+            name: "category",
+            label: "Categor\xEDa de Pel\xEDcula/Proyecci\xF3n",
+            options: [
+              { value: "publica", label: "Proyecci\xF3n P\xFAblica" },
+              { value: "reservado", label: "Reservado (Evento no p\xFAblico/privado)" }
+            ],
+            description: "Las proyecciones reservadas tienen un trato especial: no aparecen en el hero banner, tienen menos campos obligatorios y pueden ocultarse de la cartelera principal."
+          },
+          {
+            type: "boolean",
+            name: "hiddenFromCartelera",
+            label: "\u{1F441}\uFE0F Ocultar de la Cartelera Principal",
+            description: "Si est\xE1 activo, esta proyecci\xF3n no aparecer\xE1 en la cartelera principal y solo ser\xE1 accesible mediante enlace directo."
           },
           {
             type: "number",
@@ -204,12 +220,6 @@ var config_default = defineConfig({
             name: "eventEndTime",
             label: "Hora de finalizaci\xF3n (opcional)",
             ui: { component: TimePickerField }
-          },
-          {
-            type: "boolean",
-            name: "featured",
-            label: "\u2B50 Destacado (Hero Principal)",
-            description: "Si est\xE1 activo, este evento ocupa el hero principal hasta que la fecha pase."
           },
           {
             type: "reference",
