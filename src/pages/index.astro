@@ -34,16 +34,17 @@ const nowTimeStr = new Date().toLocaleTimeString("en-GB", {
 });
 
 // ── Current week boundaries (Sunday to Saturday) in Tegucigalpa ──
-const todayTegucigalpa = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Tegucigalpa" }));
-const currentDayOfWeek = todayTegucigalpa.getDay(); // 0 is Sunday, 6 is Saturday
+const [yr, mo, dy] = todayStr.split("-").map(Number);
+const dateObj = new Date(Date.UTC(yr, mo - 1, dy));
+const dayOfWeek = dateObj.getUTCDay(); // 0 is Sunday, 6 is Saturday
 
-const startOfWeek = new Date(todayTegucigalpa);
-startOfWeek.setDate(todayTegucigalpa.getDate() - currentDayOfWeek);
-const startOfWeekStr = startOfWeek.toLocaleDateString("en-CA"); // YYYY-MM-DD
+const startOfWeek = new Date(dateObj);
+startOfWeek.setUTCDate(dateObj.getUTCDate() - dayOfWeek);
+const startOfWeekStr = startOfWeek.toISOString().slice(0, 10); // YYYY-MM-DD
 
 const endOfWeek = new Date(startOfWeek);
-endOfWeek.setDate(startOfWeek.getDate() + 6);
-const endOfWeekStr = endOfWeek.toLocaleDateString("en-CA"); // YYYY-MM-DD
+endOfWeek.setUTCDate(startOfWeek.getUTCDate() + 6);
+const endOfWeekStr = endOfWeek.toISOString().slice(0, 10); // YYYY-MM-DD
 
 const activeMovies = allMovies.filter((m: any) => {
 	if (m.hiddenFromCartelera) return false;
