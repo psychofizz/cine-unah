@@ -27,6 +27,31 @@ try {
 	console.warn("TinaCMS data not available.", err);
 }
 
+// Fallback to local files if TinaCMS query returns empty or failed
+if (!allMovies || allMovies.length === 0) {
+	const localMoviesGlob = import.meta.glob("../content/peliculas/*.md", { eager: true });
+	allMovies = Object.entries(localMoviesGlob).map(([filePath, mod]: any) => {
+		const filename = filePath.split("/").pop()?.replace(/\.md$/, "") || "";
+		return {
+			_sys: { filename },
+			id: filename,
+			...mod.frontmatter,
+		};
+	});
+}
+
+if (!allEvents || allEvents.length === 0) {
+	const localEventsGlob = import.meta.glob("../content/eventos/*.md", { eager: true });
+	allEvents = Object.entries(localEventsGlob).map(([filePath, mod]: any) => {
+		const filename = filePath.split("/").pop()?.replace(/\.md$/, "") || "";
+		return {
+			_sys: { filename },
+			id: filename,
+			...mod.frontmatter,
+		};
+	});
+}
+
 const nowTimeStr = new Date().toLocaleTimeString("en-GB", {
 	timeZone: "America/Tegucigalpa",
 	hour: "2-digit",

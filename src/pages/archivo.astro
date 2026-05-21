@@ -58,6 +58,42 @@ try {
     console.warn("TinaCMS eventos not available.", err);
 }
 
+// Fallback to local files if TinaCMS query returns empty or failed
+if (!pastMovies || pastMovies.length === 0) {
+    const localMoviesGlob = import.meta.glob("../content/peliculas/*.md", { eager: true });
+    const allPastMovies = Object.entries(localMoviesGlob).map(([filePath, mod]: any) => {
+        const filename = filePath.split("/").pop()?.replace(/\.md$/, "") || "";
+        return {
+            _sys: { filename },
+            id: filename,
+            ...mod.frontmatter,
+        };
+    }).filter((m: any) => m.showDate && isPast(m.showDate, m.showEndTime, m.showTime));
+
+    pastMovies = allPastMovies
+        .filter((m: any) => m.category !== "reservado")
+        .sort((a: any, b: any) => new Date(b.showDate).getTime() - new Date(a.showDate).getTime());
+
+    pastReserved = allPastMovies
+        .filter((m: any) => m.category === "reservado")
+        .sort((a: any, b: any) => new Date(b.showDate).getTime() - new Date(a.showDate).getTime());
+}
+
+if (!pastEvents || pastEvents.length === 0) {
+    const localEventsGlob = import.meta.glob("../content/eventos/*.md", { eager: true });
+    pastEvents = Object.entries(localEventsGlob).map(([filePath, mod]: any) => {
+        const filename = filePath.split("/").pop()?.replace(/\.md$/, "") || "";
+        return {
+            _sys: { filename },
+            id: filename,
+            ...mod.frontmatter,
+        };
+    })
+    .filter((ev: any) => ev.date && isPast(ev.date, ev.eventEndTime, ev.eventTime))
+    .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+
 function slugFromFilename(filename: string) {
     return filename.replace(/\.md$/, "");
 }
