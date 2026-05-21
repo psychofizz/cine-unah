@@ -71,6 +71,13 @@ const endOfWeek = new Date(startOfWeek);
 endOfWeek.setUTCDate(startOfWeek.getUTCDate() + 6);
 const endOfWeekStr = endOfWeek.toISOString().slice(0, 10); // YYYY-MM-DD
 
+function addMinutes(timeStr: string, mins: number) {
+	const [h, m] = timeStr.split(":").map(Number);
+	const d = new Date();
+	d.setHours(h, m + mins, 0, 0);
+	return `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
+}
+
 const activeMovies = allMovies.filter((m: any) => {
 	if (m.hiddenFromCartelera) return false;
 	if (!m.showDate) return false;
@@ -80,11 +87,13 @@ const activeMovies = allMovies.filter((m: any) => {
 
 	if (showDateStr < todayStr) return false;
 	if (showDateStr === todayStr) {
-		const endTime = m.showEndTime || m.showTime;
+		const endTime = m.showEndTime || (() => {
+			if (!m.showTime) return "";
+			const [h, mStr] = m.showTime.split(":");
+			return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${mStr}`;
+		})();
 		if (endTime) {
-			const [h, mStr] = endTime.split(":");
-			const dropH = (parseInt(h) + 2).toString().padStart(2, "0");
-			const dropTime = `${dropH}:${mStr}`;
+			const dropTime = addMinutes(endTime, 15);
 			if (nowTimeStr > dropTime) return false;
 		}
 	}
@@ -99,22 +108,62 @@ const futureEvents = allEvents.filter((e: any) => {
 
 	if (eventDateStr < todayStr) return false;
 	if (eventDateStr === todayStr) {
-		const endTime = e.eventEndTime || e.eventTime;
+		const endTime = e.eventEndTime || (() => {
+			if (!e.eventTime) return "";
+			const [h, mStr] = e.eventTime.split(":");
+			return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${mStr}`;
+		})();
 		if (endTime) {
-			const [h, mStr] = endTime.split(":");
-			const dropH = (parseInt(h) + 2).toString().padStart(2, "0");
-			const dropTime = `${dropH}:${mStr}`;
+			const dropTime = addMinutes(endTime, 15);
 			if (nowTimeStr > dropTime) return false;
 		}
 	}
 	return true;
 });
 
-// The carousel shows all active non-reservado movies and future events coming up, sorted by date and time
+const isPastMovie = (m: any) => {
+	const showDateStr = new Date(m.showDate).toLocaleDateString("en-CA", {
+		timeZone: "America/Tegucigalpa",
+	});
+	if (showDateStr < todayStr) return true;
+	if (showDateStr === todayStr) {
+		const endTime = m.showEndTime || (() => {
+			if (!m.showTime) return "";
+			const [h, mStr] = m.showTime.split(":");
+			return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${mStr}`;
+		})();
+		if (endTime && nowTimeStr > endTime) return true;
+	}
+	return false;
+};
+
+const isPastEvent = (e: any) => {
+	const eventDateStr = new Date(e.date).toLocaleDateString("en-CA", {
+		timeZone: "America/Tegucigalpa",
+	});
+	if (eventDateStr < todayStr) return true;
+	if (eventDateStr === todayStr) {
+		const endTime = e.eventEndTime || (() => {
+			if (!e.eventTime) return "";
+			const [h, mStr] = e.eventTime.split(":");
+			return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${mStr}`;
+		})();
+		if (endTime && nowTimeStr > endTime) return true;
+	}
+	return false;
+};
+
+// The carousel shows all active non-reservado movies and future events coming up, sorted by ended-status, then date and time
 const heroCarouselItems = [
 	...activeMovies.filter((m: any) => m.category !== "reservado"),
 	...futureEvents
 ].sort((a: any, b: any) => {
+	const aPast = a.showDate ? isPastMovie(a) : isPastEvent(a);
+	const bPast = b.showDate ? isPastMovie(b) : isPastEvent(b);
+
+	// Ended (past) items go to the end
+	if (aPast !== bPast) return aPast ? 1 : -1;
+
 	const dateAStr = new Date(a.showDate || a.date).toLocaleDateString("en-CA", {
 		timeZone: "America/Tegucigalpa",
 	});
@@ -295,10 +344,6 @@ function formatHeroDate(dateStr: string) {
 											class="hero-label"
 											style="display: none;"
 										>
-											<span
-												class="hero-label-dot"
-												aria-hidden="true"
-											/>
 											<span class="hero-label-text" />
 										</span>
 
@@ -356,7 +401,7 @@ function formatHeroDate(dateStr: string) {
 												href={href}
 												class="hero-btn-primary"
 											>
-												Ver detalle
+												Ver más
 												<svg
 													width="14"
 													height="14"

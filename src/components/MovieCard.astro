@@ -30,6 +30,26 @@ const {
 } = Astro.props;
 
 const tz = "America/Tegucigalpa";
+const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: tz });
+const nowTimeStr = new Date().toLocaleTimeString("en-GB", {
+    timeZone: tz,
+    hour: "2-digit",
+    minute: "2-digit",
+});
+
+const isPast = (() => {
+    const showDateStr = new Date(showDate).toLocaleDateString("en-CA", { timeZone: tz });
+    if (showDateStr < todayStr) return true;
+    if (showDateStr === todayStr) {
+        const endTime = showEndTime || (() => {
+            if (!showTime) return "";
+            const [h, m] = showTime.split(":");
+            return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${m}`;
+        })();
+        if (endTime && nowTimeStr > endTime) return true;
+    }
+    return false;
+})();
 
 const formattedDate = new Date(showDate).toLocaleDateString("es-MX", {
     timeZone: tz,
@@ -43,7 +63,7 @@ import { Image } from "astro:assets";
 
 <a
     href={`/peliculas/${slug}`}
-    class="card"
+    class={`card${isPast ? " is-past" : ""}`}
     data-date={showDate}
     data-time={showTime || ""}
     data-end-time={showEndTime || ""}
@@ -95,13 +115,6 @@ import { Image } from "astro:assets";
                         <line x1="6" y1="6" x2="18" y2="18" />
                     </svg>
                     Cancelada
-                </div>
-            )
-        }
-        {
-            category === "reservado" && (
-                <div class="card-reserved-badge" aria-label="Función reservada">
-                    Reservada
                 </div>
             )
         }

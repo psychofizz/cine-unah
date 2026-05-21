@@ -35,7 +35,7 @@ try {
     const pelRes = await client.queries.peliculaConnection();
     const allPastMovies = (pelRes.data.peliculaConnection.edges ?? [])
         .map((e: any) => e.node)
-        .filter((m: any) => m.showDate && isPast(m.showDate, m.showEndTime, m.showTime));
+        .filter((m: any) => m.showDate && !m.cancelled && isPast(m.showDate, m.showEndTime, m.showTime));
 
     pastMovies = allPastMovies
         .filter((m: any) => m.category !== "reservado")
@@ -52,7 +52,7 @@ try {
     const evtRes = await client.queries.eventoConnection();
     pastEvents = (evtRes.data.eventoConnection.edges ?? [])
         .map((e: any) => e.node)
-        .filter((ev: any) => ev.date && isPast(ev.date, ev.eventEndTime, ev.eventTime))
+        .filter((ev: any) => ev.date && !ev.cancelled && isPast(ev.date, ev.eventEndTime, ev.eventTime))
         .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
 } catch (err) {
     console.warn("TinaCMS eventos not available.", err);
@@ -68,7 +68,7 @@ if (!pastMovies || pastMovies.length === 0) {
             id: filename,
             ...mod.frontmatter,
         };
-    }).filter((m: any) => m.showDate && isPast(m.showDate, m.showEndTime, m.showTime));
+    }).filter((m: any) => m.showDate && !m.cancelled && isPast(m.showDate, m.showEndTime, m.showTime));
 
     pastMovies = allPastMovies
         .filter((m: any) => m.category !== "reservado")
@@ -89,7 +89,7 @@ if (!pastEvents || pastEvents.length === 0) {
             ...mod.frontmatter,
         };
     })
-    .filter((ev: any) => ev.date && isPast(ev.date, ev.eventEndTime, ev.eventTime))
+    .filter((ev: any) => ev.date && !ev.cancelled && isPast(ev.date, ev.eventEndTime, ev.eventTime))
     .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
@@ -299,9 +299,6 @@ const PAGE_SIZE = 6;
                                                 🔒
                                             </div>
                                         )}
-                                        <div class="card-reserved-badge" style="top: 10px; right: 10px;" aria-label="Función reservada">
-                                            Reservada
-                                        </div>
                                     </div>
                                     <div class="archive-body">
                                         <p class="archive-title">{movie.title}</p>
@@ -362,7 +359,10 @@ function initPaginator({ gridId, paginatorId }: PaginatorConfig) {
     const paginatorEl = document.getElementById(paginatorId);
     if (!grid || !paginatorEl) return;
 
-    const pageSize = parseInt(grid.dataset.pageSize ?? "20", 10);
+    let pageSize = parseInt(grid.dataset.pageSize ?? "6", 10);
+    if (window.matchMedia("(min-width: 1024px)").matches) {
+        pageSize = 8;
+    }
     const cards = Array.from(grid.querySelectorAll<HTMLElement>(".archive-card"));
     const total = cards.length;
     const totalPages = Math.ceil(total / pageSize);
