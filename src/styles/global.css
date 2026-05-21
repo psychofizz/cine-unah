@@ -489,7 +489,7 @@ p {
   flex-direction: column;
   justify-content: flex-end;
   flex: 1;
-  padding: var(--sp-5) var(--sp-4) var(--sp-8);
+  padding: var(--sp-5) var(--sp-4) var(--sp-20);
   gap: 0;
 }
 
@@ -807,6 +807,12 @@ a.hero-chip:hover {
   color: var(--color-white);
   margin-bottom: var(--sp-2);
   line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 2.4em;
 }
 
 .card-time-row {
@@ -1340,6 +1346,12 @@ a.location-link:hover {
   color: var(--color-white);
   line-height: 1.2;
   margin-bottom: 2px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 2.4em;
 }
 
 .archive-date {

@@ -34,7 +34,7 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <Analytics />
     <!-- Anti-FOUC: hide body until CSS is applied, then reveal via script -->
-    <style>body{visibility:hidden}</style>
+    <style is:inline>body{visibility:hidden}</style>
     <noscript><style>body{visibility:visible}</style></noscript>
   </head>
 
@@ -255,6 +255,7 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
             : "";
           const time = slide.getAttribute("data-time");
           const endTimeRaw = slide.getAttribute("data-end-time");
+          const cancelled = slide.getAttribute("data-cancelled") === "true";
 
           let statusLabel = "Próxima proyección";
           let drop = false;
@@ -286,8 +287,12 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
               ".hero-label-text",
             ) as HTMLElement;
             if (labelContainer && labelText) {
-              labelText.textContent = statusLabel;
-              labelContainer.style.display = "";
+              if (cancelled) {
+                labelContainer.style.display = "none";
+              } else {
+                labelText.textContent = statusLabel;
+                labelContainer.style.display = "";
+              }
             }
           }
         });

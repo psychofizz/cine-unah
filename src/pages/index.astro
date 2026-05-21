@@ -179,6 +179,7 @@ function formatHeroDate(dateStr: string) {
 								data-date={dateStr}
 								data-time={time}
 								data-end-time={endTime}
+								data-cancelled={movie.cancelled ? "true" : "false"}
 								aria-label={`${isEvent ? 'Evento' : 'Película'} destacada: ${movie.title}`}
 							>
 								{/* Background poster */}
@@ -218,6 +219,24 @@ function formatHeroDate(dateStr: string) {
 														Función Doble: {movie.isPartOfEvent.title}
 													</div>
 												) : null}
+												{movie.cancelled && (
+													<div class="card-cancelled-badge" style="top: 10px; right: 10px;" aria-label="Cancelado">
+														<svg
+															width="8"
+															height="8"
+															viewBox="0 0 24 24"
+															fill="none"
+															stroke="currentColor"
+															stroke-width="3.5"
+															stroke-linecap="round"
+															aria-hidden="true"
+														>
+															<line x1="18" y1="6" x2="6" y2="18" />
+															<line x1="6" y1="6" x2="18" y2="18" />
+														</svg>
+														Cancelado
+													</div>
+												)}
 											</div>
 										) : (
 											<div style="aspect-ratio:2/3;background:#1a1a1a;" />
@@ -226,6 +245,24 @@ function formatHeroDate(dateStr: string) {
 
 									{/* Info */}
 									<div class="hero-info">
+										{movie.cancelled && (
+											<span class="detail-tag detail-tag--cancelled" style="margin-bottom: var(--sp-2);">
+												<svg
+													width="10"
+													height="10"
+													viewBox="0 0 24 24"
+													fill="none"
+													stroke="currentColor"
+													stroke-width="3.5"
+													stroke-linecap="round"
+													aria-hidden="true"
+												>
+													<line x1="18" y1="6" x2="6" y2="18" />
+													<line x1="6" y1="6" x2="18" y2="18" />
+												</svg>
+												Cancelado
+											</span>
+										)}
 										<span
 											class="hero-label"
 											style="display: none;"
@@ -247,11 +284,11 @@ function formatHeroDate(dateStr: string) {
 											aria-label={`Fecha y hora: ${weekday} ${full} a las ${time}`}
 										>
 											{time && (
-												<span class="hero-time-big">
+												<span class={`hero-time-big${movie.cancelled ? " detail-time-number--cancelled" : ""}`}>
 													{time}
 												</span>
 											)}
-											<div class="hero-date-block">
+											<div class="hero-date-block" style={movie.cancelled ? "opacity: 0.35;" : undefined}>
 												<span class="hero-date-day">
 													{weekday}
 												</span>
