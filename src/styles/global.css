@@ -1361,12 +1361,20 @@ a.location-link:hover {
   height: 100%;
   object-fit: cover;
   transition: transform var(--ease-slow);
-  filter: grayscale(0.6) brightness(0.75);
 }
 
 .archive-card:hover .archive-poster img {
   transform: scale(1.05);
+}
+
+.card.is-past .card-poster img {
+  filter: grayscale(0.6) brightness(0.75);
+  transition: filter var(--ease-slow), transform var(--ease-slow);
+}
+
+.card.is-past:hover .card-poster img {
   filter: none;
+  transform: scale(1.05);
 }
 
 .archive-body {

@@ -193,6 +193,13 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
           minute: "2-digit",
         });
 
+        const addMinutes = (timeStr: string, mins: number) => {
+          const [h, m] = timeStr.split(":").map(Number);
+          const d = new Date();
+          d.setHours(h, m + mins, 0, 0);
+          return `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
+        };
+
         document.querySelectorAll(".card[data-date]").forEach((el) => {
           const card = el as HTMLElement;
           const rawDateStr = card.getAttribute("data-date") || "";
@@ -216,10 +223,7 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
                 const [h, m] = time.split(":");
                 return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${m}`;
               })();
-            const dropTime = (() => {
-              const [h, m] = endTime.split(":");
-              return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${m}`;
-            })();
+            const dropTime = addMinutes(endTime, 15);
 
             if (nowTime > dropTime) status = "drop";
             else if (nowTime >= endTime) status = "past";
@@ -235,6 +239,7 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
           if (badge) {
             if (dateStr < todayStr) {
               badge.style.display = "none";
+              card.classList.add("is-past");
             } else {
               badge.textContent =
                 status === "past"
@@ -243,6 +248,11 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
                     ? "Proyectando"
                     : "Próxima";
               badge.style.display = "";
+              if (status === "past") {
+                card.classList.add("is-past");
+              } else {
+                card.classList.remove("is-past");
+              }
             }
           }
         });
@@ -267,10 +277,7 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
                 const [h, m] = time.split(":");
                 return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${m}`;
               })();
-            const dropTime = (() => {
-              const [h, m] = endTime.split(":");
-              return `${(parseInt(h) + 2).toString().padStart(2, "0")}:${m}`;
-            })();
+            const dropTime = addMinutes(endTime, 15);
 
             if (nowTime > dropTime) drop = true;
             else if (nowTime >= endTime) statusLabel = "Finalizada";
