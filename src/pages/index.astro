@@ -58,18 +58,13 @@ const nowTimeStr = new Date().toLocaleTimeString("en-GB", {
 	minute: "2-digit",
 });
 
-// ── Current week boundaries (Sunday to Saturday) in Tegucigalpa ──
+// ── Upcoming 7 days window (including today) in Tegucigalpa ──
 const [yr, mo, dy] = todayStr.split("-").map(Number);
 const dateObj = new Date(Date.UTC(yr, mo - 1, dy));
-const dayOfWeek = dateObj.getUTCDay(); // 0 is Sunday, 6 is Saturday
 
-const startOfWeek = new Date(dateObj);
-startOfWeek.setUTCDate(dateObj.getUTCDate() - dayOfWeek);
-const startOfWeekStr = startOfWeek.toISOString().slice(0, 10); // YYYY-MM-DD
-
-const endOfWeek = new Date(startOfWeek);
-endOfWeek.setUTCDate(startOfWeek.getUTCDate() + 6);
-const endOfWeekStr = endOfWeek.toISOString().slice(0, 10); // YYYY-MM-DD
+const sevenDaysLater = new Date(dateObj);
+sevenDaysLater.setUTCDate(dateObj.getUTCDate() + 7);
+const sevenDaysLaterStr = sevenDaysLater.toISOString().slice(0, 10); // YYYY-MM-DD
 
 function addMinutes(timeStr: string, mins: number) {
 	const [h, m] = timeStr.split(":").map(Number);
@@ -86,6 +81,7 @@ const activeMovies = allMovies.filter((m: any) => {
 	});
 
 	if (showDateStr < todayStr) return false;
+	if (!m.forceShow && showDateStr > sevenDaysLaterStr) return false;
 	if (showDateStr === todayStr) {
 		const endTime = m.showEndTime || (() => {
 			if (!m.showTime) return "";
@@ -107,6 +103,7 @@ const futureEvents = allEvents.filter((e: any) => {
 	});
 
 	if (eventDateStr < todayStr) return false;
+	if (!e.forceShow && eventDateStr > sevenDaysLaterStr) return false;
 	if (eventDateStr === todayStr) {
 		const endTime = e.eventEndTime || (() => {
 			if (!e.eventTime) return "";
@@ -177,7 +174,7 @@ const heroCarouselItems = [
 	return timeA.localeCompare(timeB);
 });
 
-// ── Grid movies — show ALL active movies of the current week (unless forceShow is true) ──
+// ── Grid movies — show ALL active movies of the upcoming 7 days (unless forceShow is true) ──
 const gridMovies = [...activeMovies]
 	.filter((m: any) => {
 		if (m.forceShow) return true;
@@ -185,7 +182,7 @@ const gridMovies = [...activeMovies]
 		const showDateStr = new Date(m.showDate).toLocaleDateString("en-CA", {
 			timeZone: "America/Tegucigalpa",
 		});
-		return showDateStr >= startOfWeekStr && showDateStr <= endOfWeekStr;
+		return showDateStr >= todayStr && showDateStr <= sevenDaysLaterStr;
 	})
 	.sort((a: any, b: any) => {
 		const dateAStr = new Date(a.showDate).toLocaleDateString("en-CA", {
