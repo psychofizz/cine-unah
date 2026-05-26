@@ -223,6 +223,14 @@ function formatHeroDate(dateStr: string) {
 		}),
 	};
 }
+
+function resolveEvent(isPartOfEvent: any, allEvents: any[]) {
+	if (!isPartOfEvent) return null;
+	if (typeof isPartOfEvent === "object") return isPartOfEvent;
+	
+	const filename = isPartOfEvent.split("/").pop()?.replace(/\.md$/, "") || "";
+	return allEvents.find(e => slugFromFilename(e._sys.filename) === filename) || null;
+}
 ---
 
 <BaseLayout
@@ -245,6 +253,7 @@ function formatHeroDate(dateStr: string) {
 						const slug = slugFromFilename(movie._sys.filename);
 						const href = isEvent ? `/eventos/${slug}` : `/peliculas/${slug}`;
 						const { weekday, full } = formatHeroDate(dateStr);
+						const resolvedEvent = resolveEvent(movie.isPartOfEvent, allEvents);
 
 						return (
 							<section
@@ -277,20 +286,22 @@ function formatHeroDate(dateStr: string) {
 									{/* Thumbnail poster */}
 									<div class="hero-poster-thumb">
 										{movie.poster ? (
-											<div class="thumb-poster-wrapper" style="position: relative; width: 100%; height: 100%;">
-												<Image
-													src={encodeURI(movie.poster)}
-													alt={`Poster: ${movie.title}`}
-													width={400}
-													height={600}
-												/>
+											<div class="thumb-poster-container" style="position: relative; width: 100%; height: 100%;">
+												<div class="thumb-poster-wrapper">
+													<Image
+														src={encodeURI(movie.poster)}
+														alt={`Poster: ${movie.title}`}
+														width={400}
+														height={600}
+													/>
+												</div>
 												{isEvent ? (
 													<div class="event-badge">
 														Evento
 													</div>
-												) : movie.isPartOfEvent ? (
+												) : resolvedEvent ? (
 													<div class="event-badge">
-														Función Doble: {movie.isPartOfEvent.title}
+														Función Doble: {resolvedEvent.title}
 													</div>
 												) : null}
 												{movie.cancelled && (
@@ -313,7 +324,7 @@ function formatHeroDate(dateStr: string) {
 												)}
 											</div>
 										) : (
-											<div style="aspect-ratio:2/3;background:#1a1a1a;" />
+											<div class="thumb-poster-wrapper" style="aspect-ratio:2/3;background:#1a1a1a;" />
 										)}
 									</div>
 
@@ -497,6 +508,7 @@ function formatHeroDate(dateStr: string) {
 								location={movie.location}
 								cancelled={movie.cancelled}
 								category={movie.category}
+								isPartOfEvent={resolveEvent(movie.isPartOfEvent, allEvents)}
 							/>
 						))}
 					</div>
