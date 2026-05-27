@@ -41,6 +41,38 @@ const weekday = new Date(movie.showDate).toLocaleDateString("es-MX", {
     timeZone: "America/Tegucigalpa",
     weekday: "long",
 });
+
+let allLocations: any[] = [];
+try {
+    const ubiRes = await client.queries.ubicacionConnection();
+    allLocations = (ubiRes.data.ubicacionConnection.edges ?? []).map(
+        (e: any) => e.node,
+    );
+} catch (err) {
+    //
+}
+
+if (!allLocations || allLocations.length === 0) {
+    const localUbiGlob = import.meta.glob("../../../../content/ubicaciones/*.md", { eager: true });
+    allLocations = Object.entries(localUbiGlob).map(([filePath, mod]: any) => {
+        const filename = filePath.split("/").pop()?.replace(/\.md$/, "") || "";
+        return {
+            _sys: { filename },
+            id: filename,
+            ...mod.frontmatter,
+        };
+    });
+}
+
+function resolveLocation(loc: any, allLocations: any[]) {
+    if (!loc) return null;
+    if (typeof loc === "object" && loc.title) return loc;
+    
+    const filename = typeof loc === "string" ? loc.split("/").pop()?.replace(/\.md$/, "") || "" : "";
+    return allLocations.find(u => u._sys?.filename === filename || u.id === filename) || null;
+}
+
+const resolvedLocation = resolveLocation(movie.location, allLocations);
 ---
 <!DOCTYPE html>
 <html lang="es">
@@ -249,11 +281,15 @@ const weekday = new Date(movie.showDate).toLocaleDateString("es-MX", {
                     )}
                 </div>
 
-                {movie.location && (
+                {resolvedLocation ? (
                     <div class="location-chip">
-                        📍 {typeof movie.location === 'object' ? (movie.location.title || movie.location.id) : movie.location}
+                        📍 {resolvedLocation.title}
                     </div>
-                )}
+                ) : movie.location ? (
+                    <div class="location-chip">
+                        📍 {typeof movie.location === 'object' ? movie.location.title : movie.location}
+                    </div>
+                ) : null}
             </div>
         </div>
     </div>

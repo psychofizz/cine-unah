@@ -104,6 +104,38 @@ function formatEventDateRange(startDateStr: string, endDateStr?: string) {
 }
 
 const { weekday, fullDate: formattedDate } = formatEventDateRange(event.date, event.endDate);
+
+let allLocations: any[] = [];
+try {
+    const ubiRes = await client.queries.ubicacionConnection();
+    allLocations = (ubiRes.data.ubicacionConnection.edges ?? []).map(
+        (e: any) => e.node,
+    );
+} catch (err) {
+    //
+}
+
+if (!allLocations || allLocations.length === 0) {
+    const localUbiGlob = import.meta.glob("../../../content/ubicaciones/*.md", { eager: true });
+    allLocations = Object.entries(localUbiGlob).map(([filePath, mod]: any) => {
+        const filename = filePath.split("/").pop()?.replace(/\.md$/, "") || "";
+        return {
+            _sys: { filename },
+            id: filename,
+            ...mod.frontmatter,
+        };
+    });
+}
+
+function resolveLocation(loc: any, allLocations: any[]) {
+    if (!loc) return null;
+    if (typeof loc === "object" && loc.title) return loc;
+    
+    const filename = typeof loc === "string" ? loc.split("/").pop()?.replace(/\.md$/, "") || "" : "";
+    return allLocations.find(u => u._sys?.filename === filename || u.id === filename) || null;
+}
+
+const resolvedLocation = resolveLocation(event.location, allLocations);
 ---
 
 <BaseLayout
@@ -196,21 +228,19 @@ const { weekday, fullDate: formattedDate } = formatEventDateRange(event.date, ev
                         </div>
                     </div>
 
-                    {
-                        event.location && (
+                        {resolvedLocation ? (
                             <div class="detail-meta-row">
-                                {typeof event.location === 'object' ? (
-                                    <a href={`/ubicacion/${event.location._sys.filename}`} class="detail-meta-chip location-link">
-                                        📍 {event.location.title || event.location.id}
-                                    </a>
-                                ) : (
-                                    <span class="detail-meta-chip">
-                                        📍 {event.location}
-                                    </span>
-                                )}
+                                <a href={`/ubicacion/${resolvedLocation._sys?.filename || resolvedLocation.id}`} class="detail-meta-chip location-link">
+                                    📍 {resolvedLocation.title}
+                                </a>
                             </div>
-                        )
-                    }
+                        ) : event.location ? (
+                            <div class="detail-meta-row">
+                                <span class="detail-meta-chip">
+                                    📍 {typeof event.location === 'object' ? event.location.title : event.location}
+                                </span>
+                            </div>
+                        ) : null}
 
                     <ShareButtons
                         title={event.title}
