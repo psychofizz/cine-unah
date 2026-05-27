@@ -225,7 +225,7 @@ const weekday = new Date(movie.showDate).toLocaleDateString("es-MX", {
             <header class="story-header">
                 <div class="brand-logo">CINE <span>UNAH</span></div>
                 {movie.isPartOfEvent && (
-                    <div class="eyebrow">⚡ Función Doble</div>
+                    <div class="eyebrow">⚡ {movie.isPartOfEvent.badgeText || "Evento"}</div>
                 )}
             </header>
 

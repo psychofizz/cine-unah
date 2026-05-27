@@ -98,13 +98,16 @@ const activeMovies = allMovies.filter((m: any) => {
 
 const futureEvents = allEvents.filter((e: any) => {
 	if (!e.date) return false;
-	const eventDateStr = new Date(e.date).toLocaleDateString("en-CA", {
+	const eventStartDateStr = new Date(e.date).toLocaleDateString("en-CA", {
+		timeZone: "America/Tegucigalpa",
+	});
+	const eventEndDateStr = new Date(e.endDate || e.date).toLocaleDateString("en-CA", {
 		timeZone: "America/Tegucigalpa",
 	});
 
-	if (eventDateStr < todayStr) return false;
-	if (!e.forceShow && eventDateStr > sevenDaysLaterStr) return false;
-	if (eventDateStr === todayStr) {
+	if (eventEndDateStr < todayStr) return false;
+	if (!e.forceShow && eventStartDateStr > sevenDaysLaterStr) return false;
+	if (eventEndDateStr === todayStr) {
 		const endTime = e.eventEndTime || (() => {
 			if (!e.eventTime) return "";
 			const [h, mStr] = e.eventTime.split(":");
@@ -135,7 +138,7 @@ const isPastMovie = (m: any) => {
 };
 
 const isPastEvent = (e: any) => {
-	const eventDateStr = new Date(e.date).toLocaleDateString("en-CA", {
+	const eventDateStr = new Date(e.endDate || e.date).toLocaleDateString("en-CA", {
 		timeZone: "America/Tegucigalpa",
 	});
 	if (eventDateStr < todayStr) return true;
@@ -297,11 +300,11 @@ function resolveEvent(isPartOfEvent: any, allEvents: any[]) {
 												</div>
 												{isEvent ? (
 													<div class="event-badge">
-														Evento
+														{movie.badgeText || "Evento"}
 													</div>
 												) : resolvedEvent ? (
 													<div class="event-badge">
-														Función Doble: {resolvedEvent.title}
+														{resolvedEvent.badgeText || "Evento"}
 													</div>
 												) : null}
 												{movie.cancelled && (
@@ -560,6 +563,7 @@ function resolveEvent(isPartOfEvent: any, allEvents: any[]) {
 								title={event.title}
 								poster={event.poster}
 								date={event.date}
+								endDate={event.endDate}
 								eventTime={event.eventTime}
 								eventEndTime={event.eventEndTime}
 								location={event.location}

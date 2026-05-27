@@ -88,8 +88,8 @@ import { Image } from "astro:assets";
         }
         {
             isPartOfEvent && (
-                <div class={`card-event-badge${cancelled ? " has-cancelled" : ""}`}>
-                    ⚡ Función Doble
+                <div class="card-event-badge">
+                    {isPartOfEvent.badgeText || "Evento"}
                 </div>
             )
         }

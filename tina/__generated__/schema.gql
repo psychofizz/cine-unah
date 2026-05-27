@@ -208,11 +208,13 @@ type EventoShortFilms {
 
 type Evento implements Node & Document {
   title: String!
+  badgeText: String
   poster: String!
   cancelled: Boolean
   youtubeTrailer: String
   description: String
   date: String!
+  endDate: String
   eventTime: String
   eventEndTime: String
   location: EventoLocation
@@ -235,11 +237,13 @@ input EventoShortFilmsFilter {
 
 input EventoFilter {
   title: StringFilter
+  badgeText: StringFilter
   poster: ImageFilter
   cancelled: BooleanFilter
   youtubeTrailer: StringFilter
   description: StringFilter
   date: DatetimeFilter
+  endDate: DatetimeFilter
   eventTime: StringFilter
   eventEndTime: StringFilter
   location: EventoLocationFilter
@@ -378,11 +382,13 @@ input EventoShortFilmsMutation {
 
 input EventoMutation {
   title: String
+  badgeText: String
   poster: String
   cancelled: Boolean
   youtubeTrailer: String
   description: String
   date: String
+  endDate: String
   eventTime: String
   eventEndTime: String
   location: String

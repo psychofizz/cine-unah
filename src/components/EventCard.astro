@@ -4,21 +4,38 @@ interface Props {
     title: string;
     poster?: string;
     date: string;
+    endDate?: string;
     eventTime?: string;
     eventEndTime?: string;
     location?: any;
     cancelled?: boolean;
 }
 
-const { slug, title, poster, date, eventTime, eventEndTime, location, cancelled } =
+const { slug, title, poster, date, endDate, eventTime, eventEndTime, location, cancelled } =
     Astro.props;
 
-const formattedDate = new Date(date).toLocaleDateString("es-MX", {
-    timeZone: "America/Tegucigalpa",
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-});
+const formattedDate = (() => {
+    const tz = "America/Tegucigalpa";
+    const start = new Date(date);
+    if (!endDate) {
+        return start.toLocaleDateString("es-MX", {
+            timeZone: tz,
+            weekday: "short",
+            day: "numeric",
+            month: "short",
+        });
+    }
+    const end = new Date(endDate);
+    const startDay = start.toLocaleDateString("es-MX", { timeZone: tz, day: "numeric" });
+    const startMonth = start.toLocaleDateString("es-MX", { timeZone: tz, month: "short" });
+    const endDay = end.toLocaleDateString("es-MX", { timeZone: tz, day: "numeric" });
+    const endMonth = end.toLocaleDateString("es-MX", { timeZone: tz, month: "short" });
+    
+    if (startMonth === endMonth) {
+        return `${startDay} al ${endDay} ${startMonth}`;
+    }
+    return `${startDay} ${startMonth} - ${endDay} ${endMonth}`;
+})();
 
 import { Image } from "astro:assets";
 ---

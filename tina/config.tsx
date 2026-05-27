@@ -196,6 +196,12 @@ export default defineConfig({
             required: true,
           },
           {
+            type: "string",
+            name: "badgeText",
+            label: "Etiqueta del Evento (Badge)",
+            description: "Texto corto para el distintivo sobre el póster (ej: 'Ciclo de Cine', 'Muestra', 'Taller'). Si se deja vacío, por defecto mostrará 'Evento'.",
+          },
+          {
             type: "image",
             name: "poster",
             label: "Poster del evento",
@@ -222,8 +228,14 @@ export default defineConfig({
           {
             type: "datetime",
             name: "date",
-            label: "Fecha del evento",
+            label: "Fecha del evento (Inicio)",
             required: true,
+          },
+          {
+            type: "datetime",
+            name: "endDate",
+            label: "Fecha de finalización (opcional)",
+            description: "Si el evento dura más de un día, selecciona la fecha final aquí.",
           },
           {
             type: "string",
