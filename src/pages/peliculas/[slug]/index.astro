@@ -70,6 +70,38 @@ const showDateStr = new Date(movie.showDate).toLocaleDateString("en-CA", {
 const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: tz });
 
 const statusText = movie.category === "reservado" ? "Reservado" : (showDateStr < todayStr ? "Archivo" : "En cartelera");
+
+let allLocations: any[] = [];
+try {
+    const ubiRes = await client.queries.ubicacionConnection();
+    allLocations = (ubiRes.data.ubicacionConnection.edges ?? []).map(
+        (e: any) => e.node,
+    );
+} catch (err) {
+    //
+}
+
+if (!allLocations || allLocations.length === 0) {
+    const localUbiGlob = import.meta.glob("../../../content/ubicaciones/*.md", { eager: true });
+    allLocations = Object.entries(localUbiGlob).map(([filePath, mod]: any) => {
+        const filename = filePath.split("/").pop()?.replace(/\.md$/, "") || "";
+        return {
+            _sys: { filename },
+            id: filename,
+            ...mod.frontmatter,
+        };
+    });
+}
+
+function resolveLocation(loc: any, allLocations: any[]) {
+    if (!loc) return null;
+    if (typeof loc === "object" && loc.title) return loc;
+    
+    const filename = typeof loc === "string" ? loc.split("/").pop()?.replace(/\.md$/, "") || "" : "";
+    return allLocations.find(u => u._sys?.filename === filename || u.id === filename) || null;
+}
+
+const resolvedLocation = resolveLocation(movie.location, allLocations);
 ---
 
 <BaseLayout
@@ -179,17 +211,15 @@ const statusText = movie.category === "reservado" ? "Reservado" : (showDateStr <
                                         {movie.duration} min
                                     </span>
                                 )}
-                                {movie.location && (
-                                    typeof movie.location === 'object' ? (
-                                        <a href={`/ubicacion/${movie.location._sys.filename}`} class="detail-meta-chip location-link">
-                                            📍 {movie.location.title || movie.location.id}
-                                        </a>
-                                    ) : (
-                                        <span class="detail-meta-chip">
-                                            📍 {movie.location}
-                                        </span>
-                                    )
-                                )}
+                                {resolvedLocation ? (
+                                    <a href={`/ubicacion/${resolvedLocation._sys?.filename || resolvedLocation.id}`} class="detail-meta-chip location-link">
+                                        📍 {resolvedLocation.title}
+                                    </a>
+                                ) : movie.location ? (
+                                    <span class="detail-meta-chip">
+                                        📍 {typeof movie.location === 'object' ? movie.location.title : movie.location}
+                                    </span>
+                                ) : null}
                             </div>
                         )
                     }

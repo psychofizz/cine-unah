@@ -4,10 +4,10 @@ import MovieCard from "../components/MovieCard.astro";
 import EventCard from "../components/EventCard.astro";
 import { client } from "../../tina/__generated__/client";
 import { Image } from "astro:assets";
-
 // ── Fetch data ─────────────────────────────────────────
 let allMovies: any[] = [];
 let allEvents: any[] = [];
+let allLocations: any[] = [];
 const now = new Date();
 const todayStr = new Date().toLocaleDateString("en-CA", {
 	timeZone: "America/Tegucigalpa",
@@ -21,6 +21,11 @@ try {
 
 	const evtRes = await client.queries.eventoConnection();
 	allEvents = (evtRes.data.eventoConnection.edges ?? []).map(
+		(e: any) => e.node,
+	);
+
+	const ubiRes = await client.queries.ubicacionConnection();
+	allLocations = (ubiRes.data.ubicacionConnection.edges ?? []).map(
 		(e: any) => e.node,
 	);
 } catch (err) {
@@ -43,6 +48,17 @@ if (!allMovies || allMovies.length === 0) {
 if (!allEvents || allEvents.length === 0) {
 	const localEventsGlob = import.meta.glob("../content/eventos/*.md", { eager: true });
 	allEvents = Object.entries(localEventsGlob).map(([filePath, mod]: any) => {
+		const filename = filePath.split("/").pop()?.replace(/\.md$/, "") || "";
+		return {
+			_sys: { filename },
+			id: filename,
+			...mod.frontmatter,
+		};
+	});
+}
+if (!allLocations || allLocations.length === 0) {
+	const localLocationsGlob = import.meta.glob("../content/ubicaciones/*.md", { eager: true });
+	allLocations = Object.entries(localLocationsGlob).map(([filePath, mod]: any) => {
 		const filename = filePath.split("/").pop()?.replace(/\.md$/, "") || "";
 		return {
 			_sys: { filename },
@@ -234,6 +250,14 @@ function resolveEvent(isPartOfEvent: any, allEvents: any[]) {
 	const filename = isPartOfEvent.split("/").pop()?.replace(/\.md$/, "") || "";
 	return allEvents.find(e => slugFromFilename(e._sys.filename) === filename) || null;
 }
+
+function resolveLocation(loc: any, allLocations: any[]) {
+	if (!loc) return null;
+	if (typeof loc === "object" && loc.title) return loc;
+	
+	const filename = typeof loc === "string" ? loc.split("/").pop()?.replace(/\.md$/, "") || "" : "";
+	return allLocations.find(u => u._sys?.filename === filename || u.id === filename) || null;
+}
 ---
 
 <BaseLayout
@@ -257,6 +281,7 @@ function resolveEvent(isPartOfEvent: any, allEvents: any[]) {
 						const href = isEvent ? `/eventos/${slug}` : `/peliculas/${slug}`;
 						const { weekday, full } = formatHeroDate(dateStr);
 						const resolvedEvent = resolveEvent(movie.isPartOfEvent, allEvents);
+						const resolvedLocation = resolveLocation(movie.location, allLocations);
 
 						return (
 							<section
@@ -394,17 +419,15 @@ function resolveEvent(isPartOfEvent: any, allEvents: any[]) {
 													{movie.country}
 												</span>
 											)}
-											{movie.location && (
-												typeof movie.location === 'object' ? (
-													<a href={`/ubicacion/${movie.location._sys.filename}`} class="hero-chip location-link" style="text-decoration: none; display: inline-flex; align-items: center;">
-														📍 {movie.location.title || movie.location.id}
-													</a>
-												) : (
-													<span class="hero-chip">
-														📍 {movie.location}
-													</span>
-												)
-											)}
+											{resolvedLocation ? (
+												<a href={`/ubicacion/${resolvedLocation._sys?.filename || resolvedLocation.id}`} class="hero-chip location-link" style="text-decoration: none; display: inline-flex; align-items: center;">
+													📍 {resolvedLocation.title}
+												</a>
+											) : movie.location ? (
+												<span class="hero-chip">
+													📍 {typeof movie.location === 'object' ? movie.location.title : movie.location}
+												</span>
+											) : null}
 										</div>
 
 										<div class="hero-actions">
@@ -508,7 +531,7 @@ function resolveEvent(isPartOfEvent: any, allEvents: any[]) {
 								showEndTime={movie.showEndTime}
 								country={movie.country}
 								duration={movie.duration}
-								location={movie.location}
+								location={resolveLocation(movie.location, allLocations)}
 								cancelled={movie.cancelled}
 								category={movie.category}
 								isPartOfEvent={resolveEvent(movie.isPartOfEvent, allEvents)}
@@ -566,7 +589,7 @@ function resolveEvent(isPartOfEvent: any, allEvents: any[]) {
 								endDate={event.endDate}
 								eventTime={event.eventTime}
 								eventEndTime={event.eventEndTime}
-								location={event.location}
+								location={resolveLocation(event.location, allLocations)}
 								cancelled={event.cancelled}
 							/>
 						))}
