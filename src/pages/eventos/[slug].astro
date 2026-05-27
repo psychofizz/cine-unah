@@ -48,17 +48,62 @@ if (!event) {
     return Astro.redirect("/404");
 }
 
-const formattedDate = new Date(event.date).toLocaleDateString("es-MX", {
-    timeZone: "America/Tegucigalpa",
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-});
-const weekday = new Date(event.date).toLocaleDateString("es-MX", {
-    timeZone: "America/Tegucigalpa",
-    weekday: "long",
-});
+function formatEventDateRange(startDateStr: string, endDateStr?: string) {
+    const tz = "America/Tegucigalpa";
+    const start = new Date(startDateStr);
+    
+    const startWk = start.toLocaleDateString("es-MX", { timeZone: tz, weekday: "long" });
+    const startDay = start.toLocaleDateString("es-MX", { timeZone: tz, day: "numeric" });
+    const startMonth = start.toLocaleDateString("es-MX", { timeZone: tz, month: "long" });
+    const startYear = start.toLocaleDateString("es-MX", { timeZone: tz, year: "numeric" });
+
+    if (!endDateStr) {
+        return {
+            weekday: startWk,
+            fullDate: start.toLocaleDateString("es-MX", {
+                timeZone: tz,
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            }),
+            isRange: false,
+            rangeLabel: startWk
+        };
+    }
+
+    const end = new Date(endDateStr);
+    const endWk = end.toLocaleDateString("es-MX", { timeZone: tz, weekday: "long" });
+    const endDay = end.toLocaleDateString("es-MX", { timeZone: tz, day: "numeric" });
+    const endMonth = end.toLocaleDateString("es-MX", { timeZone: tz, month: "long" });
+    const endYear = end.toLocaleDateString("es-MX", { timeZone: tz, year: "numeric" });
+
+    const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+    if (startMonth === endMonth && startYear === endYear) {
+        return {
+            weekday: `${startWk} a ${endWk}`,
+            fullDate: `${cap(startWk)} ${startDay} al ${endWk} ${endDay} de ${cap(startMonth)} de ${startYear}`,
+            isRange: true,
+            rangeLabel: `${startDay} al ${endDay} de ${startMonth}`
+        };
+    } else if (startYear === endYear) {
+        return {
+            weekday: `${startWk} a ${endWk}`,
+            fullDate: `${cap(startWk)} ${startDay} de ${cap(startMonth)} al ${endWk} ${endDay} de ${cap(endMonth)} de ${startYear}`,
+            isRange: true,
+            rangeLabel: `${startDay} de ${startMonth} al ${endDay} de ${endMonth}`
+        };
+    } else {
+        return {
+            weekday: `${startWk} a ${endWk}`,
+            fullDate: `${cap(startWk)} ${startDay} de ${cap(startMonth)} de ${startYear} al ${endWk} ${endDay} de ${cap(endMonth)} de ${endYear}`,
+            isRange: true,
+            rangeLabel: `${startDay} de ${startMonth}, ${startYear} al ${endDay} de ${endMonth}, ${endYear}`
+        };
+    }
+}
+
+const { weekday, fullDate: formattedDate } = formatEventDateRange(event.date, event.endDate);
 ---
 
 <BaseLayout
@@ -147,12 +192,7 @@ const weekday = new Date(event.date).toLocaleDateString("es-MX", {
                         }
                         <div class="detail-time-info">
                             <span class="detail-time-label">Evento</span>
-                            <span class="detail-date-str"
-                                >{weekday}
-                                {
-                                    formattedDate.replace(weekday + ", ", "")
-                                }</span
-                            >
+                            <span class="detail-date-str" style="text-transform: capitalize;">{formattedDate}</span>
                         </div>
                     </div>
 

@@ -537,20 +537,20 @@ p {
 
 .event-badge {
   position: absolute;
-  top: -10px;
-  right: -10px;
-  background: #e62117;
+  top: 12px;
+  left: 12px;
+  background: linear-gradient(135deg, #e62117 0%, #b3100a 100%);
   color: #fff;
   font-family: var(--font-sans);
   font-size: 10px;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 6px 12px;
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(230, 33, 23, 0.4);
+  letter-spacing: 0.08em;
+  padding: 5px 12px;
+  border-radius: 100px;
+  box-shadow: 0 4px 15px rgba(230, 33, 23, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   z-index: 10;
-  transform: rotate(3deg);
   white-space: nowrap;
 }
 
@@ -774,23 +774,19 @@ a.hero-chip:hover {
 .card-event-badge {
   position: absolute;
   top: var(--sp-2);
-  right: var(--sp-2);
-  background: #e62117;
+  left: var(--sp-2);
+  background: linear-gradient(135deg, #e62117 0%, #b3100a 100%);
   color: #fff;
   font-family: var(--font-sans);
   font-size: 9px;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 4px 8px;
-  border-radius: 3px;
-  box-shadow: 0 4px 12px rgba(230, 33, 23, 0.4);
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: 100px;
+  box-shadow: 0 4px 12px rgba(230, 33, 23, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   z-index: 10;
-  transition: top var(--ease);
-}
-
-.card-event-badge.has-cancelled {
-  top: 36px;
 }
 
 .card:hover .card-poster img {

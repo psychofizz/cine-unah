@@ -15,8 +15,9 @@ const nowTimeStr = new Date().toLocaleTimeString("en-GB", {
     minute: "2-digit",
 });
 
-function isPast(dateStr: string, endTime?: string, startTime?: string): boolean {
-    const itemDateStr = new Date(dateStr).toLocaleDateString("en-CA", {
+function isPast(dateStr: string, endTime?: string, startTime?: string, endDateStr?: string): boolean {
+    const activeDateStr = endDateStr || dateStr;
+    const itemDateStr = new Date(activeDateStr).toLocaleDateString("en-CA", {
         timeZone: "America/Tegucigalpa",
     });
     if (itemDateStr < todayStr) return true;
@@ -52,7 +53,7 @@ try {
     const evtRes = await client.queries.eventoConnection();
     pastEvents = (evtRes.data.eventoConnection.edges ?? [])
         .map((e: any) => e.node)
-        .filter((ev: any) => ev.date && !ev.cancelled && isPast(ev.date, ev.eventEndTime, ev.eventTime))
+        .filter((ev: any) => ev.date && !ev.cancelled && isPast(ev.date, ev.eventEndTime, ev.eventTime, ev.endDate))
         .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
 } catch (err) {
     console.warn("TinaCMS eventos not available.", err);
@@ -89,7 +90,7 @@ if (!pastEvents || pastEvents.length === 0) {
             ...mod.frontmatter,
         };
     })
-    .filter((ev: any) => ev.date && !ev.cancelled && isPast(ev.date, ev.eventEndTime, ev.eventTime))
+    .filter((ev: any) => ev.date && !ev.cancelled && isPast(ev.date, ev.eventEndTime, ev.eventTime, ev.endDate))
     .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
@@ -105,6 +106,32 @@ function formatDate(dateStr: string) {
         month: "short",
         year: "numeric",
     });
+}
+
+function formatDateRange(dateStr: string, endDateStr?: string) {
+    const tz = "America/Tegucigalpa";
+    const start = new Date(dateStr);
+    
+    const formattedStart = start.toLocaleDateString("es-MX", {
+        timeZone: tz,
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+    });
+    
+    if (!endDateStr) return formattedStart;
+    
+    const end = new Date(endDateStr);
+    const startDay = start.toLocaleDateString("es-MX", { timeZone: tz, day: "numeric" });
+    const startMonth = start.toLocaleDateString("es-MX", { timeZone: tz, month: "short" });
+    const endDay = end.toLocaleDateString("es-MX", { timeZone: tz, day: "numeric" });
+    const endMonth = end.toLocaleDateString("es-MX", { timeZone: tz, month: "short" });
+    const endYear = end.toLocaleDateString("es-MX", { timeZone: tz, year: "numeric" });
+    
+    if (startMonth === endMonth) {
+        return `${startDay} al ${endDay} ${startMonth}, ${endYear}`;
+    }
+    return `${startDay} ${startMonth} - ${endDay} ${endMonth}, ${endYear}`;
 }
 
 const PAGE_SIZE = 6;
@@ -214,7 +241,7 @@ const PAGE_SIZE = 6;
                                 <a
                                     href={`/eventos/${slugFromFilename(event._sys.filename)}`}
                                     class="archive-card"
-                                    aria-label={`${event.title} — ${formatDate(event.date)}`}
+                                    aria-label={`${event.title} — ${formatDateRange(event.date, event.endDate)}`}
                                     data-index={i}
                                 >
                                     <div class="archive-poster is-loading" data-archive-poster>
@@ -238,7 +265,7 @@ const PAGE_SIZE = 6;
                                     <div class="archive-body">
                                         <p class="archive-title">{event.title}</p>
                                         <p class="archive-date archive-date--event">
-                                            Evento · {formatDate(event.date)}
+                                            Evento · {formatDateRange(event.date, event.endDate)}
                                         </p>
                                     </div>
                                 </a>
