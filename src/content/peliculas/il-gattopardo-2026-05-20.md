@@ -35,7 +35,7 @@ credits: |-
 
   Género
       Drama. Siglo XIX. Histórico.
-showDate: 2026-05-20T17:09:48.507Z
+showDate: 2026-06-03T17:09:48.507Z
 showTime: '09:00'
 showEndTime: '12:00'
 duration: 186
