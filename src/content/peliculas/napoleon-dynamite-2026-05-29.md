@@ -29,7 +29,7 @@ credits: |-
       Fox Searchlight(Productora)
       Paramount Pictures(Productora)
       MTV Films(Productora)
-showDate: 2026-06-06T06:13:36.326Z
+showDate: 2026-05-29T06:13:36.326Z
 showTime: '10:00'
 showEndTime: '12:00'
 duration: 86
