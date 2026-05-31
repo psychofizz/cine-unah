@@ -14,6 +14,9 @@ shortFilms:
   - title: El ayer
     director: Lidia Ruiz
     duration: 8
+    synopsis: |-
+      La música recibe a Olivia al regresar del trabajo, pero esa tarde toda la tranquilidad se acaba cuando escucha un golpe muy fuerte de una de las habitaciones mientras cambia el día del calendario. Corre a auxiliar a su mamá, pero es muy tarde y ese día la pierde. 
+      Ahora Olivia se encuentra atrapada en el duelo, así como el calendario que no avanza, ella ha perdido la esperanza de un futuro sin dolor. Pero un día, la luz supera los muros que la encierran.
   - title: Un gran hombre
     director: Gus Monterrey
     duration: 10
