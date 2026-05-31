@@ -14,6 +14,11 @@ shortFilms:
   - title: El ayer
     director: Lidia Ruiz
     duration: 8
-  - {}
+  - title: Un gran hombre
+    director: Gus Monterrey
+    duration: 10
+    synopsis: |-
+      Presionado por su madre, quesito se somete a un ridículo programa de transformación social, para conseguir pareja.
+      Tras un entrenamiento extremo y con un matrimonio desastroso que dura apenas dos días, quesito busca el amor. lo que comienza como una desesperada búsqueda de afecto, termina como una pieza clave en un plan turbio tramado por terceros.
 ---
 
