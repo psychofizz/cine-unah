@@ -1,6 +1,6 @@
 ---
 title: Cine foro semana de periodismo
-poster: /uploads/IMG-20260530-WA0018.jpg
+poster: /uploads/Periodismo day (2).png
 description: 'Cine Foro organizado por la Carrera de Periodismo, con la presentación de cortometrajes realizados por la Comunidad Cinematográfica Universitaria, en conmemoración de la semana del periodismo por el 55 aniversario de formación de la carrera.'
 date: 2026-06-04T15:34:30.123Z
 eventTime: '13:00'
