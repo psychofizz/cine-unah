@@ -11,5 +11,9 @@ shortFilms:
     director: Emmet Guity
     duration: 3
     synopsis: 'Un rasta que viaja a través del tiempo por medio de la bebida ancestral, Guifity,  decide cambiar hitos y hechos históricos para solucionar los problemas de su país: dos hermanos de armas comparten sus ideas hasta que un día, entre tragos, deciden pelearse al azar.'
+  - title: El ayer
+    director: Lidia Ruiz
+    duration: 8
+  - {}
 ---
 
