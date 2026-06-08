@@ -1,6 +1,7 @@
 ---
 title: Los condenados
 poster: /uploads/IMG-20260607-WA0013.jpg
+synopsis: 'En una sociedad sometida por la ignorancia y el poder de un tirano, un solo hombre se atreve a cuestionar el orden establecido. Su duda desatará un efecto dominó que destruirá las bases de un sistema decadente, empujando a opresores y oprimidos hacia una crisis inevitable donde pensar es el mayor peligro.'
 credits: |-
   Dirección
       Osmar Garcia
@@ -71,6 +72,9 @@ credits: |-
 
   Productor asociado
       Ivanjob Colman
+
+  Género
+      Drama Distopico. Experimental.
 showDate: 2026-06-10T04:32:00.435Z
 showTime: '10:00'
 showEndTime: '12:00'
