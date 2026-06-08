@@ -1,0 +1,14 @@
+---
+title: Ciclo de cine Ecuatoriano
+poster: /uploads/IMG-20260607-WA0007.jpg
+date: 2026-06-10T03:41:35.307Z
+eventTime: '13:30'
+eventEndTime: '16:00'
+location: src/content/ubicaciones/cise.md
+shortFilms:
+  - title: Ciudad a la espalda
+    director: Paola Rodas
+    duration: 76
+    synopsis: María e Isabel reciclan donde no hay sistema de reciclaje. María lucha por derechos laborales básicos. Isabel empuja a sus hijas. Ellas deambulan por las calles con el material de reciclaje a sus espaldas para un futuro mejor para ellas y para la ciudad.
+---
+
