@@ -10,5 +10,9 @@ shortFilms:
     director: Paola Rodas
     duration: 76
     synopsis: María e Isabel reciclan donde no hay sistema de reciclaje. María lucha por derechos laborales básicos. Isabel empuja a sus hijas. Ellas deambulan por las calles con el material de reciclaje a sus espaldas para un futuro mejor para ellas y para la ciudad.
+  - title: 'Neisi: la fuerza de un sueño'
+    director: Daniel Yepes
+    duration: 90
+    synopsis: 'En un tranquilo y humilde pueblo del Ecuador, existe un pequeño y sencillo gimnasio de halterofilia donde entrena la joven Neisi Dajomes junto a sus hermanos, quienes ven en el levantamiento de pesas una forma de vida y el gran incentivo para superarse día a día, para cumplir sus sueños olímpicos.'
 ---
 
