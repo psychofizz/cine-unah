@@ -8,8 +8,18 @@ export default defineConfig({
     output: 'server',
     adapter: vercel({
         imageService: true,
+        imagesConfig: {
+            minimumCacheTTL: 2678400, // 31 days
+            formats: ['image/webp'],
+            sizes: [320, 640, 768, 1024, 1280, 1536],
+        },
     }),
     image: {
-        domains: ['assets.tina.io'],
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'assets.tina.io',
+            },
+        ],
     },
 });

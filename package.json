@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@astrojs/vercel": "^9.0.4",
-    "@tinacms/cli": "^2.1.8",
+    "@tinacms/cli": "2.4.3",
     "@types/fs-extra": "^11.0.4",
     "@vercel/analytics": "^1.6.1",
     "astro": "^5.17.1",
@@ -23,7 +23,7 @@
     "slate": "^0.123.0",
     "slate-dom": "^0.123.0",
     "slate-react": "^0.123.0",
-    "tinacms": "^3.6.0"
+    "tinacms": "3.9.0"
   },
   "devDependencies": {
     "@types/react": "^19.2.14"
