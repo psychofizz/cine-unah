@@ -59,6 +59,7 @@ const formattedDate = new Date(showDate).toLocaleDateString("es-MX", {
 });
 
 import { Image } from "astro:assets";
+import { resolveLocation } from "../utils/resolveLocation";
 ---
 
 <a
@@ -136,13 +137,19 @@ import { Image } from "astro:assets";
         <p class="card-date">{formattedDate}</p>
 
         {
-            (country || duration || location) && (
-                <p class="card-meta">
-                    {[country, duration ? `${duration} min` : null, typeof location === 'object' ? location?.title : location]
-                        .filter(Boolean)
-                        .join(" · ")}
-                </p>
-            )
+            (() => {
+                const loc = resolveLocation(location);
+                const items = [
+                    country,
+                    duration ? `${duration} min` : null,
+                    loc?.title
+                ].filter(Boolean);
+                return items.length > 0 ? (
+                    <p class="card-meta">
+                        {items.join(" · ")}
+                    </p>
+                ) : null;
+            })()
         }
     </div>
 </a>

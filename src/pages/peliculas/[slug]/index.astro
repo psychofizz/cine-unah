@@ -3,6 +3,7 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import ShareButtons from "../../../components/ShareButtons.astro";
 import { client } from "../../../../tina/__generated__/client";
 import { Image } from "astro:assets";
+import { resolveLocation } from "../../../utils/resolveLocation";
 
 const { slug } = Astro.params;
 
@@ -179,17 +180,14 @@ const statusText = movie.category === "reservado" ? "Reservado" : (showDateStr <
                                         {movie.duration} min
                                     </span>
                                 )}
-                                {movie.location && (
-                                    typeof movie.location === 'object' ? (
-                                        <a href={`/ubicacion/${movie.location._sys.filename}`} class="detail-meta-chip location-link">
-                                            📍 {movie.location.title || movie.location.id}
+                                {(() => {
+                                    const loc = resolveLocation(movie.location);
+                                    return loc ? (
+                                        <a href={`/ubicacion/${loc.slug}`} class="detail-meta-chip location-link">
+                                            📍 {loc.title}
                                         </a>
-                                    ) : (
-                                        <span class="detail-meta-chip">
-                                            📍 {movie.location}
-                                        </span>
-                                    )
-                                )}
+                                    ) : null;
+                                })()}
                             </div>
                         )
                     }

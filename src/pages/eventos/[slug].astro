@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
 import { client } from "../../../tina/__generated__/client";
 import { Image } from "astro:assets";
+import { resolveLocation } from "../../utils/resolveLocation";
 
 const { slug } = Astro.params;
 
@@ -157,19 +158,16 @@ const weekday = new Date(event.date).toLocaleDateString("es-MX", {
                     </div>
 
                     {
-                        event.location && (
-                            <div class="detail-meta-row">
-                                {typeof event.location === 'object' ? (
-                                    <a href={`/ubicacion/${event.location._sys.filename}`} class="detail-meta-chip location-link">
-                                        📍 {event.location.title || event.location.id}
+                        (() => {
+                            const loc = resolveLocation(event.location);
+                            return loc ? (
+                                <div class="detail-meta-row">
+                                    <a href={`/ubicacion/${loc.slug}`} class="detail-meta-chip location-link">
+                                        📍 {loc.title}
                                     </a>
-                                ) : (
-                                    <span class="detail-meta-chip">
-                                        📍 {event.location}
-                                    </span>
-                                )}
-                            </div>
-                        )
+                                </div>
+                            ) : null;
+                        })()
                     }
 
                     <ShareButtons

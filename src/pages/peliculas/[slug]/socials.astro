@@ -1,6 +1,7 @@
 ---
 import { client } from "../../../../tina/__generated__/client";
 import { Image } from "astro:assets";
+import { resolveLocation } from "../../../utils/resolveLocation";
 
 const { slug } = Astro.params;
 
@@ -249,11 +250,14 @@ const weekday = new Date(movie.showDate).toLocaleDateString("es-MX", {
                     )}
                 </div>
 
-                {movie.location && (
-                    <div class="location-chip">
-                        📍 {typeof movie.location === 'object' ? (movie.location.title || movie.location.id) : movie.location}
-                    </div>
-                )}
+                {(() => {
+                    const loc = resolveLocation(movie.location);
+                    return loc ? (
+                        <div class="location-chip">
+                            📍 {loc.title}
+                        </div>
+                    ) : null;
+                })()}
             </div>
         </div>
     </div>
