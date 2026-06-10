@@ -1,6 +1,7 @@
 ---
 import { client } from "../../../../tina/__generated__/client";
 import { Image } from "astro:assets";
+import { resolveLocation } from "../../../utils/resolveLocation";
 
 const { slug } = Astro.params;
 
@@ -25,6 +26,23 @@ if (!movie) {
         if (match) movie = match.node;
     } catch (e) {
         // Fallback also failed
+    }
+}
+
+if (!movie) {
+    try {
+        const localMoviesGlob = import.meta.glob("../../../content/peliculas/*.md", { eager: true });
+        const matchKey = Object.keys(localMoviesGlob).find(k => k.endsWith(`/${slug}.md`));
+        if (matchKey) {
+            const mod: any = localMoviesGlob[matchKey];
+            movie = {
+                _sys: { filename: slug },
+                id: slug,
+                ...mod.frontmatter,
+            };
+        }
+    } catch (e) {
+        // Local fallback failed
     }
 }
 
@@ -249,11 +267,14 @@ const weekday = new Date(movie.showDate).toLocaleDateString("es-MX", {
                     )}
                 </div>
 
-                {movie.location && (
-                    <div class="location-chip">
-                        📍 {typeof movie.location === 'object' ? (movie.location.title || movie.location.id) : movie.location}
-                    </div>
-                )}
+                {(() => {
+                    const loc = resolveLocation(movie.location);
+                    return loc ? (
+                        <div class="location-chip">
+                            📍 {loc.title}
+                        </div>
+                    ) : null;
+                })()}
             </div>
         </div>
     </div>

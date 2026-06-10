@@ -30,6 +30,23 @@ if (!loc) {
 }
 
 if (!loc) {
+    try {
+        const localUbicacionesGlob = import.meta.glob("../../content/ubicaciones/*.md", { eager: true });
+        const matchKey = Object.keys(localUbicacionesGlob).find(k => k.endsWith(`/${slug}.md`));
+        if (matchKey) {
+            const mod: any = localUbicacionesGlob[matchKey];
+            loc = {
+                _sys: { filename: slug },
+                id: slug,
+                ...mod.frontmatter,
+            };
+        }
+    } catch (e) {
+        // Fallback also failed
+    }
+}
+
+if (!loc) {
     return Astro.redirect('/404');
 }
 
