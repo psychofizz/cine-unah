@@ -6,14 +6,7 @@ import vercel from '@astrojs/vercel';
 export default defineConfig({
     site: 'https://taquilla.cine',
     output: 'server',
-    adapter: vercel({
-        imageService: true,
-        imagesConfig: {
-            minimumCacheTTL: 2678400, // 31 days
-            formats: ['image/webp'],
-            sizes: [320, 640, 768, 1024, 1280, 1536],
-        },
-    }),
+    adapter: vercel(),
     image: {
         remotePatterns: [
             {
