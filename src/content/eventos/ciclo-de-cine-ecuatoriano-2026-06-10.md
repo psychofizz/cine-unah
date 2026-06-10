@@ -1,7 +1,8 @@
 ---
 title: Ciclo de cine Ecuatoriano
 poster: /uploads/IMG-20260607-WA0007.jpg
-date: 2026-06-11T03:41:35.307Z
+date: 2026-06-10T03:41:35.307Z
+endDate: 2026-06-11T03:06:39.065Z
 eventTime: '13:30'
 eventEndTime: '16:00'
 location: src/content/ubicaciones/cise.md
