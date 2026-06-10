@@ -4,6 +4,7 @@ import MovieCard from "../components/MovieCard.astro";
 import EventCard from "../components/EventCard.astro";
 import { client } from "../../tina/__generated__/client";
 import { Image } from "astro:assets";
+import { resolveLocation } from "../utils/resolveLocation";
 
 // ── Fetch data ─────────────────────────────────────────
 let allMovies: any[] = [];
@@ -380,17 +381,14 @@ function formatHeroDate(dateStr: string) {
 													{movie.country}
 												</span>
 											)}
-											{movie.location && (
-												typeof movie.location === 'object' ? (
-													<a href={`/ubicacion/${movie.location._sys.filename}`} class="hero-chip location-link" style="text-decoration: none; display: inline-flex; align-items: center;">
-														📍 {movie.location.title || movie.location.id}
+											{(() => {
+												const loc = resolveLocation(movie.location);
+												return loc ? (
+													<a href={`/ubicacion/${loc.slug}`} class="hero-chip location-link" style="text-decoration: none; display: inline-flex; align-items: center;">
+														📍 {loc.title}
 													</a>
-												) : (
-													<span class="hero-chip">
-														📍 {movie.location}
-													</span>
-												)
-											)}
+												) : null;
+											})()}
 										</div>
 
 										<div class="hero-actions">

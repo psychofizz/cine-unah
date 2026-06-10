@@ -1,8 +1,8 @@
 import React from "react";
-import { defineConfig } from "tinacms";
+import { defineConfig, wrapFieldsWithMeta } from "tinacms";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const TimePickerField = ({ input }: any) => {
+const TimePickerField = wrapFieldsWithMeta(({ input }: any) => {
   return React.createElement("input", {
     type: "time",
     id: input.name,
@@ -21,13 +21,21 @@ const TimePickerField = ({ input }: any) => {
       cursor: "pointer",
     },
   });
-};
+});
 
 
 export default defineConfig({
   branch: process.env.TINA_BRANCH || process.env.VERCEL_GIT_COMMIT_REF || process.env.HEAD || "main",
   clientId: process.env.TINA_CLIENT_ID ?? "",
   token: process.env.TINA_TOKEN ?? "",
+  search: {
+    tina: {
+      indexerToken: process.env.TINA_SEARCH_TOKEN ?? "",
+      stopwordLanguages: ["spa"],
+    },
+    indexBatchSize: 100,
+    maxSearchIndexFieldLength: 100,
+  },
 
   build: {
     outputFolder: "admin",

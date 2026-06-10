@@ -1,7 +1,7 @@
 // tina/config.tsx
 import React from "react";
-import { defineConfig } from "tinacms";
-var TimePickerField = ({ input }) => {
+import { defineConfig, wrapFieldsWithMeta } from "tinacms";
+var TimePickerField = wrapFieldsWithMeta(({ input }) => {
   return React.createElement("input", {
     type: "time",
     id: input.name,
@@ -19,11 +19,19 @@ var TimePickerField = ({ input }) => {
       cursor: "pointer"
     }
   });
-};
+});
 var config_default = defineConfig({
   branch: process.env.TINA_BRANCH || process.env.VERCEL_GIT_COMMIT_REF || process.env.HEAD || "main",
   clientId: process.env.TINA_CLIENT_ID ?? "",
   token: process.env.TINA_TOKEN ?? "",
+  search: {
+    tina: {
+      indexerToken: process.env.TINA_SEARCH_TOKEN ?? "",
+      stopwordLanguages: ["spa"]
+    },
+    indexBatchSize: 100,
+    maxSearchIndexFieldLength: 100
+  },
   build: {
     outputFolder: "admin",
     publicFolder: "public"
