@@ -188,6 +188,12 @@ var config_default = defineConfig({
             required: true
           },
           {
+            type: "string",
+            name: "badgeText",
+            label: "Etiqueta del Evento (Badge)",
+            description: "Texto corto para el distintivo sobre el p\xF3ster (ej: 'Ciclo de Cine', 'Muestra', 'Taller'). Si se deja vac\xEDo, por defecto mostrar\xE1 'Evento'."
+          },
+          {
             type: "image",
             name: "poster",
             label: "Poster del evento",
@@ -214,8 +220,14 @@ var config_default = defineConfig({
           {
             type: "datetime",
             name: "date",
-            label: "Fecha del evento",
+            label: "Fecha del evento (Inicio)",
             required: true
+          },
+          {
+            type: "datetime",
+            name: "endDate",
+            label: "Fecha de finalizaci\xF3n (opcional)",
+            description: "Si el evento dura m\xE1s de un d\xEDa, selecciona la fecha final aqu\xED."
           },
           {
             type: "string",

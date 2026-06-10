@@ -40,11 +40,13 @@ fragment PeliculaParts on Pelicula {
     ... on Evento {
       __typename
       title
+      badgeText
       poster
       cancelled
       youtubeTrailer
       description
       date
+      endDate
       eventTime
       eventEndTime
       location {
@@ -95,11 +97,13 @@ fragment PeliculaParts on Pelicula {
 fragment EventoParts on Evento {
   __typename
   title
+  badgeText
   poster
   cancelled
   youtubeTrailer
   description
   date
+  endDate
   eventTime
   eventEndTime
   location {
