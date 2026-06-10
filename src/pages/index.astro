@@ -5,6 +5,7 @@ import EventCard from "../components/EventCard.astro";
 import { client } from "../../tina/__generated__/client";
 import { Image } from "astro:assets";
 import { resolveLocation } from "../utils/resolveLocation";
+import { formatEventDates } from "../utils/dateFormatter";
 
 // ── Fetch data ─────────────────────────────────────────
 let allMovies: any[] = [];
@@ -99,7 +100,7 @@ const activeMovies = allMovies.filter((m: any) => {
 
 const futureEvents = allEvents.filter((e: any) => {
 	if (!e.date) return false;
-	const eventDateStr = new Date(e.date).toLocaleDateString("en-CA", {
+	const eventDateStr = new Date(e.endDate || e.date).toLocaleDateString("en-CA", {
 		timeZone: "America/Tegucigalpa",
 	});
 
@@ -136,7 +137,7 @@ const isPastMovie = (m: any) => {
 };
 
 const isPastEvent = (e: any) => {
-	const eventDateStr = new Date(e.date).toLocaleDateString("en-CA", {
+	const eventDateStr = new Date(e.endDate || e.date).toLocaleDateString("en-CA", {
 		timeZone: "America/Tegucigalpa",
 	});
 	if (eventDateStr < todayStr) return true;
@@ -245,7 +246,18 @@ function formatHeroDate(dateStr: string) {
 						const endTime = movie.showEndTime || movie.eventEndTime || "";
 						const slug = slugFromFilename(movie._sys.filename);
 						const href = isEvent ? `/eventos/${slug}` : `/peliculas/${slug}`;
-						const { weekday, full } = formatHeroDate(dateStr);
+						
+						let weekdayVal = "";
+						let fullVal = "";
+						if (isEvent) {
+							const dateRange = formatEventDates(movie.date, movie.endDate);
+							weekdayVal = dateRange.weekday;
+							fullVal = dateRange.fullDate;
+						} else {
+							const hDate = formatHeroDate(dateStr);
+							weekdayVal = hDate.weekday.charAt(0).toUpperCase() + hDate.weekday.slice(1);
+							fullVal = hDate.full;
+						}
 
 						return (
 							<section
@@ -352,7 +364,7 @@ function formatHeroDate(dateStr: string) {
 										{/* BIG TIME */}
 										<div
 											class="hero-datetime"
-											aria-label={`Fecha y hora: ${weekday} ${full} a las ${time}`}
+											aria-label={`Fecha y hora: ${weekdayVal} ${fullVal} a las ${time}`}
 										>
 											{time && (
 												<span class={`hero-time-big${movie.cancelled ? " detail-time-number--cancelled" : ""}`}>
@@ -361,10 +373,10 @@ function formatHeroDate(dateStr: string) {
 											)}
 											<div class="hero-date-block" style={movie.cancelled ? "opacity: 0.35;" : undefined}>
 												<span class="hero-date-day">
-													{weekday}
+													{weekdayVal}
 												</span>
 												<span class="hero-date-full">
-													{full}
+													{fullVal}
 												</span>
 											</div>
 										</div>
@@ -546,6 +558,7 @@ function formatHeroDate(dateStr: string) {
 								title={event.title}
 								poster={event.poster}
 								date={event.date}
+								endDate={event.endDate}
 								eventTime={event.eventTime}
 								eventEndTime={event.eventEndTime}
 								location={event.location}

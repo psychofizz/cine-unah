@@ -4,21 +4,18 @@ interface Props {
     title: string;
     poster?: string;
     date: string;
+    endDate?: string;
     eventTime?: string;
     eventEndTime?: string;
     location?: any;
     cancelled?: boolean;
 }
 
-const { slug, title, poster, date, eventTime, eventEndTime, location, cancelled } =
+const { slug, title, poster, date, endDate, eventTime, eventEndTime, location, cancelled } =
     Astro.props;
 
-const formattedDate = new Date(date).toLocaleDateString("es-MX", {
-    timeZone: "America/Tegucigalpa",
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-});
+import { formatEventDates } from "../utils/dateFormatter";
+const { cardDate: formattedDate } = formatEventDates(date, endDate);
 
 import { Image } from "astro:assets";
 import { resolveLocation } from "../utils/resolveLocation";

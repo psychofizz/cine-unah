@@ -49,17 +49,9 @@ if (!event) {
     return Astro.redirect("/404");
 }
 
-const formattedDate = new Date(event.date).toLocaleDateString("es-MX", {
-    timeZone: "America/Tegucigalpa",
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-});
-const weekday = new Date(event.date).toLocaleDateString("es-MX", {
-    timeZone: "America/Tegucigalpa",
-    weekday: "long",
-});
+import { formatEventDates } from "../../utils/dateFormatter";
+
+const { weekday, fullDate: formattedDate } = formatEventDates(event.date, event.endDate);
 ---
 
 <BaseLayout
@@ -148,12 +140,9 @@ const weekday = new Date(event.date).toLocaleDateString("es-MX", {
                         }
                         <div class="detail-time-info">
                             <span class="detail-time-label">Evento</span>
-                            <span class="detail-date-str"
-                                >{weekday}
-                                {
-                                    formattedDate.replace(weekday + ", ", "")
-                                }</span
-                            >
+                            <span class="detail-date-str">
+                                {weekday} {formattedDate}
+                            </span>
                         </div>
                     </div>
 
