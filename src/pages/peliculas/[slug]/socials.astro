@@ -30,6 +30,23 @@ if (!movie) {
 }
 
 if (!movie) {
+    try {
+        const localMoviesGlob = import.meta.glob("../../../content/peliculas/*.md", { eager: true });
+        const matchKey = Object.keys(localMoviesGlob).find(k => k.endsWith(`/${slug}.md`));
+        if (matchKey) {
+            const mod: any = localMoviesGlob[matchKey];
+            movie = {
+                _sys: { filename: slug },
+                id: slug,
+                ...mod.frontmatter,
+            };
+        }
+    } catch (e) {
+        // Local fallback failed
+    }
+}
+
+if (!movie) {
     return Astro.redirect("/404");
 }
 
