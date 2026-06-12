@@ -38,8 +38,8 @@ showDate: 2026-06-19T06:03:52.279Z
 showTime: '10:00'
 showEndTime: '12:00'
 duration: 87
-country: 'Estados Unidos, 2004'
-location: ''
+country: 'Estados Unidos, 2009'
+location: src/content/ubicaciones/cise.md
 isPartOfEvent: ''
 ---
 
