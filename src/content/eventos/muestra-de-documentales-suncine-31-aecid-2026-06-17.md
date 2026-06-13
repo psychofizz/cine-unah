@@ -25,6 +25,9 @@ shortFilms:
     director: Nagore Eceiza Mujika
     duration: 26
     synopsis: 'Desde hace más de 50 años, empresas petroleras nacionales e internacionales extraen petróleo de la Amazonía con mayor biodiversidad del planeta, amenazando la vida de comunidades indígenas con la complicidad del Gobierno ecuatoriano. Son, las denominadas: Zonas de sacrificio.'
-  - {}
+  - title: Campamento tortuguero al rescate
+    director: Ivonne Delgadillo Ceja
+    duration: 30
+    synopsis: 'La tortuga marina está en peligro de extinción. Seis de las siete especies que existen en el mundo están a punto de desaparecer. Más que nunca, los Campamentos de Tortugas son claves para su supervivencia. Una tortuga levanta su voz por primera vez, esperando que sus palabras resuenen en todo el planeta y salven a su familia.'
 ---
 
