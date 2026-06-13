@@ -26,6 +26,6 @@ showEndTime: '16:00'
 duration: 80
 country: 'Nicaragua, 2023'
 location: src/content/ubicaciones/cise.md
-isPartOfEvent: ''
+isPartOfEvent: src/content/eventos/muestra-de-documentales-suncine-31-aecid-2026-06-17.md
 ---
 
