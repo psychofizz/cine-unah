@@ -29,5 +29,10 @@ shortFilms:
     director: Ivonne Delgadillo Ceja
     duration: 30
     synopsis: 'La tortuga marina está en peligro de extinción. Seis de las siete especies que existen en el mundo están a punto de desaparecer. Más que nunca, los Campamentos de Tortugas son claves para su supervivencia. Una tortuga levanta su voz por primera vez, esperando que sus palabras resuenen en todo el planeta y salven a su familia.'
+  - title: Guardianas del lago
+    director: José Morales Ferruli
+    duration: 23
+    synopsis: 'El lago Atitlán, una maravilla natural, está contaminado con toneladas de plástico. Mujeres indígenas aj tz''utujil luchan por salvar el lago, que enfrenta una grave contaminación. Lograron una prohibición local de plásticos de un solo uso y ahora exigen que las empresas asuman la responsabilidad de sus residuos. Conocidas como las “Guardianas del Lago", estás mujeres lideran la lucha contra la destrucción ambiental.'
+  - {}
 ---
 
