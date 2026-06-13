@@ -33,6 +33,9 @@ shortFilms:
     director: José Morales Ferruli
     duration: 23
     synopsis: 'El lago Atitlán, una maravilla natural, está contaminado con toneladas de plástico. Mujeres indígenas aj tz''utujil luchan por salvar el lago, que enfrenta una grave contaminación. Lograron una prohibición local de plásticos de un solo uso y ahora exigen que las empresas asuman la responsabilidad de sus residuos. Conocidas como las “Guardianas del Lago", estás mujeres lideran la lucha contra la destrucción ambiental.'
-  - {}
+  - title: Zona cero
+    director: David Gaspar
+    duration: 28
+    synopsis: '“Zona Cero" nos invita a tomar conciencia del problema de la contaminación en los océanos y el conflicto que genera dentro de nosotros. A través de una perspectiva irónica y mordaz, intenta hacernos reflexionar sobre nuestra responsabilidad en este aspecto, con el objetivo de  ayudarnos a mejorar nuestro compromiso con los océanos mediante pequeños gestos.'
 ---
 
