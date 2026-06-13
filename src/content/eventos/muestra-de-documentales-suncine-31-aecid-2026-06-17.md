@@ -17,5 +17,11 @@ shortFilms:
     director: Leire Egaña
     duration: 77
     synopsis: 'En tiempos de crisis ecológica global, Costa Rica parece ser un oasis por su rica biodiversidad. Nacho traza una ruta para conocer proyectos agroecológicos, descubriendo lo que las comunidades indígenas llaman “el buen vivir". ¿Podría ser la solución?'
+  - title: El río renacido
+    director: David Perpiñán
+    duration: 60
+    synopsis: 'Durante décadas el río besòs fue una cloaca a cielo abierto. Con la construcción de depuradoras en los años noventa, la calidad del agua mejoró y volvió la vida. Dolores Vinyoles estudia la recuperación de peces como la anguila, mientras Paco Torres estudia aves. Xavi Larruy ha encontrado nutrias, pero el río sigue siendo delicado. Tomás Carrión trabaja en restaurar la biodiversidad en Besòs.'
+  - {}
+  - {}
 ---
 
