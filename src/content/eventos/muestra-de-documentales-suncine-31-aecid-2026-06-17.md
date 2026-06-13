@@ -21,7 +21,10 @@ shortFilms:
     director: David Perpiñán
     duration: 60
     synopsis: 'Durante décadas el río besòs fue una cloaca a cielo abierto. Con la construcción de depuradoras en los años noventa, la calidad del agua mejoró y volvió la vida. Dolores Vinyoles estudia la recuperación de peces como la anguila, mientras Paco Torres estudia aves. Xavi Larruy ha encontrado nutrias, pero el río sigue siendo delicado. Tomás Carrión trabaja en restaurar la biodiversidad en Besòs.'
-  - {}
+  - title: Zona wao
+    director: Nagore Eceiza Mujika
+    duration: 26
+    synopsis: 'Desde hace más de 50 años, empresas petroleras nacionales e internacionales extraen petróleo de la Amazonía con mayor biodiversidad del planeta, amenazando la vida de comunidades indígenas con la complicidad del Gobierno ecuatoriano. Son, las denominadas: Zonas de sacrificio.'
   - {}
 ---
 
