@@ -13,5 +13,9 @@ shortFilms:
     director: Brad Allgood y Camilo de Castro
     duration: 80
     synopsis: 'Una crisis emergente en una de las últimas selvas tropicales que quedan en Centroamérica enciende una misión heroica en PATRULLA. Cuando los ganaderos ilegales diezman grandes franjas de selva tropical, los guardabosques indígenas unen fuerzas con un conservacionista estadounidense y periodistas encubiertos para exponer el oscuro mundo de la carne de res.'
+  - title: La ruta de los conquistadores
+    director: Leire Egaña
+    duration: 77
+    synopsis: 'En tiempos de crisis ecológica global, Costa Rica parece ser un oasis por su rica biodiversidad. Nacho traza una ruta para conocer proyectos agroecológicos, descubriendo lo que las comunidades indígenas llaman “el buen vivir". ¿Podría ser la solución?'
 ---
 
