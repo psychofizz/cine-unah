@@ -16,7 +16,15 @@ const todayStr = new Date().toLocaleDateString("en-CA", {
 });
 
 try {
-	const pelRes = await client.queries.peliculaConnection({ first: 200 });
+	const pelRes = await client.queries.peliculaConnection({
+		filter: {
+			showDate: {
+				after: `${todayStr}T00:00:00.000Z`,
+			},
+		},
+		sort: "showDate",
+		first: 100,
+	});
 	allMovies = (pelRes.data.peliculaConnection.edges ?? []).map(
 		(e: any) => e.node,
 	);
