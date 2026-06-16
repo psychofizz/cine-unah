@@ -17,9 +17,8 @@ const nowTimeStr = new Date().toLocaleTimeString("en-GB", {
 });
 
 function isPast(dateStr: string, endTime?: string, startTime?: string): boolean {
-    const itemDateStr = new Date(dateStr).toLocaleDateString("en-CA", {
-        timeZone: "America/Tegucigalpa",
-    });
+    // Extract YYYY-MM-DD directly to avoid UTC->local timezone shift
+    const itemDateStr = dateStr.split("T")[0];
     if (itemDateStr < todayStr) return true;
     if (itemDateStr === todayStr) {
         const t = endTime || startTime;
@@ -100,8 +99,10 @@ function slugFromFilename(filename: string) {
 }
 
 function formatDate(dateStr: string) {
-    return new Date(dateStr).toLocaleDateString("es-MX", {
-        timeZone: "America/Tegucigalpa",
+    // Parse at UTC midnight to avoid timezone shift
+    const d = new Date(dateStr.split("T")[0] + "T00:00:00Z");
+    return d.toLocaleDateString("es-MX", {
+        timeZone: "UTC",
         day: "numeric",
         month: "short",
         year: "numeric",

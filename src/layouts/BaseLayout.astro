@@ -204,10 +204,8 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
           const card = el as HTMLElement;
           const rawDateStr = card.getAttribute("data-date") || "";
 
-          // Re-format the raw ISO string to match "en-CA" format so comparison works
-          const dateStr = rawDateStr
-            ? new Date(rawDateStr).toLocaleDateString("en-CA", { timeZone: tz })
-            : "";
+          // Extract YYYY-MM-DD directly from ISO string to avoid timezone shift
+          const dateStr = rawDateStr ? rawDateStr.split("T")[0] : "";
 
           const time = card.getAttribute("data-time");
           const endTimeRaw = card.getAttribute("data-end-time");
@@ -260,9 +258,7 @@ const pageTitle = title === "Cine UNAH" ? title : `${title} — Cine UNAH`;
         document.querySelectorAll(".hero-slide[data-date]").forEach((el) => {
           const slide = el as HTMLElement;
           const rawDateStr = slide.getAttribute("data-date") || "";
-          const dateStr = rawDateStr
-            ? new Date(rawDateStr).toLocaleDateString("en-CA", { timeZone: tz })
-            : "";
+          const dateStr = rawDateStr ? rawDateStr.split("T")[0] : "";
           const time = slide.getAttribute("data-time");
           const endTimeRaw = slide.getAttribute("data-end-time");
           const cancelled = slide.getAttribute("data-cancelled") === "true";

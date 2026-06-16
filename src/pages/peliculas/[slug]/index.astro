@@ -52,22 +52,24 @@ if (!movie) {
     return Astro.redirect("/404");
 }
 
-const formattedDate = new Date(movie.showDate).toLocaleDateString("es-MX", {
-    timeZone: "America/Tegucigalpa",
+// Parse at UTC midnight using the YYYY-MM-DD part to avoid timezone shift
+const showDateCalendar = movie.showDate.split("T")[0];
+const showDateObj = new Date(showDateCalendar + "T00:00:00Z");
+
+const formattedDate = showDateObj.toLocaleDateString("es-MX", {
+    timeZone: "UTC",
     weekday: "long",
     day: "numeric",
     month: "long",
     year: "numeric",
 });
-const weekday = new Date(movie.showDate).toLocaleDateString("es-MX", {
-    timeZone: "America/Tegucigalpa",
+const weekday = showDateObj.toLocaleDateString("es-MX", {
+    timeZone: "UTC",
     weekday: "long",
 });
 
 const tz = "America/Tegucigalpa";
-const showDateStr = new Date(movie.showDate).toLocaleDateString("en-CA", {
-    timeZone: tz,
-});
+const showDateStr = showDateCalendar; // already YYYY-MM-DD
 const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: tz });
 
 const statusText = movie.category === "reservado" ? "Reservado" : (showDateStr < todayStr ? "Archivo" : "En cartelera");
