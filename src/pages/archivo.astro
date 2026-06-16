@@ -32,7 +32,7 @@ function isPast(dateStr: string, endTime?: string, startTime?: string): boolean 
 }
 
 try {
-    const pelRes = await client.queries.peliculaConnection();
+    const pelRes = await client.queries.peliculaConnection({ first: 200 });
     const allPastMovies = (pelRes.data.peliculaConnection.edges ?? [])
         .map((e: any) => e.node)
         .filter((m: any) => m.showDate && !m.cancelled && isPast(m.showDate, m.showEndTime, m.showTime));

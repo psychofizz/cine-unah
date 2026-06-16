@@ -4,6 +4,7 @@ import ShareButtons from "../../components/ShareButtons.astro";
 import { client } from "../../../tina/__generated__/client";
 import { Image } from "astro:assets";
 import { resolveLocation } from "../../utils/resolveLocation";
+import { formatEventDates } from "../../utils/dateFormatter";
 
 const { slug } = Astro.params;
 
@@ -49,7 +50,6 @@ if (!event) {
     return Astro.redirect("/404");
 }
 
-import { formatEventDates } from "../../utils/dateFormatter";
 
 const { weekday, fullDate: formattedDate } = formatEventDates(event.date, event.endDate);
 ---

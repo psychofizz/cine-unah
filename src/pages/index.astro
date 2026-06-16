@@ -16,7 +16,7 @@ const todayStr = new Date().toLocaleDateString("en-CA", {
 });
 
 try {
-	const pelRes = await client.queries.peliculaConnection();
+	const pelRes = await client.queries.peliculaConnection({ first: 200 });
 	allMovies = (pelRes.data.peliculaConnection.edges ?? []).map(
 		(e: any) => e.node,
 	);
