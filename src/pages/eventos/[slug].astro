@@ -4,6 +4,7 @@ import ShareButtons from "../../components/ShareButtons.astro";
 import { client } from "../../../tina/__generated__/client";
 import { Image } from "astro:assets";
 import { resolveLocation } from "../../utils/resolveLocation";
+import { formatEventDates } from "../../utils/dateFormatter";
 
 const { slug } = Astro.params;
 
@@ -49,17 +50,8 @@ if (!event) {
     return Astro.redirect("/404");
 }
 
-const formattedDate = new Date(event.date).toLocaleDateString("es-MX", {
-    timeZone: "America/Tegucigalpa",
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-});
-const weekday = new Date(event.date).toLocaleDateString("es-MX", {
-    timeZone: "America/Tegucigalpa",
-    weekday: "long",
-});
+
+const { weekday, fullDate: formattedDate } = formatEventDates(event.date, event.endDate);
 ---
 
 <BaseLayout
@@ -148,12 +140,9 @@ const weekday = new Date(event.date).toLocaleDateString("es-MX", {
                         }
                         <div class="detail-time-info">
                             <span class="detail-time-label">Evento</span>
-                            <span class="detail-date-str"
-                                >{weekday}
-                                {
-                                    formattedDate.replace(weekday + ", ", "")
-                                }</span
-                            >
+                            <span class="detail-date-str">
+                                {weekday} {formattedDate}
+                            </span>
                         </div>
                     </div>
 

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { client } from "../../tina/__generated__/client";
+import { formatEventDates } from "../utils/dateFormatter";
 
 let pastMovies: any[] = [];
 let pastEvents: any[] = [];
@@ -16,9 +17,8 @@ const nowTimeStr = new Date().toLocaleTimeString("en-GB", {
 });
 
 function isPast(dateStr: string, endTime?: string, startTime?: string): boolean {
-    const itemDateStr = new Date(dateStr).toLocaleDateString("en-CA", {
-        timeZone: "America/Tegucigalpa",
-    });
+    // Extract YYYY-MM-DD directly to avoid UTC->local timezone shift
+    const itemDateStr = dateStr.split("T")[0];
     if (itemDateStr < todayStr) return true;
     if (itemDateStr === todayStr) {
         const t = endTime || startTime;
@@ -32,7 +32,14 @@ function isPast(dateStr: string, endTime?: string, startTime?: string): boolean 
 }
 
 try {
-    const pelRes = await client.queries.peliculaConnection();
+    const pelRes = await client.queries.peliculaConnection({
+        filter: {
+            showDate: {
+                before: `${todayStr}T23:59:59.999Z`,
+            },
+        },
+        first: 100,
+    });
     const allPastMovies = (pelRes.data.peliculaConnection.edges ?? [])
         .map((e: any) => e.node)
         .filter((m: any) => m.showDate && !m.cancelled && isPast(m.showDate, m.showEndTime, m.showTime));
@@ -52,7 +59,7 @@ try {
     const evtRes = await client.queries.eventoConnection();
     pastEvents = (evtRes.data.eventoConnection.edges ?? [])
         .map((e: any) => e.node)
-        .filter((ev: any) => ev.date && !ev.cancelled && isPast(ev.date, ev.eventEndTime, ev.eventTime))
+        .filter((ev: any) => ev.date && !ev.cancelled && isPast(ev.endDate || ev.date, ev.eventEndTime, ev.eventTime))
         .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
 } catch (err) {
     console.warn("TinaCMS eventos not available.", err);
@@ -89,7 +96,7 @@ if (!pastEvents || pastEvents.length === 0) {
             ...mod.frontmatter,
         };
     })
-    .filter((ev: any) => ev.date && !ev.cancelled && isPast(ev.date, ev.eventEndTime, ev.eventTime))
+    .filter((ev: any) => ev.date && !ev.cancelled && isPast(ev.endDate || ev.date, ev.eventEndTime, ev.eventTime))
     .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
@@ -99,8 +106,10 @@ function slugFromFilename(filename: string) {
 }
 
 function formatDate(dateStr: string) {
-    return new Date(dateStr).toLocaleDateString("es-MX", {
-        timeZone: "America/Tegucigalpa",
+    // Parse at UTC midnight to avoid timezone shift
+    const d = new Date(dateStr.split("T")[0] + "T00:00:00Z");
+    return d.toLocaleDateString("es-MX", {
+        timeZone: "UTC",
         day: "numeric",
         month: "short",
         year: "numeric",
@@ -210,39 +219,42 @@ const PAGE_SIZE = 6;
                             data-page-size={PAGE_SIZE}
                             data-current-page="1"
                         >
-                            {pastEvents.map((event: any, i: number) => (
-                                <a
-                                    href={`/eventos/${slugFromFilename(event._sys.filename)}`}
-                                    class="archive-card"
-                                    aria-label={`${event.title} — ${formatDate(event.date)}`}
-                                    data-index={i}
-                                >
-                                    <div class="archive-poster is-loading" data-archive-poster>
-                                        {event.poster ? (
-                                            <img
-                                                src={encodeURI(event.poster)}
-                                                alt={`Poster de ${event.title}`}
-                                                loading="lazy"
-                                                decoding="async"
-                                            />
-                                        ) : (
-                                            <div
-                                                class="card-poster-placeholder"
-                                                style="height:100%; display:flex; align-items:center; justify-content:center; font-size:2.5rem;"
-                                                aria-hidden="true"
-                                            >
-                                                🎭
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div class="archive-body">
-                                        <p class="archive-title">{event.title}</p>
-                                        <p class="archive-date archive-date--event">
-                                            Evento · {formatDate(event.date)}
-                                        </p>
-                                    </div>
-                                </a>
-                            ))}
+                            {pastEvents.map((event: any, i: number) => {
+                                const { archiveDate } = formatEventDates(event.date, event.endDate);
+                                return (
+                                    <a
+                                        href={`/eventos/${slugFromFilename(event._sys.filename)}`}
+                                        class="archive-card"
+                                        aria-label={`${event.title} — ${archiveDate}`}
+                                        data-index={i}
+                                    >
+                                        <div class="archive-poster is-loading" data-archive-poster>
+                                            {event.poster ? (
+                                                <img
+                                                    src={encodeURI(event.poster)}
+                                                    alt={`Poster de ${event.title}`}
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                />
+                                            ) : (
+                                                <div
+                                                    class="card-poster-placeholder"
+                                                    style="height:100%; display:flex; align-items:center; justify-content:center; font-size:2.5rem;"
+                                                    aria-hidden="true"
+                                                >
+                                                    🎭
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div class="archive-body">
+                                            <p class="archive-title">{event.title}</p>
+                                            <p class="archive-date archive-date--event">
+                                                Evento · {archiveDate}
+                                            </p>
+                                        </div>
+                                    </a>
+                                );
+                            })}
                         </div>
 
                         {pastEvents.length > PAGE_SIZE && (

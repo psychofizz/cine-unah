@@ -37,10 +37,13 @@ const nowTimeStr = new Date().toLocaleTimeString("en-GB", {
     minute: "2-digit",
 });
 
+// Extract the calendar date (YYYY-MM-DD) directly from the ISO string to avoid
+// timezone-induced off-by-one-day errors when TinaCMS stores dates as UTC.
+const showDateCalendar = showDate.split("T")[0];
+
 const isPast = (() => {
-    const showDateStr = new Date(showDate).toLocaleDateString("en-CA", { timeZone: tz });
-    if (showDateStr < todayStr) return true;
-    if (showDateStr === todayStr) {
+    if (showDateCalendar < todayStr) return true;
+    if (showDateCalendar === todayStr) {
         const endTime = showEndTime || (() => {
             if (!showTime) return "";
             const [h, m] = showTime.split(":");
@@ -51,8 +54,10 @@ const isPast = (() => {
     return false;
 })();
 
-const formattedDate = new Date(showDate).toLocaleDateString("es-MX", {
-    timeZone: tz,
+// Parse at UTC midnight so formatting uses the correct calendar date.
+const showDateUTC = new Date(showDateCalendar + "T00:00:00Z");
+const formattedDate = showDateUTC.toLocaleDateString("es-MX", {
+    timeZone: "UTC",
     weekday: "short",
     day: "numeric",
     month: "short",

@@ -18,7 +18,7 @@ try {
 // Fallback search
 if (!movie) {
     try {
-        const connResult = await client.queries.peliculaConnection();
+        const connResult = await client.queries.peliculaConnection({ first: 200 });
         const edges = connResult.data.peliculaConnection.edges ?? [];
         const match = edges.find(
             (edge: any) => edge.node._sys.filename === slug,
@@ -50,13 +50,16 @@ if (!movie) {
     return Astro.redirect("/404");
 }
 
-const formattedDate = new Date(movie.showDate).toLocaleDateString("es-MX", {
-    timeZone: "America/Tegucigalpa",
+// Parse at UTC midnight using the YYYY-MM-DD part to avoid timezone shift
+const showDateObj = new Date(movie.showDate.split("T")[0] + "T00:00:00Z");
+
+const formattedDate = showDateObj.toLocaleDateString("es-MX", {
+    timeZone: "UTC",
     day: "numeric",
     month: "long",
 });
-const weekday = new Date(movie.showDate).toLocaleDateString("es-MX", {
-    timeZone: "America/Tegucigalpa",
+const weekday = showDateObj.toLocaleDateString("es-MX", {
+    timeZone: "UTC",
     weekday: "long",
 });
 ---

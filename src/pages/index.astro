@@ -5,6 +5,7 @@ import EventCard from "../components/EventCard.astro";
 import { client } from "../../tina/__generated__/client";
 import { Image } from "astro:assets";
 import { resolveLocation } from "../utils/resolveLocation";
+import { formatEventDates, toCalendarDate } from "../utils/dateFormatter";
 
 // ── Fetch data ─────────────────────────────────────────
 let allMovies: any[] = [];
@@ -15,7 +16,15 @@ const todayStr = new Date().toLocaleDateString("en-CA", {
 });
 
 try {
-	const pelRes = await client.queries.peliculaConnection();
+	const pelRes = await client.queries.peliculaConnection({
+		filter: {
+			showDate: {
+				after: `${todayStr}T00:00:00.000Z`,
+			},
+		},
+		sort: "showDate",
+		first: 100,
+	});
 	allMovies = (pelRes.data.peliculaConnection.edges ?? []).map(
 		(e: any) => e.node,
 	);
@@ -77,9 +86,8 @@ function addMinutes(timeStr: string, mins: number) {
 const activeMovies = allMovies.filter((m: any) => {
 	if (m.hiddenFromCartelera) return false;
 	if (!m.showDate) return false;
-	const showDateStr = new Date(m.showDate).toLocaleDateString("en-CA", {
-		timeZone: "America/Tegucigalpa",
-	});
+	// Use the YYYY-MM-DD portion directly to avoid UTC->local timezone shift
+	const showDateStr = toCalendarDate(m.showDate);
 
 	if (showDateStr < todayStr) return false;
 	if (!m.forceShow && showDateStr > sevenDaysLaterStr) return false;
@@ -99,9 +107,8 @@ const activeMovies = allMovies.filter((m: any) => {
 
 const futureEvents = allEvents.filter((e: any) => {
 	if (!e.date) return false;
-	const eventDateStr = new Date(e.date).toLocaleDateString("en-CA", {
-		timeZone: "America/Tegucigalpa",
-	});
+	// Use the YYYY-MM-DD portion directly to avoid UTC->local timezone shift
+	const eventDateStr = toCalendarDate(e.endDate || e.date);
 
 	if (eventDateStr < todayStr) return false;
 	if (!e.forceShow && eventDateStr > sevenDaysLaterStr) return false;
@@ -120,9 +127,7 @@ const futureEvents = allEvents.filter((e: any) => {
 });
 
 const isPastMovie = (m: any) => {
-	const showDateStr = new Date(m.showDate).toLocaleDateString("en-CA", {
-		timeZone: "America/Tegucigalpa",
-	});
+	const showDateStr = toCalendarDate(m.showDate);
 	if (showDateStr < todayStr) return true;
 	if (showDateStr === todayStr) {
 		const endTime = m.showEndTime || (() => {
@@ -136,9 +141,7 @@ const isPastMovie = (m: any) => {
 };
 
 const isPastEvent = (e: any) => {
-	const eventDateStr = new Date(e.date).toLocaleDateString("en-CA", {
-		timeZone: "America/Tegucigalpa",
-	});
+	const eventDateStr = toCalendarDate(e.endDate || e.date);
 	if (eventDateStr < todayStr) return true;
 	if (eventDateStr === todayStr) {
 		const endTime = e.eventEndTime || (() => {
@@ -162,12 +165,8 @@ const heroCarouselItems = [
 	// Ended (past) items go to the end
 	if (aPast !== bPast) return aPast ? 1 : -1;
 
-	const dateAStr = new Date(a.showDate || a.date).toLocaleDateString("en-CA", {
-		timeZone: "America/Tegucigalpa",
-	});
-	const dateBStr = new Date(b.showDate || b.date).toLocaleDateString("en-CA", {
-		timeZone: "America/Tegucigalpa",
-	});
+	const dateAStr = toCalendarDate(a.showDate || a.date);
+	const dateBStr = toCalendarDate(b.showDate || b.date);
 	if (dateAStr !== dateBStr) return dateAStr.localeCompare(dateBStr);
 
 	const timeA = a.showTime || a.eventTime || "00:00";
@@ -179,19 +178,12 @@ const heroCarouselItems = [
 const gridMovies = [...activeMovies]
 	.filter((m: any) => {
 		if (m.forceShow) return true;
-		
-		const showDateStr = new Date(m.showDate).toLocaleDateString("en-CA", {
-			timeZone: "America/Tegucigalpa",
-		});
+		const showDateStr = toCalendarDate(m.showDate);
 		return showDateStr >= todayStr && showDateStr <= sevenDaysLaterStr;
 	})
 	.sort((a: any, b: any) => {
-		const dateAStr = new Date(a.showDate).toLocaleDateString("en-CA", {
-			timeZone: "America/Tegucigalpa",
-		});
-		const dateBStr = new Date(b.showDate).toLocaleDateString("en-CA", {
-			timeZone: "America/Tegucigalpa",
-		});
+		const dateAStr = toCalendarDate(a.showDate);
+		const dateBStr = toCalendarDate(b.showDate);
 		if (dateAStr !== dateBStr) return dateAStr.localeCompare(dateBStr);
 
 		const timeA = a.showTime || "00:00";
@@ -210,14 +202,15 @@ function slugFromFilename(f: string) {
 
 // ── Format helpers ────────────────────────────────────────
 function formatHeroDate(dateStr: string) {
-	const d = new Date(dateStr);
+	// Parse at UTC midnight using the YYYY-MM-DD portion to avoid timezone shift
+	const d = new Date(toCalendarDate(dateStr) + "T00:00:00Z");
 	return {
 		weekday: d.toLocaleDateString("es-MX", {
-			timeZone: "America/Tegucigalpa",
+			timeZone: "UTC",
 			weekday: "long",
 		}),
 		full: d.toLocaleDateString("es-MX", {
-			timeZone: "America/Tegucigalpa",
+			timeZone: "UTC",
 			day: "numeric",
 			month: "long",
 			year: "numeric",
@@ -245,7 +238,18 @@ function formatHeroDate(dateStr: string) {
 						const endTime = movie.showEndTime || movie.eventEndTime || "";
 						const slug = slugFromFilename(movie._sys.filename);
 						const href = isEvent ? `/eventos/${slug}` : `/peliculas/${slug}`;
-						const { weekday, full } = formatHeroDate(dateStr);
+						
+						let weekdayVal = "";
+						let fullVal = "";
+						if (isEvent) {
+							const dateRange = formatEventDates(movie.date, movie.endDate);
+							weekdayVal = dateRange.weekday;
+							fullVal = dateRange.fullDate;
+						} else {
+							const hDate = formatHeroDate(dateStr);
+							weekdayVal = hDate.weekday.charAt(0).toUpperCase() + hDate.weekday.slice(1);
+							fullVal = hDate.full;
+						}
 
 						return (
 							<section
@@ -352,7 +356,7 @@ function formatHeroDate(dateStr: string) {
 										{/* BIG TIME */}
 										<div
 											class="hero-datetime"
-											aria-label={`Fecha y hora: ${weekday} ${full} a las ${time}`}
+											aria-label={`Fecha y hora: ${weekdayVal} ${fullVal} a las ${time}`}
 										>
 											{time && (
 												<span class={`hero-time-big${movie.cancelled ? " detail-time-number--cancelled" : ""}`}>
@@ -361,10 +365,10 @@ function formatHeroDate(dateStr: string) {
 											)}
 											<div class="hero-date-block" style={movie.cancelled ? "opacity: 0.35;" : undefined}>
 												<span class="hero-date-day">
-													{weekday}
+													{weekdayVal}
 												</span>
 												<span class="hero-date-full">
-													{full}
+													{fullVal}
 												</span>
 											</div>
 										</div>
@@ -546,6 +550,7 @@ function formatHeroDate(dateStr: string) {
 								title={event.title}
 								poster={event.poster}
 								date={event.date}
+								endDate={event.endDate}
 								eventTime={event.eventTime}
 								eventEndTime={event.eventEndTime}
 								location={event.location}
