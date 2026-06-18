@@ -19,7 +19,7 @@ credits: |-
   Género
       Documental
 showDate: 2026-06-18T05:22:40.957Z
-showTime: '13:30'
+showTime: '14:30'
 showEndTime: '16:00'
 duration: 77
 country: 'España, 2024'

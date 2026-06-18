@@ -20,7 +20,7 @@ credits: |-
       Documental
 showDate: 2026-06-18T05:32:25.551Z
 showTime: '13:30'
-showEndTime: '16:00'
+showEndTime: '14:30'
 duration: 60
 country: 'España, 2024'
 location: src/content/ubicaciones/cise.md
