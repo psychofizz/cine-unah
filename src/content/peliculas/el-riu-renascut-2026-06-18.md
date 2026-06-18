@@ -21,6 +21,7 @@ credits: |-
 showDate: 2026-06-18T05:32:25.551Z
 showTime: '13:30'
 showEndTime: '14:30'
+hiddenFromCartelera: true
 duration: 60
 country: 'España, 2024'
 location: src/content/ubicaciones/cise.md
