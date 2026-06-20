@@ -36,8 +36,8 @@ credits: |-
   Género
       Drama. Amistad.
 showDate: 2026-06-24T06:04:32.322Z
-showTime: '13:00'
-showEndTime: '15:00'
+showTime: '16:00'
+showEndTime: '18:00'
 duration: 111
 country: 'Cuba, 1993'
 location: src/content/ubicaciones/cise.md
