@@ -35,7 +35,7 @@ credits: |-
 
   Género
       Drama. Amistad.
-showDate: 2026-06-23T06:04:32.322Z
+showDate: 2026-06-24T06:04:32.322Z
 showTime: '13:00'
 showEndTime: '15:00'
 duration: 111
