@@ -34,7 +34,7 @@ credits: |-
 
   Género
       Romance. Drama. Drama Romántico. Años 60.
-showDate: 2026-06-24T05:52:25.751Z
+showDate: 2026-06-23T05:52:25.751Z
 showTime: '10:00'
 showEndTime: '12:00'
 duration: 134
