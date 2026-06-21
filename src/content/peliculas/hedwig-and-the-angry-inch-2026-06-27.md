@@ -29,7 +29,7 @@ credits: |-
 
   Género
       Musical. Drama. Cine Independiente. Película de Culto.
-showDate: 2026-06-27T04:11:18.192Z
+showDate: 2026-06-26T04:11:18.192Z
 showTime: '13:30'
 showEndTime: '16:00'
 duration: 94
