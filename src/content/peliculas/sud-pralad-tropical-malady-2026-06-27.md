@@ -32,7 +32,7 @@ credits: |-
 
   Género
       Drama. Fantástico. Cine Experimental. Naturaleza.
-showDate: 2026-06-27T03:55:00.890Z
+showDate: 2026-06-26T03:55:00.890Z
 showTime: '10:00'
 showEndTime: '12:00'
 duration: 118
