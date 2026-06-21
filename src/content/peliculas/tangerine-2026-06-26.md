@@ -29,7 +29,7 @@ credits: |-
 
   Género
       Comedia. Drama. Amistad. Navidad Cine Independiente. Comedia Dramática.
-showDate: 2026-06-26T02:45:18.050Z
+showDate: 2026-06-25T02:45:18.050Z
 showTime: '13:30'
 showEndTime: '15:30'
 duration: 88
