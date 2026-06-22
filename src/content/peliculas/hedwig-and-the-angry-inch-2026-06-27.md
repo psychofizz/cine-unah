@@ -35,6 +35,6 @@ showEndTime: '16:00'
 duration: 94
 country: 'Estados Unidos, 2001'
 location: src/content/ubicaciones/cise.md
-isPartOfEvent: ''
+isPartOfEvent: src/content/eventos/cine-foro-de-la-pelicula-hedwig-and-the-angry-inch-2026-06-26.md
 ---
 
