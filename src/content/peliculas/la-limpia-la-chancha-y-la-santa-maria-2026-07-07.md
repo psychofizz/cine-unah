@@ -19,7 +19,7 @@ credits: |-
 
   Género
       Comedia.
-showDate: 2026-07-07T04:11:10.336Z
+showDate: 2026-07-06T04:11:10.336Z
 showTime: '10:00'
 showEndTime: '12:00'
 duration: 90
