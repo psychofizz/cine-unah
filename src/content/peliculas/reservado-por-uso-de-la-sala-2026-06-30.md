@@ -1,7 +1,7 @@
 ---
-title: Reservado por uso de la sala
+title: Sala reservada
 poster: /uploads/reservado.jpg
-showDate: 2026-06-30T05:40:15.423Z
+showDate: 2026-07-10T05:40:15.423Z
 showTime: '10:00'
 showEndTime: '16:00'
 location: ''
