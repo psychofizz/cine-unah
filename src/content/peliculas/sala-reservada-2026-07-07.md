@@ -1,9 +1,9 @@
 ---
 title: Sala reservada
 poster: /uploads/reservado.jpg
-showDate: 2026-07-06T04:19:56.583Z
-showTime: '12:00'
-showEndTime: '16:00'
+showDate: 2026-07-15T04:19:56.583Z
+showTime: '10:00'
+showEndTime: '12:00'
 location: ''
 isPartOfEvent: ''
 ---
