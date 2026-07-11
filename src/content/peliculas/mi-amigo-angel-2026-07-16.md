@@ -28,7 +28,7 @@ credits: |-
 showDate: 2026-07-16T06:35:31.164Z
 showTime: '10:00'
 showEndTime: '12:00'
-hiddenFromCartelera: true
+hiddenFromCartelera: false
 duration: 32
 country: 'Honduras, 1962'
 location: src/content/ubicaciones/cise.md
