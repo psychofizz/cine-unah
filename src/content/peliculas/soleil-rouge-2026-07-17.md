@@ -35,7 +35,7 @@ credits: |-
 
   Género
       Western. Acción. Spaghetti Western. Samuráis.
-showDate: 2026-07-17T03:18:32.544Z
+showDate: 2026-07-16T03:18:32.544Z
 showTime: '10:00'
 showEndTime: '12:00'
 duration: 109
