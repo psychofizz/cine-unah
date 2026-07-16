@@ -29,7 +29,7 @@ showDate: 2026-07-16T03:36:12.620Z
 showTime: '14:00'
 duration: 32
 country: 'Honduras, 1962'
-location: ''
-isPartOfEvent: ''
+location: src/content/ubicaciones/cise.md
+isPartOfEvent: src/content/eventos/proyeccion-especial-de-cine-hondureno-2026-07-17.md
 ---
 
