@@ -25,7 +25,7 @@ credits: |-
 
   Género
       Drama. Mediometraje.
-showDate: 2026-07-17T03:36:12.620Z
+showDate: 2026-07-16T03:36:12.620Z
 showTime: '14:00'
 duration: 32
 country: 'Honduras, 1962'
