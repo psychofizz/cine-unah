@@ -40,7 +40,7 @@ showTime: '10:00'
 showEndTime: '12:00'
 duration: 109
 country: 'Francia, 1971'
-location: ''
+location: src/content/ubicaciones/cise.md
 isPartOfEvent: ''
 ---
 
