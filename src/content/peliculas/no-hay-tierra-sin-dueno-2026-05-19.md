@@ -21,9 +21,9 @@ credits: |-
 
   Compañías
       Alta Loma Films(Productora)
-showDate: 2026-05-19T06:46:39.851Z
-showTime: '13:00'
-showEndTime: '15:00'
+showDate: 2026-07-23T06:46:39.851Z
+showTime: '14:00'
+showEndTime: '16:00'
 duration: 107
 country: 'Honduras, 2003'
 location: src/content/ubicaciones/cise.md
