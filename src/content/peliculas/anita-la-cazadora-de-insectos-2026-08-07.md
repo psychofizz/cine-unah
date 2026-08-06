@@ -23,7 +23,7 @@ credits: |-
 
   Género
       Drama.
-showDate: 2026-08-07T03:00:51.564Z
+showDate: 2026-08-06T03:00:51.564Z
 showTime: '14:00'
 showEndTime: '16:00'
 duration: 93
