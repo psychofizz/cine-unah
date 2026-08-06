@@ -34,7 +34,7 @@ credits: |-
 
   Género
       Animación. Comedia. Infantil.
-showDate: 2026-08-08T05:29:28.641Z
+showDate: 2026-08-07T05:29:28.641Z
 showTime: '10:00'
 showEndTime: '12:00'
 duration: 110
