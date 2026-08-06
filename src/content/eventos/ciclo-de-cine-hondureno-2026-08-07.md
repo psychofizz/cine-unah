@@ -1,9 +1,9 @@
 ---
 title: Ciclo de cine hondureño
 poster: /uploads/IMG-20260805-WA0011.jpg
-description: Presentación de películas en el ciclo de cine hondureño
+description: Presentación de películas en el ciclo de cine hondureño.
 date: 2026-08-07T02:22:10.418Z
-endDate: 2026-08-07T05:44:01.157Z
+endDate: 2026-08-14T05:44:39.507Z
 eventTime: '14:00'
 eventEndTime: '16:00'
 location: src/content/ubicaciones/cise.md
