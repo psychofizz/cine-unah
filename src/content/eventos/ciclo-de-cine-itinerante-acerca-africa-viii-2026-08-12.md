@@ -18,6 +18,9 @@ shortFilms:
     director: 'François-Xavier Destors, Gaël Kamilindi'
     duration: 84
     synopsis: 'Gaël tenía cinco años cuando murió su madre, Didy. Desde entonces, el recuerdo de su presencia se ha perdido en la furia de las guerras civiles, el genocidio y el sida. Estas tragedias que han asolado Burundi y luego Ruanda precipitaron su exilio a Suiza. Treinta años después, se aventura a reabrir las páginas de su historia familiar conociendo a los hombres y mujeres que amaron y guiaron a su madre y esboza un retrato de ella y de una generación de mujeres ruandesas que sobrevivieron a lo peor.'
-  - {}
+  - title: Les enfants rouges
+    director: Lotfi Achour
+    duration: 100
+    synopsis: 'Un grupo de hombres ataca a dos jóvenes pastores. Achraf, de 13 años, se ve obligado a llevar a la familia la cabeza de su primo Nizar como macabro mensaje.'
 ---
 
