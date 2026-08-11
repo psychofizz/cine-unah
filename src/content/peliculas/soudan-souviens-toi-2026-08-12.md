@@ -20,7 +20,7 @@ credits: |-
       Hind Meddeb
 
   Compañías
-      Coproducción Francia-Túnez-Catar;
+  Coproducción Francia-Túnez-Catar;
       Echo Films(Productora)
       Blue Train Films(Productora)
 
