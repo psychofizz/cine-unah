@@ -27,8 +27,8 @@ credits: |-
   Género
       Documental. Política.
 showDate: 2026-08-12T07:13:45.794Z
-showTime: '12:00'
-showEndTime: '14:00'
+showTime: '14:00'
+showEndTime: '16:00'
 duration: 76
 country: 'Francia, 2024'
 location: src/content/ubicaciones/cise.md
