@@ -4,8 +4,8 @@ poster: /uploads/1786430930159.jpg
 description: Ciclo de cine con muestra de proyectos de cine africano.
 date: 2026-08-12T06:53:59.934Z
 endDate: 2026-08-14T06:54:05.805Z
-eventTime: '12:00'
-eventEndTime: '14:00'
+eventTime: '14:00'
+eventEndTime: '16:00'
 location: src/content/ubicaciones/cise.md
 shortFilms:
   - title: 'Soudan, souviens-toi'
