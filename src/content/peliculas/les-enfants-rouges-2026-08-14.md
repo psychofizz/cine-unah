@@ -40,8 +40,8 @@ credits: |-
   Género
       Drama. Crimen. Familia. Infancia.
 showDate: 2026-08-14T07:26:28.529Z
-showTime: '12:00'
-showEndTime: '14:00'
+showTime: '14:00'
+showEndTime: '16:00'
 duration: 100
 country: 'Túnez, 2024'
 location: src/content/ubicaciones/cise.md
